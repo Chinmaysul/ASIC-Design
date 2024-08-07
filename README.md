@@ -72,7 +72,7 @@ The picture below represents the C code and its output
 
 
 ### Step: 1
-*Code for creating spike objdump file:
+* Code for creating spike objdump file:
 ```bash
 spike pk sum.o
 ```
