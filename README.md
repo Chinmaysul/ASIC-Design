@@ -111,5 +111,405 @@ reg 0 sp
 ```
 ![Screenshot from 2024-08-08 02-28-08](https://github.com/user-attachments/assets/d63d279c-5435-4204-9d5c-ce9bbec6e56c)
 
+## ASSIGNMENT 3
+### 1. Identifying Instruction Type
+
+Instruction formats act as an agreement between assembly language and hardware, ensuring that when an instruction is issued in assembly language, the hardware knows exactly how to execute it. These instructions are represented by sequences of 0s and 1s, which define things like the operation to be performed and where the data is located. This way, the hardware can accurately understand and carry out the instructions.
+
+There are 6 types of instruction formats:
+
+* R type
+
+    + It is also called the Register type.
+    +  It is used for instructions with three registers like Arithmetic and Logical instructions.
+    +  R-type instructions include fields for 2 source registers, 1 destination register, a funct for specifying the operation, as well as an Opcode.
+    +  Examples: ADD, AND, XNOR.
+  
+  ![rtype](https://github.com/user-attachments/assets/518e5b3b-046d-452b-90a4-4dc22a78accf)
+* I type
+
+    +  I type performs Arithmetic operations with immediate values.
+    +  The I-type instructions include a destination register, a source register, an integer value, funct code, and an opcode.
+    +  Example: Load, Branch etc.
+  
+  ![itype](https://github.com/user-attachments/assets/044814e2-9f7b-453a-8541-d2650c4e15ab)
+  
+* S Type 
+  
+   + S-type instruction is used for store operations, to write a value into the memory.
+   + The S-type instruction has 2 source registers, an immediate integer which stores the offset for the memory, a funct code, and an opcode.
+     
+  ![stype](https://github.com/user-attachments/assets/6d2c61ec-2ab2-46f3-98a7-a351d43387a2)
 
 
+* B-Type Instructions
+
+     + B-type instructions are used for conditional branching. These instructions help control the flow of execution by making decisions based on comparisons between two registers.
+     + The B-type format includes fields for two source registers, an immediate value that determines the branch offset, a function code, and an opcode.
+  
+  ![B-Type Format](https://github.com/user-attachments/assets/f8c4c251-9d0e-43bb-bc2d-5d62f6546a94)
+
+* U-Type Instructions
+
+    + U-type instructions handle operations that require large immediate values. They're primarily used for loading upper immediate values or calculating addresses.
+    + The U-type format includes a destination register, a large immediate value, and an opcode.
+  
+  ![U-Type Format](https://github.com/user-attachments/assets/27da568d-cc13-49f7-b291-fe9bec1e0a0f)
+
+* J-Type Instructions
+
+  + J-type instructions are used for jump operations, allowing the program to change control flow by jumping to a specific address.
+  + These instructions are common for unconditional jumps, such as function calls or loop implementations.
+  
+  ![J-Type Format](https://github.com/user-attachments/assets/d2b575bf-f23f-4064-8cce-015d24a712c4)
+
+   
+  
+
+### 2. RISC-V Instruction Breakdown
+
+#### ADD `r5, r4, r5`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r5 (00101)`
+- **Source Register 1 (rs1):** `r4 (00100)`
+- **Source Register 2 (rs2):** `r5 (00101)`
+- **Function Code (func3):** `000`
+- **Function Code (func7):** `0000000`
+- **Binary Instruction:** `0000000 00101 00100 000 00101 0110011`
+- **Hexadecimal Code:** `0x005202b3`
+
+#### SUB `r5, r5, r4`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r5 (00101)`
+- **Source Register 1 (rs1):** `r5 (00101)`
+- **Source Register 2 (rs2):** `r4 (00100)`
+- **Function Code (func3):** `000`
+- **Function Code (func7):** `0100000`
+- **Binary Instruction:** `0100000 00100 00101 000 00101 0110011`
+- **Hexadecimal Code:** `0x404282b3`
+
+#### AND `r4, r5, r5`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r4 (00100)`
+- **Source Register 1 (rs1):** `r5 (00101)`
+- **Source Register 2 (rs2):** `r5 (00101)`
+- **Function Code (func3):** `111`
+- **Function Code (func7):** `0000000`
+- **Binary Instruction:** `0000000 00101 00101 111 00100 0110011`
+- **Hexadecimal Code:** `0x0052f233`
+
+#### OR `r8, r4, r5`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r8 (01000)`
+- **Source Register 1 (rs1):** `r4 (00100)`
+- **Source Register 2 (rs2):** `r5 (00101)`
+- **Function Code (func3):** `110`
+- **Function Code (func7):** `0000000`
+- **Binary Instruction:** `0000000 00101 00100 110 01000 0110011`
+- **Hexadecimal Code:** `0x005222b3`
+
+#### XOR `r8, r5, r4`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r8 (01000)`
+- **Source Register 1 (rs1):** `r5 (00101)`
+- **Source Register 2 (rs2):** `r4 (00100)`
+- **Function Code (func3):** `100`
+- **Function Code (func7):** `0000000`
+- **Binary Instruction:** `0000000 00100 00101 100 01000 0110011`
+- **Hexadecimal Code:** `0x0042e2b3`
+
+#### SLT `r10, r2, r4`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r10 (01010)`
+- **Source Register 1 (rs1):** `r2 (00010)`
+- **Source Register 2 (rs2):** `r4 (00100)`
+- **Function Code (func3):** `010`
+- **Function Code (func7):** `0000000`
+- **Binary Instruction:** `0000000 00100 00010 010 01010 0110011`
+- **Hexadecimal Code:** `0x004151b3`
+
+#### ADDI `r12, r3, 5`
+- **Instruction Type:** I-Type
+- **Opcode:** `0010011`
+- **Destination Register (rd):** `r12 (01100)`
+- **Source Register 1 (rs1):** `r3 (00011)`
+- **Immediate (imm[11:0]):** `5 (000000000101)`
+- **Function Code (func3):** `000`
+- **Binary Instruction:** `000000000101 00011 000 01100 0010011`
+- **Hexadecimal Code:** `0x005181b3`
+
+#### SW `r3, r1, 4`
+- **Instruction Type:** S-Type
+- **Opcode:** `0100011`
+- **Source Register 2 (rs2):** `r3 (00011)`
+- **Source Register 1 (rs1):** `r1 (00001)`
+- **Immediate (imm[11:0]):** `4 (000000000100)`
+- **Function Code (func3):** `010`
+- **Binary Instruction:** `0000000 00011 00001 010 00000 0100011`
+- **Hexadecimal Code:** `0x0040a123`
+
+#### SRL `r16, r11, r2`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r16 (10000)`
+- **Source Register 1 (rs1):** `r11 (01011)`
+- **Source Register 2 (rs2):** `r2 (00010)`
+- **Function Code (func3):** `101`
+- **Function Code (func7):** `0000000`
+- **Binary Instruction:** `0000000 00010 01011 101 10000 0110011`
+- **Hexadecimal Code:** `0x0022d803`
+
+#### BNE `r0, r1, 20`
+- **Instruction Type:** B-Type
+- **Opcode:** `1100011`
+- **Source Register 1 (rs1):** `r0 (00000)`
+- **Source Register 2 (rs2):** `r1 (00001)`
+- **Immediate (imm[12:1]):** `20 (000000010100)`
+- **Function Code (func3):** `001`
+- **Binary Instruction:** `0 000001 00001 00000 001 0100 0 1100011`
+- **Hexadecimal Code:** `0x00100063`
+
+#### BEQ `r0, r0, 15`
+- **Instruction Type:** B-Type
+- **Opcode:** `1100011`
+- **Source Register 1 (rs1):** `r0 (00000)`
+- **Source Register 2 (rs2):** `r0 (00000)`
+- **Immediate (imm[12:1]):** `15 (000000001111)`
+- **Function Code (func3):** `000`
+- **Binary Instruction:** `0 000000 00000 00000 000 1111 0 1100011`
+- **Hexadecimal Code:** `0x00000f63`
+
+#### LW `r13, r11, 2`
+- **Instruction Type:** I-Type
+- **Opcode:** `0000011`
+- **Destination Register (rd):** `r13 (01101)`
+- **Source Register 1 (rs1):** `r11 (01011)`
+- **Immediate (imm[11:0]):** `2 (000000000010)`
+- **Function Code (func3):** `010`
+- **Binary Instruction:** `0000000 00010 01011 010 01101 0000011`
+- **Hexadecimal Code:** `0x0022a683 `
+
+#### SLL `r15, r11, r2`
+- **Instruction Type:** R-Type
+- **Opcode:** `0110011`
+- **Destination Register (rd):** `r15 (01111)`
+- **Source Register 1 (rs1):** `r11 (01011)`
+- **Source Register 2 (rs2):** `r2 (00010)`
+- **Function Code (func3):** `001`
+- **Function Code (func7):** `0000000`
+- **Binary Instruction:** `0000000 00010 01011 001 01111 0110011`
+- **Hexadecimal Code:** `0x0022d7b3`
+  
+## Instruction Summary Table
+
+## Instruction Summary Table
+
+| **Instruction**      | **Type** | **Binary Code**                       | Standard RISC-V       | Hardcoded RISC-V       |
+|----------------------|----------|---------------------------------------|------------------------|-----------------------|
+| `ADD r5, r4, r5`     | R-Type   | `0000000 00101 00100 000 00101 0110011` | 32'h005202b3             | 32'h02510280             |
+| `SUB r5, r5, r4`     | R-Type   | `0100000 00100 00101 000 00101 0110011` | 32'h404282b3             | 32'h02429280             |
+| `AND r4, r5, r5`     | R-Type   | `0000000 00101 00101 111 00100 0110011` | 32'h0052f233             | 32'h0250a300             |
+| `OR r8, r4, r5`      | R-Type   | `0000000 00101 00100 110 01000 0110011` | 32'h005222b3             | 32'h02512480             |
+| `XOR r8, r5, r4`     | R-Type   | `0000000 00100 00101 100 01000 0110011` | 32'h0042e2b3             | 32'h02412480             |
+| `SLT r10, r2, r4`    | R-Type   | `0000000 00100 00010 010 01010 0110011` | 32'h004151b3             | 32'h02415580             |
+| `ADDI r12, r3, 5`    | I-Type   | `000000000101 00011 000 01100 0010011`  | 32'h005181b3             | 32'h00510600             |
+| `SW r3, r1, 4`       | S-Type   | `0000000 00011 00001 010 00000 0100011` | 32'h0040a123             | 32'h00409181             |
+| `SRL r16, r11, r2`   | R-Type   | `0000000 00010 01011 101 10000 0110011` | 32'h0022d803             | 32'h00271803             |
+| `BNE r0, r1, 20`     | B-Type   | `0 000001 00001 00000 001 0100 0 1100011` | 32'h00100063             | 32'h01400002             |
+| `BEQ r0, r0, 15`     | B-Type   | `0 000000 00000 00000 000 1111 0 1100011` | 32'h00000f63             | 32'h00f00002             |
+| `LW r13, r11, 2`     | I-Type   | `0000000 00010 01011 010 01101 0000011`  | 32'h0022a683             | 32'h00228681             |
+| `SLL r15, r11, r2`   | R-Type   | `0000000 00010 01011 001 01111 0110011` | 32'h0022d7b3             | 32'h00228783             |
+
+
+### 2. Identifying Instruction Types
+A.The given hardcoded instructions are:
+
+![Screenshot 2024-07-29 120125](https://github.com/user-attachments/assets/7c95b29a-40ca-4ce3-a8a9-fd8858bbfb79)
+
+`ADD R6, R2, R1`
+
+This is the waveform of the given hardcoded verilog program:
+
+![ADD](https://github.com/user-attachments/assets/bf8c2366-2cdd-409e-912e-9f8326e8bd87)
+
+This is the waveform of our verilog program:
+
+
+`SUB R7, R1, R2`
+
+This is the waveform of the given hardcoded verilog program:
+
+![SUB](https://github.com/user-attachments/assets/facff573-4992-4bbe-96f2-11f9128ada45)
+
+This is the waveform of our verilog program:
+
+
+`AND R8, R1, R3`
+
+ This is the waveform of the given hardcoded verilog program:
+
+![AND](https://github.com/user-attachments/assets/5cf420f5-1bfa-4b9f-9133-415dfc7baf21)
+
+ This is the waveform of our verilog program:
+
+
+
+ `OR R9, R2, R5`
+
+  This is the waveform of the given hardcoded verilog program:
+
+  ![OR](https://github.com/user-attachments/assets/f191347d-1866-4e74-aac2-2d4558114f18)
+
+  This is the waveform of our verilog program:
+
+
+  `XOR r10, r1, r4`
+
+  This is the waveform of the given hardcoded verilog program:
+
+![XOR](https://github.com/user-attachments/assets/defbe708-cd86-4de6-9f72-20c31d26ec06)
+
+  This is the waveform of our verilog program:
+
+ 
+
+  `SLT r1, r2, r4 `
+
+  This is the waveform of the given hardcoded verilog program:
+
+![SLT](https://github.com/user-attachments/assets/e21bc999-f45c-4713-b9a9-91cb2894fe93)  
+
+  This is the waveform of our verilog program:
+
+
+  `ADDI r12, r4, 5 `
+
+  This is the waveform of the given hardcoded verilog program:
+
+![ADDI](https://github.com/user-attachments/assets/9c599bde-01e6-4cc9-a138-ee22457a89b6)
+
+  This is the waveform of our verilog program:
+
+
+
+  `SW r3, r1, 2`
+
+   This is the waveform of the given hardcoded verilog program:
+
+![SW](https://github.com/user-attachments/assets/c7dc6c31-3e07-4ce2-880b-cffa18b32adf)
+
+   This is the waveform of our verilog program:
+
+
+
+   `LW r13, r01, 2`
+
+![LW](https://github.com/user-attachments/assets/1640b1a1-7693-453c-9338-dd2a6e589428)
+
+   This is the waveform of our verilog program:
+
+  
+
+   `BEQ r0, r0, 15`
+
+   ![BEQ](https://github.com/user-attachments/assets/2868d2aa-09a0-4670-96f5-2535efdb9e6f)
+
+   This is the waveform of our verilog program:
+
+B.The given custom instructions are:
+
+![Screenshot 2024-07-29 142902](https://github.com/user-attachments/assets/590e675d-343e-4223-95dc-e0f27be14af7)
+
+`ADD R0, R1, R2`
+
+This is the waveform of the given hardcoded verilog program:
+
+![add](https://github.com/user-attachments/assets/ab6d346b-e69f-42a3-8719-bf7f07a66140)
+
+This is the waveform of our verilog program:
+
+
+`SUB R2, R0, R1`
+
+This is the waveform of the given hardcoded verilog program:
+
+![sub](https://github.com/user-attachments/assets/4e54ff97-2aa1-4884-b334-996edff4ac7c)
+
+This is the waveform of our verilog program:
+
+
+`AND R1, R0, R2`
+
+ This is the waveform of the given hardcoded verilog program:
+
+![and](https://github.com/user-attachments/assets/781c3125-a6aa-4881-b8c3-dd9e0475b5b8)
+
+ This is the waveform of our verilog program:
+
+
+
+ `OR R8, R1, R5`
+
+  This is the waveform of the given hardcoded verilog program:
+
+![or](https://github.com/user-attachments/assets/6f9c4a18-d244-4b8f-8213-723d775011a2)
+
+  This is the waveform of our verilog program:
+
+
+  `XOR r8, r0, r4`
+
+  This is the waveform of the given hardcoded verilog program:
+
+![xor](https://github.com/user-attachments/assets/3c520ef7-8a64-4a2b-9c60-7c36511f9953)
+
+  This is the waveform of our verilog program:
+
+ 
+
+  `SLT r00, r1, r4 `
+
+  This is the waveform of the given hardcoded verilog program:
+
+  ![slt](https://github.com/user-attachments/assets/10667b1b-95ee-4368-8d55-d037c24ea465)
+
+  This is the waveform of our verilog program:
+
+
+  `ADDI r2, r2, 5 `
+
+  This is the waveform of the given hardcoded verilog program:
+
+![ADDI](https://github.com/user-attachments/assets/4de3ad07-947e-4d7d-a535-0a738b8f2c36)
+
+  This is the waveform of our verilog program:
+
+
+
+  `SW r2, r0, 4`
+
+   This is the waveform of the given hardcoded verilog program:
+
+![SW](https://github.com/user-attachments/assets/5845f1b1-0f53-4749-b7ba-181f07faf9a5)
+
+   This is the waveform of our verilog program:
+
+
+
+   `LW r03, r01, 2`
+
+![lw](https://github.com/user-attachments/assets/999490c3-2e8f-47bd-986e-1f0c0e5113a0)
+
+   This is the waveform of our verilog program:
+
+  
+
+   `BEQ r0, r0, 15`
+
+![BEQ](https://github.com/user-attachments/assets/ae0dd3ed-e09c-468e-a3c3-a81e410d822a)
