@@ -125,21 +125,21 @@ There are 6 types of instruction formats:
     +  R-type instructions include fields for 2 source registers, 1 destination register, a funct for specifying the operation, as well as an Opcode.
     +  Examples: ADD, AND, XNOR.
   
-  ![rtype](https://github.com/user-attachments/assets/518e5b3b-046d-452b-90a4-4dc22a78accf)
+  ![Screenshot from 2024-08-08 02-28-08](https://github.com/user-attachments/assets/518e5b3b-046d-452b-90a4-4dc22a78accf)
 * I type
 
     +  I type performs Arithmetic operations with immediate values.
     +  The I-type instructions include a destination register, a source register, an integer value, funct code, and an opcode.
     +  Example: Load, Branch etc.
   
-  ![itype](https://github.com/user-attachments/assets/044814e2-9f7b-453a-8541-d2650c4e15ab)
+  ![Screenshot from 2024-08-08 02-28-08](https://github.com/user-attachments/assets/044814e2-9f7b-453a-8541-d2650c4e15ab)
   
 * S Type 
   
    + S-type instruction is used for store operations, to write a value into the memory.
    + The S-type instruction has 2 source registers, an immediate integer which stores the offset for the memory, a funct code, and an opcode.
      
-  ![stype](https://github.com/user-attachments/assets/6d2c61ec-2ab2-46f3-98a7-a351d43387a2)
+  ![Screenshot from 2024-08-08 02-28-08](https://github.com/user-attachments/assets/6d2c61ec-2ab2-46f3-98a7-a351d43387a2)
 
 
 * B-Type Instructions
@@ -147,21 +147,21 @@ There are 6 types of instruction formats:
      + B-type instructions are used for conditional branching. These instructions help control the flow of execution by making decisions based on comparisons between two registers.
      + The B-type format includes fields for two source registers, an immediate value that determines the branch offset, a function code, and an opcode.
   
-  ![B-Type Format](https://github.com/user-attachments/assets/f8c4c251-9d0e-43bb-bc2d-5d62f6546a94)
+  ![Screenshot from 2024-08-08 02-28-08](https://github.com/user-attachments/assets/f8c4c251-9d0e-43bb-bc2d-5d62f6546a94)
 
 * U-Type Instructions
 
     + U-type instructions handle operations that require large immediate values. They're primarily used for loading upper immediate values or calculating addresses.
     + The U-type format includes a destination register, a large immediate value, and an opcode.
   
-  ![U-Type Format](https://github.com/user-attachments/assets/27da568d-cc13-49f7-b291-fe9bec1e0a0f)
+  ![Screenshot from 2024-08-08 02-28-08](https://github.com/user-attachments/assets/27da568d-cc13-49f7-b291-fe9bec1e0a0f)
 
 * J-Type Instructions
 
   + J-type instructions are used for jump operations, allowing the program to change control flow by jumping to a specific address.
   + These instructions are common for unconditional jumps, such as function calls or loop implementations.
   
-  ![J-Type Format](https://github.com/user-attachments/assets/d2b575bf-f23f-4064-8cce-015d24a712c4)
+  ![Screenshot from 2024-08-08 02-28-08](https://github.com/user-attachments/assets/d2b575bf-f23f-4064-8cce-015d24a712c4)
 
    
   
@@ -306,9 +306,7 @@ There are 6 types of instruction formats:
 - **Binary Instruction:** `0000000 00010 01011 001 01111 0110011`
 - **Hexadecimal Code:** `0x0022d7b3`
   
-## Instruction Summary Table
-
-## Instruction Summary Table
+* **Instruction Summary Table**
 
 | **Instruction**      | **Type** | **Binary Code**                       | Standard RISC-V       | Hardcoded RISC-V       |
 |----------------------|----------|---------------------------------------|------------------------|-----------------------|
@@ -325,5 +323,105 @@ There are 6 types of instruction formats:
 | `BEQ r0, r0, 15`     | B-Type   | `0 000000 00000 00000 000 1111 0 1100011` | 32'h00000f63             | 32'h00f00002             |
 | `LW r13, r11, 2`     | I-Type   | `0000000 00010 01011 010 01101 0000011`  | 32'h0022a683             | 32'h00228681             |
 | `SLL r15, r11, r2`   | R-Type   | `0000000 00010 01011 001 01111 0110011` | 32'h0022d7b3             | 32'h00228783             |
+
+* **Hardcoded ISA Table**
+  
+  | **Operation**  | **Hardcoded ISA** | 
+  |----------------|-------------------|
+  | ADD R6, R1, R2 | 32'h02208300 | 
+  | SUB R7, R1, R2 | 32'h02209380 | 
+  | AND R8, R1, R3 | 32'h0230a400 | 
+  | OR R9, R2, R5  | 32'h02513480 | 
+  | XOR R10, R1, R4 | 32'h0240c500 |
+  | SLT R1, R2, R4 | 32'h02415580 | 
+  | ADDI R12, R4, 5 | 32'h00520600 |
+  | BEQ R0, R0, 15 | 32'h00f00002 | 
+  | SW R3, R1, 2   | 32'h00209181 | 
+  | LW R13, R1, 2  | 32'h00208681 | 
+  | SRL R16, R14, R2 | 32'h00271803 | 
+  | SLL R15, R1, R2 | 32'h00208783 |
+
+  * The following are the Hardcoded instrustion set
+ 
+  ![Screenshot from 2024-08-11 15-17-28](https://github.com/user-attachments/assets/196a0800-337a-499a-8d72-24ebdd12bc22)
+
+
+### 3. GTKWave of the ISA Instructions
+#### Step 1: Create a verilog file and testbench
+```bash
+gedit rv32.v
+gedit rv32_tb.v
+```
+![Screenshot from 2024-08-11 14-53-00](https://github.com/user-attachments/assets/6fa644ab-8aea-4ced-a172-36a70337d552)
+
+
+#### Step 2: Create the dump file
+```bash
+iverilog -o rv32 rv32.v rv32_tb.v
+./rv32
+```
+#### Step 3: Run GTKWave
+```bash
+gtkwave iiitb_rv32i.vcd
+```
+![Screenshot from 2024-08-11 14-55-40](https://github.com/user-attachments/assets/65e846dc-9a5c-40ab-a872-b64c4644b11e)
+
+#### Waveforms:
+
+* `ADD R6, R2, R1`
+  
+![Screenshot from 2024-08-11 15-10-31](https://github.com/user-attachments/assets/33de7e9b-f9e4-4f5d-8843-9fd8c439a57c)
+
+
+* `SUB R7, R1, R2`
+  
+![Screenshot from 2024-08-11 15-10-44](https://github.com/user-attachments/assets/b93619cb-4abf-48f5-8f0c-c5e3ebd2bf80)
+
+
+* `AND R8, R1, R3`
+  
+![Screenshot from 2024-08-11 15-10-50](https://github.com/user-attachments/assets/c85743ce-e13e-4d33-a3aa-ed8c2241de99)
+
+
+* `OR R9, R2, R5`
+  
+![Screenshot from 2024-08-11 15-10-56](https://github.com/user-attachments/assets/d18b4972-ca4e-4ba2-b7fe-6f49b05c9f3f)
+
+
+* `XOR R10,R1,R4`
+  
+ ![Screenshot from 2024-08-11 15-11-02](https://github.com/user-attachments/assets/d65db59b-21da-4e2f-9da8-6b9c384482c2)
+
+
+* `SLT R1, R2, R4`
+  
+  ![Screenshot from 2024-08-11 15-11-09](https://github.com/user-attachments/assets/c70a6bde-834d-4851-8eb5-7f5b54508257)
+
+* `ADDI R12, R4, 5 `
+  
+![Screenshot from 2024-08-11 15-11-15](https://github.com/user-attachments/assets/fe8cc0c7-b22a-46c2-a6bb-837ca7c73837)
+
+
+* `BEQ R0, R0, 15`
+  
+![Screenshot from 2024-08-11 15-14-43](https://github.com/user-attachments/assets/32f8b087-574d-4292-8c98-c7b612666be7)
+
+
+* `SW R3, R1, 2 `
+  
+![Screenshot from 2024-08-11 15-14-20](https://github.com/user-attachments/assets/935a8d30-2042-4e6e-8d6d-06caee90f39c)
+
+
+* `LW R13, R1, 2`
+  
+![Screenshot from 2024-08-11 15-14-36](https://github.com/user-attachments/assets/672f4818-05c5-4262-9b26-5fdacc1690a5)
+
+
+
+
+
+
+
+
 
 
