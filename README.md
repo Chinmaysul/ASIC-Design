@@ -328,18 +328,18 @@ There are 6 types of instruction formats:
   
   | **Operation**  | **Hardcoded ISA** | 
   |----------------|-------------------|
-  | ADD R6, R1, R2 | 32'h02208300 | 
-  | SUB R7, R1, R2 | 32'h02209380 | 
-  | AND R8, R1, R3 | 32'h0230a400 | 
-  | OR R9, R2, R5  | 32'h02513480 | 
-  | XOR R10, R1, R4 | 32'h0240c500 |
-  | SLT R1, R2, R4 | 32'h02415580 | 
-  | ADDI R12, R4, 5 | 32'h00520600 |
-  | BEQ R0, R0, 15 | 32'h00f00002 | 
-  | SW R3, R1, 2   | 32'h00209181 | 
-  | LW R13, R1, 2  | 32'h00208681 | 
-  | SRL R16, R14, R2 | 32'h00271803 | 
-  | SLL R15, R1, R2 | 32'h00208783 |
+  | `ADD r6, r1, r2` | 32'h02208300 | 
+  | `SUB r7, r1, r2` | 32'h02209380 | 
+  | `AND r8, r1, r3` | 32'h0230a400 | 
+  | `OR r9, r2, r5`  | 32'h02513480 | 
+  | `XOR r10, r1, r4` | 32'h0240c500 |
+  | `SLT r1, r2, r4` | 32'h02415580 | 
+  | `ADDI r12, r4, 5` | 32'h00520600 |
+  | `BEQ r0, r0, 15` | 32'h00f00002 | 
+  | `SW r3, r1, 2`   | 32'h00209181 | 
+  | `LW r13, r1, 2`  | 32'h00208681 | 
+  | `SRL r16, r14, r2` | 32'h00271803 | 
+  | `SLL r15, r1, r2` | 32'h00208783 |
 
   * The following are the Hardcoded instrustion set
  
