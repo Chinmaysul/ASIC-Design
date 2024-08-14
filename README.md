@@ -416,7 +416,69 @@ gtkwave iiitb_rv32i.vcd
   
 ![Screenshot from 2024-08-11 15-14-36](https://github.com/user-attachments/assets/672f4818-05c5-4262-9b26-5fdacc1690a5)
 
+## ASSIGNMENT 4
+### Complie C code with GCC and RISC-V: Linear search
+```c
+#include <stdio.h>
 
+int linearSearch(int* arr, int size, int key) {
+  
+    // Starting the loop and looking for the key in arr
+    for (int i = 0; i < size; i++) {
+
+        // If key is found, return key
+        if (arr[i] == key) {
+            return i;
+        }
+    }
+
+    // If key is not found, return some value to indicate
+    // end
+    return -1;
+}
+
+int main() {
+    int arr[9] = { 10, 50, 30, 70, 80, 60, 20, 90, 40 };
+    int size = sizeof(arr) / sizeof(arr[0]);
+    int key = 30;
+
+    // Calling linearSearch
+    int index = linearSearch(arr, size, key);
+
+    // printing result based on value returned by
+    // linearSearch()
+    if (index == -1) {
+        printf("The element is not present in the arr.");
+    }
+    else {
+        printf("The element is present at arr[%d].", index);
+    }
+
+    return 0;
+}
+
+```
+
+#### Step 1: Create the C file and compile using GCC
+
+![Screenshot from 2024-08-14 23-03-23](https://github.com/user-attachments/assets/48e2157f-27a6-4f54-b5ad-45c8c96e5a32)
+![Screenshot from 2024-08-14 23-03-38](https://github.com/user-attachments/assets/66fd39b9-eb22-44d4-9121-d655563dbf89)
+
+
+#### Step 2: Compile the code with RISC-V Compiler
+```bash
+riscv64-unknown-elf-gcc -O1 -mabi=lp64 -march=rv64i -o code.o code.c
+spike pk code.o
+```
+![Screenshot from 2024-08-14 23-10-07](https://github.com/user-attachments/assets/135fd3c2-ddf6-423e-b974-90735274a16a)
+
+#### Step 3: Create the obj file and dump it
+```bash
+riscv64-unknown-elf-objdump -d sum.o|less
+```
+![Screenshot from 2024-08-14 23-09-34](https://github.com/user-attachments/assets/94add241-f1f0-40d0-a6bb-d32af38a1e6f)
+
+![Screenshot from 2024-08-14 23-09-37](https://github.com/user-attachments/assets/6519379a-e9f8-4d05-95ad-a4f21e81dbf9)
 
 
 
