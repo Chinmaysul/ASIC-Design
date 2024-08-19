@@ -417,6 +417,8 @@ gtkwave iiitb_rv32i.vcd
 ![Screenshot from 2024-08-11 15-14-36](https://github.com/user-attachments/assets/672f4818-05c5-4262-9b26-5fdacc1690a5)
 
 ## ASSIGNMENT 4
+### Description: Linear Search in Array
+This code searches the element present in the array and returns its position in the array otherwise prints not present.
 ### Complie C code with GCC and RISC-V: Linear search
 ```c
 #include <stdio.h>
