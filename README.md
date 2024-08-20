@@ -523,10 +523,14 @@ Below are the combinatorial circuits simulated in Makerchip:
 
 * **Arithmetic Operations ( Addition)**
   
+  This performs the addition operation on the variables $in1[3:0] and $in2[3:0]
   ![Screenshot from 2024-08-21 00-35-15](https://github.com/user-attachments/assets/a2ea73eb-f0a9-4178-ae4c-4d5d363e3858)
 
 * **Combinational Calculator in TL-Verilog**
-  
+
+    In the provided code, two random 4-bit values, $rand1[3:0] and $rand2[3:0], are assigned to 32-bit variables $num1[31:0] and $num2[31:0], respectively. The calculator then carries out the four arithmetic operations on these values: addition, subtraction, multiplication and division.
+
+    A multiplexer (MUX), controlled by the selection bits $sel[1:0], is used to choose one of these operations. The MUX determines which operation's result is sent to the output variable $out[31:0].
   ![Screenshot from 2024-08-21 00-42-29](https://github.com/user-attachments/assets/cca10691-31f7-424f-a798-8b80cdf18924)
 
   
