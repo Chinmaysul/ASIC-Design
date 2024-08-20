@@ -492,6 +492,41 @@ riscv64-unknown-elf-objdump -d sum.o|less
 ### About Makerchip
 Makerchip brings support for Transaction-Level Verilog (TL-Verilog), a next-generation approach to hardware design. TL-Verilog simplifies the process by getting rid of the complexities of traditional Verilog and introducing a clearer, more straightforward syntax. It includes robust features for managing pipelines and transactions, which makes it easier to create intricate digital circuits and boosts design efficiency overall.
 
-
+### Combinatorial Ciruit using TL-Verilog
 ![all-gates-truth-table](https://github.com/user-attachments/assets/c474c120-c552-4b99-bee4-e1b3abe4cb33)
 
+Below are the combinatorial circuits simulated in Makerchip:
+
+* **Inverter- NOT Gate**
+  
+  ![Screenshot from 2024-08-21 00-31-43](https://github.com/user-attachments/assets/e9223eaf-43f3-4244-8096-4d93f6dcafea)
+
+* **2 Input AND Gate**
+  
+  ![Screenshot from 2024-08-21 00-32-56](https://github.com/user-attachments/assets/725fb74f-ab92-4213-b2f4-804726d1df7c)
+
+* **2 Input OR Gate**
+  
+   ![Screenshot from 2024-08-21 00-33-59](https://github.com/user-attachments/assets/e1a1a156-3072-469e-bfa5-5d667c782b78)
+
+* **2 Input XOR Gate**
+  
+  ![Screenshot from 2024-08-21 00-34-38](https://github.com/user-attachments/assets/c06713a7-9b71-4d4f-ac58-54b40fe8f5d2)
+
+* **2:1 Mux**
+  
+  ![Screenshot from 2024-08-21 00-36-02](https://github.com/user-attachments/assets/dbe2f221-1467-4547-8a35-8dd3419f0e4e)
+
+* **2:1 Mux on Vectors**
+  
+  ![Screenshot from 2024-08-21 00-36-38](https://github.com/user-attachments/assets/68f5ab66-0f32-4200-8acb-ceeb7a110694)
+
+* **Arithmetic Operations ( Addition)**
+  
+  ![Screenshot from 2024-08-21 00-35-15](https://github.com/user-attachments/assets/a2ea73eb-f0a9-4178-ae4c-4d5d363e3858)
+
+* **Combinational Calculator in TL-Verilog**
+  
+  ![Screenshot from 2024-08-21 00-42-29](https://github.com/user-attachments/assets/cca10691-31f7-424f-a798-8b80cdf18924)
+
+  
