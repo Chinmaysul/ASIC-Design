@@ -419,6 +419,10 @@ gtkwave iiitb_rv32i.vcd
 ## ASSIGNMENT 4
 ### Description: Linear Search in Array
 This code searches the element present in the array and returns its position in the array otherwise prints not present.
+- The code contains an array arr of size 9
+- The number to search for in the array is called key
+- The program performs linear search in the array and returns the position of the array if the key is present
+- If the key is not present it returns the message "The element is not present in the arr."
 ### Complie C code with GCC and RISC-V: Linear search
 ```c
 #include <stdio.h>
