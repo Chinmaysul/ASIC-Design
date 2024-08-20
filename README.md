@@ -490,7 +490,7 @@ riscv64-unknown-elf-objdump -d sum.o|less
 ## ASSIGNMENT 5
 
 ### About Makerchip
-Makerchip is a platform that suppors TL-Verilog standard, which represents a significant advancement by removing the need for the legacy features of traditional Verilog and introducing a more streamlined syntax. TL-Verilog enhances design efficiency by adding powerful constructs for pipelines and transactions, making it easier to develop complex digital circuits.
+Makerchip brings support for Transaction-Level Verilog (TL-Verilog), a next-generation approach to hardware design. TL-Verilog simplifies the process by getting rid of the complexities of traditional Verilog and introducing a clearer, more straightforward syntax. It includes robust features for managing pipelines and transactions, which makes it easier to create intricate digital circuits and boosts design efficiency overall.
 
 
 ![all-gates-truth-table](https://github.com/user-attachments/assets/c474c120-c552-4b99-bee4-e1b3abe4cb33)
