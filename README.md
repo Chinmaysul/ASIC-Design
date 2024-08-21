@@ -557,3 +557,45 @@ The Fibonacci series is a sequence of numbers in which each number is the sum of
 This code functions like a standard calculator, where the result of the previous operation is used as one of the operands for the next operation. When reset, the result is set back to zero.
 
 ![image](https://github.com/user-attachments/assets/0b8ed2c4-eff2-4471-a436-8b8953b89799)
+
+### Pipelined Logic
+In Transaction-Level Verilog (TL-Verilog), pipelined logic is effectively represented using pipeline constructs that naturally depict the flow of data through various stages of a digital design. Each stage in a TL-Verilog pipeline corresponds to a clock cycle, where data is processed as it moves through the pipeline. This method allows for clear and straightforward modeling of sequential logic, with each stage automatically managing the propagation of state and values to the subsequent cycle. By utilizing TL-Verilog's pipeline notation, designers can easily describe complex, multi-stage operations, focusing on transaction flow, which simplifies the design and verification process while improving readability and maintainability.
+
+ <img width="898" alt="14" src="https://github.com/user-attachments/assets/cef07766-78a1-4b64-8593-cdea8b621a0a">
+
+I've included the simulation for the pipelined logic below. 
+
+ ![image](https://github.com/user-attachments/assets/ef3f104c-aa94-4691-a515-1d3c15772e5e)
+
+#### Cycle Calculator
+
+The simulation for the cycle calculator is shown below.
+
+![image](https://github.com/user-attachments/assets/de9f23b8-cde2-45ea-8ade-bad191e45d1b)
+
+ 
+<img width="488" alt="16" src="https://github.com/user-attachments/assets/fa30363a-f7a0-45c2-8ac4-ca95806ce18a">
+
+#### Validity
+
+When generating a waveform, we typically receive results for every clock cycle, just as in previous examples. Although there may be no compilation errors, logical errors can still occur, which won't be detected during compilation. These errors can be difficult to identify simply by analyzing the waveforms. Additionally, there may be scenarios where "don't care" conditions arise, which are irrelevant and should be ignored. To address this, we use the concept of validity.
+
+The global clock runs continuously, and there may be cases in our code where certain operations are triggered by the clock even though they aren't needed. Physically, running the clock requires power from voltage or current sources during each cycle. In complex circuits, failing to manage these unnecessary operations can lead to wasted power. To minimize power consumption, we disable the clock during these unnecessary cycles, a technique known as clock gating. Validity is essential for implementing this process.
+
+* **Cycle Calculator**
+
+* **Total Distance Calculator**
+![image](https://github.com/user-attachments/assets/90626dc9-94ae-4e9e-aa7a-5d6b00325729)
+
+
+### RISC-V CPU Implementation
+
+![15](https://github.com/user-attachments/assets/141d5daa-c990-4379-bdbf-235cb6d1dca4)
+
+The design of the RISC-V consists of the following blocks:
+- Program Counter
+- Instruction Fetch
+- Instruction Decode
+
+#### 1. Program Counter  
+
