@@ -596,6 +596,60 @@ The design of the RISC-V consists of the following blocks:
 - Program Counter
 - Instruction Fetch
 - Instruction Decode
+- Register File Read
+- Arithmetic Logic Unit
+- Register File Write
+- Branch instruction
 
 #### 1. Program Counter  
+The Program Counter (PC) is a key register that keeps track of the address of the next instruction to be executed, essentially pointing to the current position in the instruction memory. Since each instruction is 32 bits (or 4 bytes) long in a byte-addressable memory system, the PC increases by 4 after every instruction to point to the next one. When the system starts up, a reset signal initializes the PC to 0, ensuring the first instruction is fetched from the correct starting address. For branch instructions, the PC adds an immediate offset to the current address, calculating the new address as: NextPC = Current PC + Offset. Normally, the PC simply advances by 4 to move to the next instruction, but it will reset to zero if a reset signal is detected. The provided diagram illustrates how the PC moves through instructions and responds to reset signals and branch operations.
 
+<img width="777" alt="2" src="https://github.com/user-attachments/assets/a65385c0-94d3-471f-913e-b580fd4d507f">
+
+![image](https://github.com/user-attachments/assets/7aea7de4-059b-4797-b849-46fb31fbcd8b)
+
+#### 2. Instruction Fetch
+
+The Instruction Fetch Unit (IFU) in a CPU is responsible for ensuring that program instructions are retrieved from memory and executed in the correct order, serving as a crucial part of the core's control logic. The program counter plays a key role by indicating the address of the next instruction that needs to be fetched from the instruction memory. This step is essential for continuing the program’s execution and performing subsequent computations.
+
+In this setup, the instruction memory is integrated into the program, allowing the Instruction Fetch logic to access and retrieve the required instructions. Once an instruction is fetched, it is passed on to the Decode logic for further processing. The program counter provides the read address for the instruction memory, which in turn outputs a 32-bit instruction (instr[31:0]). This sequence ensures that instructions are fetched and processed efficiently, maintaining the flow of the program.
+
+![3](https://github.com/user-attachments/assets/a67fcb4b-84ec-476a-bb3c-2a44fae2442d)
+
+
+![image](https://github.com/user-attachments/assets/fec6c3a7-d322-49f1-8f73-dbb4ae334c76)
+
+#### 3. Instruction Decode
+In the decode stage, the main goal is to break down the instruction fetched in the previous stage to extract all necessary details. This process includes identifying the type of instruction, recognizing any immediate values, and retrieving the relevant register values. During Instruction Decode, each instruction is carefully analyzed to determine its category, check for the presence of immediate values, and extract specific fields such as the opcode. The opcode is then matched to its corresponding instruction, and the bit fields are interpreted according to the RISC-V ISA specifications.
+
+**RISC-V Instruction Formats**
+RISC-V instruction formats serve as a "contract" between the assembly language and the hardware, ensuring that when an assembly instruction is executed, the hardware knows exactly how to proceed. Each instruction type in RISC-V has a specific format, defined by a sequence of 0s and 1s, which includes details about the operation type and data location. There are six distinct types of instructions in the RISC-V architecture.
+
+![4](https://github.com/user-attachments/assets/484bde35-4fdc-4255-a22a-d5d38c6a495e)
+
+![image](https://github.com/user-attachments/assets/d9cfdf87-24a8-48cd-96b4-65f7a4f8b753)
+
+
+#### 4. Register File Read
+
+Most instructions, particularly arithmetic ones, require data from source registers, which means the CPU needs to read from these registers. To facilitate this, the CPU's register file is designed to handle two simultaneous reads for the source operands (rs1 and rs2) and one write operation per cycle to the destination register. The register file receives rs1 and rs2 as inputs and outputs the corresponding register values. The enable bits for rs1 and rs2 are activated based on their validity, as determined earlier in the process. This setup, known as a 2-port register file, allows the CPU to read from two registers at the same time. The retrieved data is then stored in registers and sent to the ALU for further processing.
+
+![Screenshot 2024-08-21 192832](https://github.com/user-attachments/assets/4afb17d8-bb73-494c-89a1-51bdf29d2037)
+
+#### 5. Arithmetic Logic Unit (ALU)
+
+The Arithmetic Logic Unit (ALU) is responsible for carrying out computations based on the specified operation. It receives data from two registers provided by the register file, performs the required arithmetic operation, and then stores the result back into memory via the register file's write port. Currently, the code is configured to support only ADD and ADDI operations to execute the test code.
+
+![image](https://github.com/user-attachments/assets/ae20e7c6-3d02-4a5b-8b40-3cfc237812d1)
+
+#### 6. Register File Write
+
+This step is crucial for handling instructions that need to store the output in a destination register (rd). The result generated by the ALU is written back to memory through the `register_file_write` port, with the `register_file_write_enable` signal activated based on the validity of the destination register (rd). The `register_file_write_index` then directs the value from the destination register (rd) to the correct memory location. In the RISC-V architecture, the x0 register is always set to zero, so an additional condition is included to prevent any write operations to the x0 register. After the ALU completes its operations on the register values, the results are written back to the appropriate registers, ensuring that the x0 register remains unchanged, preserving its value of zero.
+
+![image](https://github.com/user-attachments/assets/5c84dff4-8e33-4d8b-85f9-0dc933dd214f)
+
+#### 7. Branch instruction
+
+The last stage involves adding support for branch instructions. In the RISC-V instruction set architecture, branches are conditional, so a branch is executed only when a particular condition is fulfilled. Moreover, the target address for the branch (Program Counter or PC) needs to be computed. If the branch condition is met, the PC is updated to this new target address. This ensures that when a branch occurs, the program counter correctly points to the desired instruction.
+
+![image](https://github.com/user-attachments/assets/dbf456af-9801-4784-bb26-1c62dbb4a146)
