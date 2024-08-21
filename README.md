@@ -534,3 +534,26 @@ Below are the combinatorial circuits simulated in Makerchip:
   ![Screenshot from 2024-08-21 00-42-29](https://github.com/user-attachments/assets/cca10691-31f7-424f-a798-8b80cdf18924)
 
   
+### Sequential Circuits using TL-Verilog
+
+A sequential circuit is a type of digital circuit that incorporates memory elements to store data, allowing it to produce outputs based on both the current inputs and its previous states. Unlike combinational circuits, where the output is determined only by the current inputs, sequential circuits take into account past inputs through feedback loops and storage components like flip-flops or registers. These components help the circuit maintain an internal state over time, which, along with the current input, influences its behavior. This capability enables sequential circuits to perform functions that require tracking past inputs or operations, such as counting, data storage, or event sequencing.
+
+#### Counter Circuit:
+It increments the value by 1 in each iteration
+
+<img width="267" alt="image" src="https://github.com/user-attachments/assets/e68d8794-9938-4380-aeda-c23f2d068cae">
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/09ec6961-3928-4047-9e7c-98c16a16967c">
+
+#### Fibonacci Series: 
+The Fibonacci series is a sequence of numbers in which each number is the sum of the two preceding ones, usually starting with 0 and 1. The sequence begins as follows:
+
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+![Screenshot 2024-08-21 143500](https://github.com/user-attachments/assets/257c9948-fb60-40ba-8f81-7c2aac003c34)
+
+![image](https://github.com/user-attachments/assets/3f5932b9-57d9-439f-a620-1d733fca6ed1)
+
+#### Counter-Output with Calculator Integration:
+
+This code functions like a standard calculator, where the result of the previous operation is used as one of the operands for the next operation. When reset, the result is set back to zero.
+
+![image](https://github.com/user-attachments/assets/0b8ed2c4-eff2-4471-a436-8b8953b89799)
