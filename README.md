@@ -498,39 +498,67 @@ Makerchip brings support for Transaction-Level Verilog (TL-Verilog), a next-gene
 Below are the combinatorial circuits simulated in Makerchip:
 
 * **Inverter- NOT Gate**
-  
+  ```tl-verilog 
+   $out = ! $in;
+  ```
   ![Screenshot from 2024-08-21 00-31-43](https://github.com/user-attachments/assets/e9223eaf-43f3-4244-8096-4d93f6dcafea)
 
 * **2 Input AND Gate**
-  
+  ```tl-verilog
+  $out = $in1 && $in2;
+  ```
   ![Screenshot from 2024-08-21 00-32-56](https://github.com/user-attachments/assets/725fb74f-ab92-4213-b2f4-804726d1df7c)
 
 * **2 Input OR Gate**
-  
+   ```tl-verilog
+   $out = $in1 || $in2;
+   ```
    ![Screenshot from 2024-08-21 00-33-59](https://github.com/user-attachments/assets/e1a1a156-3072-469e-bfa5-5d667c782b78)
 
 * **2 Input XOR Gate**
-  
+  ```tl-verilog
+   $out = $in1 ^ $in2;
+   ```
   ![Screenshot from 2024-08-21 00-34-38](https://github.com/user-attachments/assets/c06713a7-9b71-4d4f-ac58-54b40fe8f5d2)
 
 * **2:1 Mux**
-  
+  ```tl-verilog
+   $out = $sel ? $in1 : $in0;
+  ```
   ![Screenshot from 2024-08-21 00-36-02](https://github.com/user-attachments/assets/dbe2f221-1467-4547-8a35-8dd3419f0e4e)
 
 * **2:1 Mux on Vectors**
-  
+  ```tl-verilog
+   $out[7:0] = $sel ? $in1[7:0] : $in0[7:0];
+  ```
   ![Screenshot from 2024-08-21 00-36-38](https://github.com/user-attachments/assets/68f5ab66-0f32-4200-8acb-ceeb7a110694)
 
 * **Arithmetic Operations ( Addition)**
   
   This performs the addition operation on the variables $in1[3:0] and $in2[3:0]
+  
+  ```tl-verilog
+   $out[4:0] = $in1[3:0] + $in2[3:0];
+  ```
   ![Screenshot from 2024-08-21 00-35-15](https://github.com/user-attachments/assets/a2ea73eb-f0a9-4178-ae4c-4d5d363e3858)
 
 * **Combinational Calculator in TL-Verilog**
 
-    In the provided code, two random 4-bit values, $rand1[3:0] and $rand2[3:0], are assigned to 32-bit variables $num1[31:0] and $num2[31:0], respectively. The calculator then carries out the four arithmetic operations on these values: addition, subtraction, multiplication and division.
+   ```tl-verilog
+    $num1[31:0] = $rand1[3:0];
+    $num2[31:0] = $rand2[3:0];
+    
+    $sum[31:0]  = $num1[31:0] + $num2[31:0];
+    $diff[31:0] = $num1[31:0] - $num2[31:0];
+    $prod[31:0] = $num1[31:0] * $num2[31:0];
+    $div[31:0] = $num1[31:0] / $num2[31:0];
+    $out[31:0]  = $sel[1] ? ($sel[0] ? $div[31:0] : $prod[31:0]): ($sel[0] ? $diff[31:0] : $sum[31:0]);
+   ```
 
-    A multiplexer (MUX), controlled by the selection bits $sel[1:0], is used to choose one of these operations. The MUX determines which operation's result is sent to the output variable $out[31:0].
+In the provided code, two random 4-bit values, $rand1[3:0] and $rand2[3:0], are assigned to 32-bit variables $num1[31:0] and $num2[31:0], respectively. The calculator then carries out the four arithmetic operations on these values: addition, subtraction, multiplication and division.
+
+A multiplexer (MUX), controlled by the selection bits $sel[1:0], is used to choose one of these operations. The MUX determines which operation's result is sent to the output variable $out[31:0].
+    
   ![Screenshot from 2024-08-21 00-42-29](https://github.com/user-attachments/assets/cca10691-31f7-424f-a798-8b80cdf18924)
 
   
@@ -541,6 +569,12 @@ A sequential circuit is a type of digital circuit that incorporates memory eleme
 #### Counter Circuit:
 It increments the value by 1 in each iteration
 
+```tl-verilog
+$reset = *reset;
+$clk_chi = *clk;
+$cnt[31:0] = $reset ? 0 : (>>1$cnt + 1);
+```
+
 <img width="267" alt="image" src="https://github.com/user-attachments/assets/e68d8794-9938-4380-aeda-c23f2d068cae">
 <img width="959" alt="image" src="https://github.com/user-attachments/assets/09ec6961-3928-4047-9e7c-98c16a16967c">
 
@@ -548,6 +582,12 @@ It increments the value by 1 in each iteration
 The Fibonacci series is a sequence of numbers in which each number is the sum of the two preceding ones, usually starting with 0 and 1. The sequence begins as follows:
 
 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+
+```tl-verilog
+$reset = *reset;
+$clk_chi = *clk;
+$num[31:0] = $reset ? 1 : (>>1$num + >>2$num);
+```
 ![Screenshot 2024-08-21 143500](https://github.com/user-attachments/assets/257c9948-fb60-40ba-8f81-7c2aac003c34)
 
 ![image](https://github.com/user-attachments/assets/3f5932b9-57d9-439f-a620-1d733fca6ed1)
@@ -556,7 +596,22 @@ The Fibonacci series is a sequence of numbers in which each number is the sum of
 
 This code functions like a standard calculator, where the result of the previous operation is used as one of the operands for the next operation. When reset, the result is set back to zero.
 
+```tl-verilog
+$reset = *reset;
+$clk_chi = *clk;   
+$val1[31:0] = >>1$out;
+$val2[31:0] = $rand[3:0];
+   
+$sum[31:0] =  $val1[31:0] +  $val2[31:0];
+$diff[31:0] =  $val1[31:0] -  $val2[31:0];
+$prod[31:0] =  $val1[31:0] *  $val2[31:0];
+$quot[31:0] =  $val1[31:0] /  $val2[31:0];
+$out[31:0] = $reset ? 32'h0 : ($choose[1] ? ($choose[0] ? $quot : $prod):($choose[0] ? $diff : $sum));
+
+```
+
 ![image](https://github.com/user-attachments/assets/0b8ed2c4-eff2-4471-a436-8b8953b89799)
+
 
 ### Pipelined Logic
 In Transaction-Level Verilog (TL-Verilog), pipelined logic is effectively represented using pipeline constructs that naturally depict the flow of data through various stages of a digital design. Each stage in a TL-Verilog pipeline corresponds to a clock cycle, where data is processed as it moves through the pipeline. This method allows for clear and straightforward modeling of sequential logic, with each stage automatically managing the propagation of state and values to the subsequent cycle. By utilizing TL-Verilog's pipeline notation, designers can easily describe complex, multi-stage operations, focusing on transaction flow, which simplifies the design and verification process while improving readability and maintainability.
@@ -565,9 +620,48 @@ In Transaction-Level Verilog (TL-Verilog), pipelined logic is effectively repres
 
 I've included the simulation for the pipelined logic below. 
 
+```tl-verilog
+$reset = *reset;
+$clk_chi = *clk;
+|comp
+  @1
+    $err1 = $bad_input || $illegal_op;
+  @3
+    $err2 = $over_flow || $err1;
+  @6
+    $err3 = $div_by_zero || $err2;
+```
+
  ![image](https://github.com/user-attachments/assets/ef3f104c-aa94-4691-a515-1d3c15772e5e)
 
 #### Cycle Calculator
+
+```tl-verilog
+$reset = *reset;
+$clk_chi = *clk;
+|calc
+  @1
+    $reset = *reset;
+    $clk_chi = *clk;
+   
+    $val1[31:0] = >>2$out[31:0];
+    $val2[31:0] = $rand2[3:0];
+    $sel[1:0] = $rand3[1:0];
+   
+    $sum[31:0] = $val1[31:0] + $val2[31:0];
+    $diff[31:0] = $val1[31:0] - $val2[31:0];
+    $prod[31:0] = $val1[31:0] * $val2[31:0];
+    $quot[31:0] = $val1[31:0] / $val2[31:0];
+         
+    $count = $reset ? 0 : >>1$count + 1;
+         
+  @2
+    $valid = $count;
+    $inv_valid = !$valid;
+    $calc_reset = $reset | $inv_valid;
+    $out[31:0] = $calc_reset ? 32'b0 : ($op[1] ? ($op[0] ? $quot[31:0] : $prod[31:0]): ($op[0] ? $diff[31:0] : $sum[31:0]));
+
+```
 
 The simulation for the cycle calculator is shown below.
 
@@ -585,6 +679,28 @@ The global clock runs continuously, and there may be cases in our code where cer
 * **Cycle Calculator**
 
 * **Total Distance Calculator**
+
+```tl-verilog
+|calc
+  @1
+    $reset = *reset;
+    $clk_chi = *clk;
+            
+    ?$vaild      
+      @1
+        $aa_seq[31:0] = $aa[3:0] * $aa;
+        $bb_seq[31:0] = $bb[3:0] * $bb;;
+      
+      @2
+        $cc_seq[31:0] = $aa_seq + $bb_seq;;
+      
+      @3
+        $cc[31:0] = sqrt($cc_seq);
+            
+      @4
+         $tot_dist[63:0] = $reset ? 0 : $valid ? >>1$tot_dist + $cc : >>1$tot_dist;
+
+```
 ![image](https://github.com/user-attachments/assets/90626dc9-94ae-4e9e-aa7a-5d6b00325729)
 
 
@@ -604,6 +720,14 @@ The design of the RISC-V consists of the following blocks:
 #### 1. Program Counter  
 The Program Counter (PC) is a key register that keeps track of the address of the next instruction to be executed, essentially pointing to the current position in the instruction memory. Since each instruction is 32 bits (or 4 bytes) long in a byte-addressable memory system, the PC increases by 4 after every instruction to point to the next one. When the system starts up, a reset signal initializes the PC to 0, ensuring the first instruction is fetched from the correct starting address. For branch instructions, the PC adds an immediate offset to the current address, calculating the new address as: NextPC = Current PC + Offset. Normally, the PC simply advances by 4 to move to the next instruction, but it will reset to zero if a reset signal is detected. The provided diagram illustrates how the PC moves through instructions and responds to reset signals and branch operations.
 
+```tl-verilog
+|cpu
+  @0
+    $reset = *reset;
+    $clk_chi = *clk;
+    $pc[31:0] = >>1$reset ? 0 : >>1$pc + 32'd4;
+```
+
 <img width="777" alt="2" src="https://github.com/user-attachments/assets/a65385c0-94d3-471f-913e-b580fd4d507f">
 
 ![image](https://github.com/user-attachments/assets/7aea7de4-059b-4797-b849-46fb31fbcd8b)
@@ -613,6 +737,20 @@ The Program Counter (PC) is a key register that keeps track of the address of th
 The Instruction Fetch Unit (IFU) in a CPU is responsible for ensuring that program instructions are retrieved from memory and executed in the correct order, serving as a crucial part of the core's control logic. The program counter plays a key role by indicating the address of the next instruction that needs to be fetched from the instruction memory. This step is essential for continuing the program’s execution and performing subsequent computations.
 
 In this setup, the instruction memory is integrated into the program, allowing the Instruction Fetch logic to access and retrieve the required instructions. Once an instruction is fetched, it is passed on to the Decode logic for further processing. The program counter provides the read address for the instruction memory, which in turn outputs a 32-bit instruction (instr[31:0]). This sequence ensures that instructions are fetched and processed efficiently, maintaining the flow of the program.
+
+```tl-verilog
+|cpu
+  @0
+    $reset = *reset;
+    $clk_chi = *clk;
+    $pc[31:0] = $reset ? '0 : >>1$pc + 32'd4;
+         
+    $imem_rd_en = !$reset ? 1 : 0;
+    $imem_rd_addr[M4_IMEM_INDEX_CNT-1:0] = $pc[M4_IMEM_INDEX_CNT+1:2];
+
+  @1
+    $instr[31:0] = $imem_rd_data[31:0];
+```
 
 ![3](https://github.com/user-attachments/assets/a67fcb4b-84ec-476a-bb3c-2a44fae2442d)
 
