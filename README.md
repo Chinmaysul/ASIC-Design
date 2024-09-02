@@ -1813,6 +1813,15 @@ iverilog -o ./pre_synth_sim.out -DPRE_SYNTH_SIM src/module/testbench.v -I src/in
 gtkwave pre_synth_sim.vcd
 ```
 
+![Screenshot from 2024-09-03 00-04-50](https://github.com/user-attachments/assets/3cdeddb4-a819-4618-9243-754360f8a829)
+
+
+![Screenshot from 2024-09-03 00-17-28](https://github.com/user-attachments/assets/5df76b4d-9451-4af9-b2f0-05bb141dc3f9)
+
+
+![Screenshot from 2024-09-03 00-15-55](https://github.com/user-attachments/assets/6c58f306-8cc5-49a7-beaa-5b726d0c78fb)
+
+
 We can observe the output of the sum for numbers 1 to 9 after simulation is graduallly increasing from 0x00 to 0x2D which is 0-45 in hexadecimal.
 
 #### VCO_IN
