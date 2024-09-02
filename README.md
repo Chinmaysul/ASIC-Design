@@ -1848,3 +1848,5 @@ We can observe the output of the sum for numbers 1 to 9 after simulation is grad
 - **Type**: Input
 - **Description**: The reset signal for the RISC-V CPU. When activated, it initializes or resets the CPU to a known state, ensuring a clean start for system operations.
 
+
+**Hence the simulation successfully demonstrates the integration of DAC and PLL peripherals with the RISC-V processor, converting digital outputs to analog signals.**
