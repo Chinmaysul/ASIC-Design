@@ -2081,6 +2081,7 @@ Netlist:
 Flat synthesis netlist code:
 ![Screenshot from 2024-10-21 22-17-09](https://github.com/user-attachments/assets/3342eadd-24ca-452f-9a8e-2f5c6ad3cc3a)
 
+
 To perform **sub module synthesis**. type the below commands:
 
 ```
@@ -2094,36 +2095,25 @@ show
 
 The following statistics are displayed:
 
-![image](https://github.com/user-attachments/assets/46762203-dd3a-45a5-925f-2d3f07bf51f3)
+![Screenshot from 2024-10-21 22-22-56](https://github.com/user-attachments/assets/e0ae3433-61b1-4938-a087-dfa83d25e81b)
+
 
 Netlist:
 
-![image](https://github.com/user-attachments/assets/7d1fd148-bbf7-4128-88df-15e0e2fc755b)
+![Screenshot from 2024-10-21 22-23-24](https://github.com/user-attachments/assets/bc03775a-28e6-478b-a900-7681136c6b7b)
 
-
-Netlist code:
-
-![image](https://github.com/user-attachments/assets/936aca6e-0ad8-4d3b-abbc-46197b490194)
 
 **Flip-Flop Coding Styles and Optimizations**
 
-Flip-Flops are an essential part of sequential logic in a circuit and here we explore the design and synthesis of various types of flip-flops. To prevent glitches in digital circuits, we use flip-flops to store intermediate values. This ensures that combinational circuit inputs remain stable until the clock edge, avoiding glitches and maintaining correct operation:
+In a digital design, when an input signal changes state, the output changes after a propogation delay. All logic gates add some delay to singals. These delays cause expected and unwanted transitions in the output, called as Glitches where the output value is momentarily different from the expected value. An increased delay in one path can cause glitch when those signals are combined at the output gate. In short, more combinational circuits lead to more glitchy outputs that will not settle down with the output value.
 
+A D flip-flop is a sequential element that follows the input pin d at the clock's given edge. D flip-flop is a fundamental component in digital logic circuits. There are two types of D Flip-Flops being implemented: Rising-Edge D Flip Flop and Falling-Edge D Flip Flop.
+Every flop element needs an initial state, else the combinational circuit will evaluate to a garbage value. In order to achieve this, there are control pins in the flop namely: Set and Reset which can either be Synchronous or Asynchronous.
 **Asynchronous Reset Flip-flop:**
 
-Verilog Code:
+Here, always block gets evaluated when there is a change in the clock or change in the set/reset.The circuit is sensitive to positive edge of the clock. Upon the signal going low/high depending on reset or set control, singal q line goes changes respectively. Hence, it does not wait for the positive edge of the clock and happens irrespective of the clock_.
 
-```
-module dff_asyncres ( input clk ,  input async_reset , input d , output reg q );
-always @ (posedge clk , posedge async_reset)
-begin
-	if(async_reset)
-		q <= 1'b0;
-	else	
-		q <= d;
-end
-endmodule
-```
+![Screenshot from 2024-10-21 22-29-27](https://github.com/user-attachments/assets/0351bb23-4e22-4701-b370-2e149492963f)
 
 Run the below code to view the simulation:
 
@@ -2134,8 +2124,9 @@ gtkwave tb_dff_asyncres.vcd
 ```
 
 Waveform:
+![Screenshot from 2024-10-21 22-30-33](https://github.com/user-attachments/assets/a09539fa-d917-4aa5-9ac7-75160d556918)
 
-![image](https://github.com/user-attachments/assets/55bbcda4-4c31-4d51-8ee3-bd20faa7d153)
+
 
 Run the below code to view the netlist:
 
@@ -2148,8 +2139,9 @@ dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 ```
+![Screenshot from 2024-10-21 22-31-26](https://github.com/user-attachments/assets/50706975-54c7-452c-b43f-e595afaed156)
 
-Netlist:
+![Screenshot from 2024-10-21 22-32-01](https://github.com/user-attachments/assets/a9b0d1b1-fb14-4273-9d5b-bee7c00cf04c)
 
 ![image](https://github.com/user-attachments/assets/70d7f947-f0e6-4921-b143-5f7419cf3ef6)
 
