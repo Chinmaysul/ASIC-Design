@@ -2143,7 +2143,6 @@ show
 
 ![Screenshot from 2024-10-21 22-32-01](https://github.com/user-attachments/assets/a9b0d1b1-fb14-4273-9d5b-bee7c00cf04c)
 
-![image](https://github.com/user-attachments/assets/70d7f947-f0e6-4921-b143-5f7419cf3ef6)
 
 **Synchronous Reset Flip-flop:**
 
@@ -2171,7 +2170,8 @@ gtkwave tb_dff_syncres.vcd
 
 Waveform:
 
-![image](https://github.com/user-attachments/assets/8b80edd0-efdb-4ca7-9e4c-7db904655d20)
+![Screenshot from 2024-10-21 22-37-59](https://github.com/user-attachments/assets/a592fb77-be4e-4974-b05e-92ee0491b498)
+
 
 Run the below code to view the netlist:
 
@@ -2184,10 +2184,9 @@ dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 ```
+![Screenshot from 2024-10-21 22-38-34](https://github.com/user-attachments/assets/a1cdc8f3-1b91-4f0f-b9dd-7e7a8e1130a2)
+![Screenshot from 2024-10-21 22-38-58](https://github.com/user-attachments/assets/42b3d172-6104-483b-9deb-81a59b9e65ca)
 
-Netlist:
-
-![image](https://github.com/user-attachments/assets/00399402-3299-4fa0-b672-0e97a2009683)
 
 **Asynchronous Set Flip-flop:**
 
@@ -2215,7 +2214,8 @@ gtkwave tb_dff_async_set.vcd
 
 Waveform:
 
-![image](https://github.com/user-attachments/assets/ec901aae-f8a9-4b23-8296-87dda912fc07)
+![Screenshot from 2024-10-21 22-41-25](https://github.com/user-attachments/assets/fc39938b-831d-4ee6-a31a-761c040bf139)
+
 
 Run the below code to view the netlist:
 
@@ -2228,38 +2228,17 @@ dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 ```
+![Screenshot from 2024-10-21 22-43-44](https://github.com/user-attachments/assets/ca1f64eb-f438-4511-bbe5-f29ba939b7d5)
 
-Netlist:
-
-![image](https://github.com/user-attachments/assets/a6b6a03b-0b96-467b-9ad8-3367e746b676)
+![Screenshot from 2024-10-21 22-44-44](https://github.com/user-attachments/assets/329deecf-e155-4c18-9689-ccca36097aa6)
 
 
 **Optimizations:**
 
 Example 1:
 
-Consider the verilog code 'mult_2.v' :
+![Screenshot from 2024-10-21 22-48-40](https://github.com/user-attachments/assets/7603c264-5b28-4b1a-9cdb-3f9566b08844)
 
-```
-module mul2 (input [2:0] a, output [3:0] y);
-assign y = a * 2;
-endmodule
-```
-
-Truth Table:
-
-| a2 | a1 | a0 | y3 | y2 | y1 | y0 |
-|---|---|---|---|---|---|---|
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 1 | 0 | 0 | 1 | 0 |
-| 0 | 1 | 0 | 0 | 1 | 0 | 0 |
-| 0 | 1 | 1 | 0 | 1 | 1 | 0 |
-| 1 | 0 | 0 | 1 | 0 | 0 | 0 |
-| 1 | 0 | 1 | 1 | 0 | 1 | 0 |
-| 1 | 1 | 0 | 1 | 1 | 0 | 0 |
-| 1 | 1 | 1 | 1 | 1 | 1 | 0 |
-
-We can see the multiplication of a number by 2 doesnt really need any extra hardware we just need to append the LSB's with zeroes and the remaining bits are the input bits of same, It can be realised by grouding the LSB's and wiring the input properly to the output.
 
 
 Run the below code to view the netlist:
@@ -2276,29 +2255,25 @@ write_verilog -noattr mult_2_net.v
 ```
 
 Statistics:
+![Screenshot from 2024-10-21 22-50-06](https://github.com/user-attachments/assets/943905e5-333a-4b94-9783-ff60607836c2)
 
-![image](https://github.com/user-attachments/assets/4f5467de-821e-485d-a1ca-595fa438f000)
 
 Netlist:
 
-![image](https://github.com/user-attachments/assets/d2333712-d710-413c-bec9-ae71c415e3fb)
+![Screenshot from 2024-10-21 22-50-29](https://github.com/user-attachments/assets/8f3c3290-5144-4d6b-9b5c-9edaec8e076f)
+
 
 Netlist code:
 
-![image](https://github.com/user-attachments/assets/895a9182-acb0-408f-a715-0b93122b1272)
+![Screenshot from 2024-10-21 22-51-20](https://github.com/user-attachments/assets/060fbf4a-f50e-493a-96b9-5b40efb1a98d)
 
 Example 2:
 
 Consider the verilog code 'mult_8.v' :
 
-```
-module mult8 (input [2:0] a , output [5:0] y);
-	assign y = a * 9;
-endmodule
-```
-
-In this design the 3-bit input number "a" is multiplied by 9 i.e (a*9) which can be re-written as (a*8) + a . The term (a*8) is nothing but a left shifting the number a by three bits. Consider that a = a2 a1 a0. (a*8) results in a2 a1 a0 0 0 0. (a*9)=(a*8)+a = a2 a1 a0 a2 a1 a0 = aa(in 6 bit format). Hence in this case no hardware realization is required. The synthesized netlist of this design is shown below:
-
+![Screenshot from 2024-10-21 22-53-50](https://github.com/user-attachments/assets/1c50c8ba-3d65-41d2-8792-3117c830bd4e)
+ 
+Run the following commands:
 ```
 yosys
 read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -2312,14 +2287,17 @@ write_verilog -noattr mult_8_net.v
 
 Statistics:
 
-![image](https://github.com/user-attachments/assets/dc7480c5-f8f9-4186-b655-408a9381cdd6)
+![Screenshot from 2024-10-21 22-54-59](https://github.com/user-attachments/assets/8301d3f6-5be1-4567-b95d-3e5ed1d0540c)
+
 
 Netlist:
 
-![image](https://github.com/user-attachments/assets/495a4cdf-7c6e-42a7-abd9-9d538c691cf6)
+![Screenshot from 2024-10-21 22-55-32](https://github.com/user-attachments/assets/6c0ff909-c3a7-4bd7-89af-300b40365ae7)
+
 
 Netlist code:
+![Screenshot from 2024-10-21 22-55-57](https://github.com/user-attachments/assets/5dc579c7-4a21-4dee-8fa9-f973371e2082)
 
-![image](https://github.com/user-attachments/assets/bde3417b-dc61-4033-92f2-5ff0fae27367)
+
 
 
