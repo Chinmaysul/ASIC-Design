@@ -1867,14 +1867,11 @@ We can observe the output of the sum for numbers 1 to 9 after simulation is grad
  
  ![image](https://github.com/user-attachments/assets/0e2f8052-f0f8-4cfa-bab0-fc83a490afb9)
 
-## LAB-1:
-**Aim: Cloning the required files from github repository:**
+**Task 1: Fetching the required files from github:**
 
 **Commands:**
 ```
-sudo -i
 sudo apt-get install git
-ls
 cd /home
 mkdir VLSI
 cd VLSI
@@ -1885,20 +1882,21 @@ ls
 
 **Screenshot of the terminal window:**
 
-![image](https://github.com/user-attachments/assets/5ab593f9-447f-44eb-ac36-8b8a4d8a3b2b)
+![Screenshot from 2024-10-21 21-16-23](https://github.com/user-attachments/assets/3e0efe2a-0d0b-4681-8aee-0c604dab340e)
 
-## LAB-2:
-**Aim: Introduction to iVerilog gtkwave:**
 
-In this lab we will implement a 2:1 multiplexer.
+**Task 2 : Running iVerilog gtkwave:**
+
+ It is to implement a 2:1 multiplexer.
 
 **Command to view Verilog code & testbench file:**
 ```
-gvim tb_good_mux.v -o good_mux.v
+vim tb_good_mux.v -o good_mux.v
 ```
-![image](https://github.com/user-attachments/assets/d43bd7e1-60c0-4dfd-8242-647a83636344)
+![Screenshot from 2024-10-21 21-19-09](https://github.com/user-attachments/assets/2dc987b8-b7ca-47d7-b177-4477b5860d49)
 
-**Steps for implementing the waveform on gtkwave:**
+
+**Implementing the waveform on gtkwave:**
 ```
 iverilog good_mux.v tb_good_mux.v
 ls
@@ -1908,12 +1906,12 @@ gtkwave tb_good_mux.vcd
 
 **Screenshots of terminal window & gtkwave waveform:**
 
-![image](https://github.com/user-attachments/assets/6759c7c8-41b9-4e3f-bcbc-c76a4e26c40f)
+![Screenshot from 2024-10-21 21-26-52](https://github.com/user-attachments/assets/75305a40-7636-41a5-a4fd-abf255999caf)
+![Screenshot from 2024-10-21 21-28-30](https://github.com/user-attachments/assets/25ca6a7d-a5ac-4d19-adbd-724318ed8695)
+![Screenshot from 2024-10-21 21-28-40](https://github.com/user-attachments/assets/197238b7-3a2f-47a0-833d-037481f527c3)
 
-![image](https://github.com/user-attachments/assets/6e8118d7-0b71-4d48-8608-727388c04fef)
 
-## LAB-3:
-**Aim: Synthesis of 2:1 Multiplexer using Yosys and Logic Synthesis:**
+**Task 3 : Synthesis of 2:1 Mux using Yosys and Logic Synthesis:**
 
 ## YOSYS:
 A synthesizer is essential in digital design, converting RTL (Register Transfer Level) code into a gate-level netlist. This netlist gives a detailed representation of the circuit, including the logic gates and their connections, forming the groundwork for subsequent steps like placement and routing. In this particular design process, Yosys, an open-source synthesis tool for Verilog HDL, is being used. Yosys employs various optimization strategies to produce an efficient gate-level design from the RTL code.
@@ -1934,7 +1932,9 @@ The primary inputs and outputs are the same in both the RTL design and the synth
 
 **Synthesis:** The RTL code is transformed into a gate-level representation, where the design is mapped into logic gates and connections, producing a file called the netlist. In Verilog, a netlist is a representation of a circuit that describes how various components (such as logic gates, flip-flops, or modules) are interconnected. 
 
-## Command steps for Yosys:
+**Liberty(.lib):** Its a collection of logical modules. It includes basic logic gates like And, Or, Not, etc... and it contains different variants of the same gate ike 2input, 3input, 4input, slow, fast, medium gates etc. Fast cells are used if only high performance is needed. Slower cells is used to address hold time issues. IThe selection of faster cells in digital circuit design can increase area and power consumption while potentially leading to hold time violations. Conversely, excessive use of slower cells can result in suboptimal performance. The optimal cell selection for synthesis is guided by constraints that balance area, power, and timing requirements.
+
+### Command steps for Yosys:
 
 **This will invoke/start the yosys:**
 ```
@@ -1942,24 +1942,14 @@ yosys
 ```
 
 
-**Load the sky130 standard library:**
+**Load the sky130 standard library and Synthesize:**
 ```
 read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib      
-```
-
-
-**Read the design files:**
-```
 read_verilog good_mux.v
-```
-![image](https://github.com/user-attachments/assets/5717cbc9-0303-46b2-bcbe-41748325c4ad)
-
-
-**Synthesize the top level module:**
-```
 synth -top good_mux
 ```
-![image](https://github.com/user-attachments/assets/14018083-104b-4037-8327-819e73043671)
+
+![Screenshot from 2024-10-21 21-41-10](https://github.com/user-attachments/assets/14aa0ea0-63b1-48c8-99ef-d4e44068d0ef)
 
 
 **Map to the standard library:**
@@ -1967,25 +1957,25 @@ synth -top good_mux
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
 
-![image](https://github.com/user-attachments/assets/c2d5e2d3-25e2-4df9-a8dd-0b8c2796282a)
-![image](https://github.com/user-attachments/assets/f26e5b13-e93f-465c-9567-6f3dd301782c)
+![Screenshot from 2024-10-21 21-40-58](https://github.com/user-attachments/assets/6b8b1de0-3682-4dc7-80c0-61e611bf7005)
 
 
-
-**To view the graphical representation of the generated logic, simply enter:**
+**View the graphical representation of the generated logic**
 ```
 show
 ```
-![image](https://github.com/user-attachments/assets/f59ce8e8-79b0-4f26-8f85-04f6c65fd07a)
+![Screenshot from 2024-10-21 21-38-31](https://github.com/user-attachments/assets/53ed05c3-bb2d-4a0b-b68c-5c28d3e7b533)
 
 
-**To save the netlist, use the write_verilog command. This will generate the netlist file in the current directory:**
+
+**Save the netlist, using the write_verilog command:**
 ```
 write_verilog -noattr good_mux_netlist.v
-!gvim good_mux_netlist.v
+cat good_mux_netlist.v
 ```
+![Screenshot from 2024-10-21 21-47-55](https://github.com/user-attachments/assets/cd394077-7483-4d7c-b713-ebaec6952bba)
 
-![image](https://github.com/user-attachments/assets/ba686931-ea3d-4256-85d4-2c3aba6cd24c)
+
 </details>
 
 <details>
