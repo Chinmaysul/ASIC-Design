@@ -2824,10 +2824,10 @@ show
 write_verilog -noattr counter_opt_net.v
 ```
 
-![image](https://github.com/user-attachments/assets/b08e9a6a-0947-4a36-9c34-1e722a09303e)
+![image](https://github.com/user-attachments/assets/275169b8-ab48-46f6-8eea-661e098025bc)
 
+![image](https://github.com/user-attachments/assets/de54ef93-3e97-48b2-8752-56f218b8692b)
 
-![image](https://github.com/user-attachments/assets/b55ceee6-1bbc-4236-957e-3c0c90592573)
 
 
 GTKWave Output:
@@ -2837,8 +2837,7 @@ iverilog counter_opt.v tb_counter_opt.v
 ./a.out
 gtkwave tb_counter_opt.vcd
 ```
-
-![image](https://github.com/user-attachments/assets/359ffb99-5980-459b-87d4-d153fa5f8da7)
+![image](https://github.com/user-attachments/assets/9463a18c-627d-450c-9de8-4e255eebd9f0)
 
 Modified counter logic:
 
@@ -2862,17 +2861,17 @@ Run the below code for netlist:
 ```
 yosys
 read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-read_verilog counter_opt.v
+read_verilog counter_opt2.v
 synth -top counter_opt
 dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
-write_verilog -noattr counter_opt_net.v
+write_verilog -noattr counter_opt2_net.v
 ```
-![image](https://github.com/user-attachments/assets/6b0daf62-32e0-486e-adfd-71fd8c8edac6)
+![image](https://github.com/user-attachments/assets/5e870f18-59e5-4c3d-b19d-c19a95b723d2)
 
+![image](https://github.com/user-attachments/assets/4677df33-bcdf-489e-b14b-7ba898c084d6)
 
-![image](https://github.com/user-attachments/assets/c8b04d5e-479c-42c5-9af9-b612d85064fb)
 
 
 GTKWave Output:
@@ -2882,7 +2881,8 @@ iverilog counter_opt.v tb_counter_opt.v
 ./a.out
 gtkwave tb_counter_opt.vcd
 ```
-![image](https://github.com/user-attachments/assets/977035cf-fd8e-4432-8717-ca7f6966d993)
+![image](https://github.com/user-attachments/assets/1c76726f-7400-4202-9b52-93007870c9e2)
+
 </details>
 <details>
 <summary>Day-4</summary>
