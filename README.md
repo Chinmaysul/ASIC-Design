@@ -1979,494 +1979,351 @@ cat good_mux_netlist.v
 </details>
 
 <details>
-<summary>Day-2</summary>
-<br>
-
-# Timing libs, hierarchical vs flat synthesis and efficient flop coding styles:
-
-## LAB-4:
-**Introduction and Walkthrough to ' dot lib ':**
-
-The .lib file serves as a collection of standard cells, including slow cells, fast cells, and other essential components. To view the contents of a .lib file, use the following command:
-```
-sudo -i
-cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/lib
-gvim sky130_fd_sc_hd__tt_025C_1v80.lib
-```
-![image](https://github.com/user-attachments/assets/9c4e2544-45ba-475f-bf77-3bc3572283d9)
-
-
-The .lib file provides critical information about the type of process used (such as 130nm technology in this case) and the process conditions like temperature, voltage, etc. It also defines various constraints, including units for variables and the type of technology used. For example:
-
-* technology("cmos"): Specifies the technology as CMOS.
-* delay_model : "table_lookup": Defines the delay model.
-* bus_naming_style : "%s[%d]": Defines the naming convention for buses.
-* time_unit : "1ns": Sets the unit of time.
-* voltage_unit : "1V": Sets the unit of voltage.
-* leakage_power_unit : "1nW": Defines the unit for leakage power.
-* current_unit : "1mA": Sets the unit of current.
-* pulling_resistance_unit : "1kohm": Specifies the unit for pulling resistance.
-* capacitive_load_unit(1.0000000000, "pf"): Defines the unit for capacitive load.
-
-Additionally, the .lib file provides details about the characteristics of various cells, such as leakage power, power consumption, area, input capacitance, and delay for different input combinations.
-
-
-**Considering a two input **AND** gate:**
-
-![image](https://github.com/user-attachments/assets/e868dcd4-4a26-47d0-9b22-c4d30d62f3a3)
-
-
-## LAB-5:
-**Hierarchical vs flat synthesis & Various Flop Coding Styles and optimization:**
-
-## Hierarchical Synthesis:
-**Instructions:**
+Run the below commands to view the contents inside the .lib file:
 
 ```
-cd ~
-cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
+cd ASIC/sky130RTLDesignAndSynthesisWorkshop/lib/
+vim sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+
+![image](https://github.com/user-attachments/assets/d5dbfd3c-5f89-42b7-9505-2e5946717169)
+
+The liberty(.lib) files store PVT parameters (Process, Voltage, Temperature). Variations in these parameters can significantly affect circuit performance. Manufacturing variations, voltage fluctuations, and temperature changes all contribute to this impact."
+
+We can also find different versions of the same cell. For example, consider the AND gate
+
+![image](https://github.com/user-attachments/assets/d9d6f28d-3a58-4323-87be-17d9a0255736)
+
+![image](https://github.com/user-attachments/assets/562710e7-544f-4d3b-b22a-8f49e492ed7e)
+
+![image](https://github.com/user-attachments/assets/8fb876cc-3b6f-4764-893d-5c17590a7ae3)
+
+We can observe that:
+
+* and2_0 -- taking the least area, more delay and low power.
+* and2_1 -- taking more area, less delay and high power.
+* and2_2 -- taking the largest area, larger delay and highest power.
+
+Hierarchical vs Flat Synthesis:
+
+Hierarchical synthesis involves synthesizing a complex design by breaking it down into various sub-modules, where each module is synthesized separately to generate gate-level netlists and then integrated. Hierarchical synthesis allows for better organization, reuse of modules, and incremental changes to the design without affecting the entire system. Flat synthesis, on the other hand, treats the entire design as a single, monolithic unit during the synthesis process and regardless of any hierarchical relations, it is synthesized into a single netlist. Flat synthesis can be useful for optimizing certain designs but it becomes challenging to maintain, analyze, and modify the design due to its lack of structural modularity.
+
+Consider the verilog file `multiple_modules.v` which is given in the verilog_files directory
+
+```
+module sub_module2 (input a, input b, output y);
+    assign y = a | b;
+endmodule
+
+module sub_module1 (input a, input b, output y);
+    assign y = a&b;
+endmodule
+
+
+module multiple_modules (input a, input b, input c , output y);
+    wire net1;
+    sub_module1 u1(.a(a),.b(b),.y(net1));  //net1 = a&b
+    sub_module2 u2(.a(net1),.b(c),.y(y));  //y = net1|c ,ie y = a&b + c;
+endmodule
+```
+
+To perform **hierarchical synthesis** on the `multiple_modules.v` file type the following commands:
+
+```
 yosys
 read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 read_verilog multiple_modules.v
-```
-![image](https://github.com/user-attachments/assets/8cdd238c-e0b0-406f-898e-4936be8c609e)
-
-**To Synthesize the Design:**
-```
 synth -top multiple_modules
-```
-
-When we run the command synth -top multiple_modules in Yosys, hierarchical synthesis is performed. This means that the relationships between the modules are preserved, maintaining the module hierarchy throughout the synthesis process.
-
-![image](https://github.com/user-attachments/assets/477ffdbb-53bd-4f59-88d7-8b950106a00b)
-
-**Multiple Modules: - 2 SubModules**
-
-Commands to generate the netlist & Create a Graphical Representation of Logic for Multiple Modules: 
-
-```
 abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show multiple_modules
-```
-![image](https://github.com/user-attachments/assets/0c65deee-ff56-4111-a733-f5ef462ce97a)
-
-**Commands to write the netlist and view it:**
-
-```
 write_verilog -noattr multiple_modules_hier.v
-!vim multiple_modules_hier.v
 ```
 
-![image](https://github.com/user-attachments/assets/33e9e7ca-cb6e-4765-9802-206a75fc31a0)
+The following statistics are displayed:
 
-**Flattening:** To  merge all hierarchical modules in the design into a single module and generate a flat netlist, simply type the following command:
+![image](https://github.com/user-attachments/assets/52098879-b1b3-43c4-bba4-ca00e0603ed1)
+
+Netlist:
+
+![image](https://github.com/user-attachments/assets/9167285b-0f13-4c41-944f-0b6becfafd0a)
+
+Hierarchical netlist code:
+
+![image](https://github.com/user-attachments/assets/15c85939-1276-4893-82b0-a5894e9066a8)
+
+To perform **flat synthesis** on the `multiple_modules.v` file type the following commands:
+
 ```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog multiple_modules.v
+synth -top multiple_modules
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 flatten
-```
-**Commands to write the netlist and view it:**
-
-```
-write_verilog -noattr multiple_modules_hier.v
-!vim multiple_modules_hier.v
+show
+write_verilog -noattr multiple_modules_flat.v
 ```
 
-![image](https://github.com/user-attachments/assets/db7eefe9-5b81-4872-a68a-6cb3090f3760)
+The following statistics are displayed:
 
-![image](https://github.com/user-attachments/assets/9d1ebe79-fb02-423e-9815-a45d16d1bb47)
+![image](https://github.com/user-attachments/assets/7dd6d1e3-2821-490a-b71a-c098b9654a7f)
 
+Netlist:
 
-**Graphical Representation of Logic for Multiple Modules:**
+![image](https://github.com/user-attachments/assets/538539a2-9358-444a-9bd3-7309a490a5b5)
+
+Flat synthesis netlist code:
+
+![image](https://github.com/user-attachments/assets/74b94d17-692c-41e1-a138-84a9376797f2)
+
+To perform **sub module synthesis**. type the below commands:
+
 ```
-show 
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
+read_verilog multiple_modules.v 
+synth -top sub_module
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
+show
 ```
-![image](https://github.com/user-attachments/assets/b323f6ca-8df0-4cf1-a340-abdaeb119e86)
+
+The following statistics are displayed:
+
+![image](https://github.com/user-attachments/assets/46762203-dd3a-45a5-925f-2d3f07bf51f3)
+
+Netlist:
+
+![image](https://github.com/user-attachments/assets/7d1fd148-bbf7-4128-88df-15e0e2fc755b)
 
 
-## D Flip-Flop Design and Simulation Using Icarus Verilog, GTKWave, and Yosys:
+Netlist code:
 
-This project demonstrates various coding styles for D Flip-Flops, followed by simulation using Icarus Verilog and GTKWave. It also covers the synthesis of these designs with Yosys. The simulations focus on three types of D Flip-Flops:
+![image](https://github.com/user-attachments/assets/936aca6e-0ad8-4d3b-abbc-46197b490194)
 
-  *  D Flip-Flop with Asynchronous Reset
-  *  D Flip-Flop with Asynchronous Set
-  *  D Flip-Flop with Synchronous Reset
+**Flip-Flop Coding Styles and Optimizations**
 
-## 1. D Flip-Flop with Asynchronous Reset:
+Flip-Flops are an essential part of sequential logic in a circuit and here we explore the design and synthesis of various types of flip-flops. To prevent glitches in digital circuits, we use flip-flops to store intermediate values. This ensures that combinational circuit inputs remain stable until the clock edge, avoiding glitches and maintaining correct operation:
 
-Verilog code for the D Flip-Flop with an asynchronous reset:
+**Asynchronous Reset Flip-flop:**
+
+Verilog Code:
+
 ```
-module dff_asyncres(input clk, input async_reset, input d, output reg q);
-	always@(posedge clk, posedge async_reset)
-	begin
-		if(async_reset)
-			q <= 1'b0;
-		else
-			q <= d;
-	end
+module dff_asyncres ( input clk ,  input async_reset , input d , output reg q );
+always @ (posedge clk , posedge async_reset)
+begin
+	if(async_reset)
+		q <= 1'b0;
+	else	
+		q <= d;
+end
 endmodule
 ```
 
-Testbench for Asynchronous Reset D Flip-Flop:
-```
-module tb_dff_asyncres; 
-	reg clk, async_reset, d;
-	wire q;
-	dff_asyncres uut (.clk(clk), .async_reset(async_reset), .d(d), .q(q));
+Run the below code to view the simulation:
 
-	initial begin
-		$dumpfile("tb_dff_asyncres.vcd");
-		$dumpvars(0, tb_dff_asyncres);
-		clk = 0;
-		async_reset = 1;
-		d = 0;
-		#3000 $finish;
-	end
-	
-	always #10 clk = ~clk;
-	always #23 d = ~d;
-	always #547 async_reset = ~async_reset; 
-endmodule
-```
-
-**Steps to Run the Simulation:**
-
-1. Navigate to the directory where the Verilog files are located:
-```
-cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
-```
-
-2. Run the following commands to compile and simulate the design:
 ```
 iverilog dff_asyncres.v tb_dff_asyncres.v
-ls
-```
-The compiled output will be saved as a.out.
-
-3. Execute the compiled output and open the waveform viewer:
-```
 ./a.out
 gtkwave tb_dff_asyncres.vcd
 ```
 
-By following these steps,we can observe the behavior of the D Flip-Flop with an asynchronous reset in the waveform viewer:
+Waveform:
 
-![image](https://github.com/user-attachments/assets/d9b2afd3-a16f-4b74-9eff-a01471cfd177)
+![image](https://github.com/user-attachments/assets/55bbcda4-4c31-4d51-8ee3-bd20faa7d153)
 
+Run the below code to view the netlist:
 
-**Observation:** From the waveform, we can observe that when the asynchronous reset is activated (set high), the Q output immediately resets to zero, regardless of the clock's positive or negative edge. This demonstrates the asynchronous behavior of the reset signal.
-
-
-## 2. D Flip-Flop with Asynchronous Set:
-
-This section demonstrates the implementation of a D Flip-Flop with an asynchronous set, using Verilog. The design ensures that when the asynchronous set signal is high, the output Q is immediately set to 1, regardless of the clock signal.
-
-Verilog Code for Asynchronous Set D Flip-Flop:
 ```
-module dff_async_set(input clk, input async_set, input d, output reg q);
-	always@(posedge clk, posedge async_set)
-	begin
-		if(async_set)
-			q <= 1'b1;
-		else
-			q <= d;
-	end
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_asyncres.v
+synth -top dff_asyncres
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+Netlist:
+
+![image](https://github.com/user-attachments/assets/70d7f947-f0e6-4921-b143-5f7419cf3ef6)
+
+**Synchronous Reset Flip-flop:**
+
+Verilog Code:
+
+```
+module dff_syncres ( input clk , input async_reset , input sync_reset , input d , output reg q );
+always @ (posedge clk )
+begin
+	if (sync_reset)
+		q <= 1'b0;
+	else	
+		q <= d;
+end
 endmodule
 ```
 
-Testbench Code:
+Run the below code to view the simulation:
+
 ```
-module tb_dff_async_set; 
-	reg clk, async_set, d;
-	wire q;
-	dff_async_set uut (.clk(clk), .async_set(async_set), .d(d), .q(q));
+iverilog dff_syncres.v tb_dff_syncres.v
+./a.out
+gtkwave tb_dff_syncres.vcd
+```
 
-	initial begin
-		$dumpfile("tb_dff_async_set.vcd");
-		$dumpvars(0, tb_dff_async_set);
-		// Initialize Inputs
-		clk = 0;
-		async_set = 1;
-		d = 0;
-		#3000 $finish;
-	end
+Waveform:
 
-	always #10 clk = ~clk;
-	always #23 d = ~d;
-	always #547 async_set = ~async_set; 
+![image](https://github.com/user-attachments/assets/8b80edd0-efdb-4ca7-9e4c-7db904655d20)
+
+Run the below code to view the netlist:
+
+```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_syncres.v
+synth -top dff_syncres
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+Netlist:
+
+![image](https://github.com/user-attachments/assets/00399402-3299-4fa0-b672-0e97a2009683)
+
+**Asynchronous Set Flip-flop:**
+
+Verilog Code:
+
+```
+module dff_async_set ( input clk ,  input async_set , input d , output reg q );
+always @ (posedge clk , posedge async_set)
+begin
+	if(async_set)
+		q <= 1'b1;
+	else	
+		q <= d;
+end
 endmodule
 ```
 
+Run the below code to view the simulation:
 
-**Steps to Run the Simulation:**
-
-1. Navigate to the directory containing the Verilog files:
-```
-cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
-```
-
-2. Compile the Verilog code and the testbench using Icarus Verilog:
 ```
 iverilog dff_async_set.v tb_dff_async_set.v
-ls
-```
-
-The output will be saved as a.out.
-
-3. Run the compiled file and open the waveform in GTKWave:
-```
 ./a.out
 gtkwave tb_dff_async_set.vcd
 ```
 
-**Result:**
+Waveform:
 
-After running the simulation, we will observe the behavior of the D Flip-Flop with an asynchronous set in the waveform viewer. Below is a snapshot of the commands and the resulting waveforms.
+![image](https://github.com/user-attachments/assets/ec901aae-f8a9-4b23-8296-87dda912fc07)
 
-![image](https://github.com/user-attachments/assets/708c04a7-baac-40c6-8a65-81eb4cb1d236)
+Run the below code to view the netlist:
 
-**Observation:** The waveform clearly shows that the Q output switches to one when the asynchronous set is asserted high, regardless of the clock edge (positive or negative).
-
-## 3. D Flip-Flop with Synchronous Reset:
-
-This section contains Verilog code to implement a D Flip-Flop with a **Synchronous Reset**.
-
-The Verilog code defines a D flip-flop with a synchronous reset, where the reset signal is active high. When the reset is asserted during a clock edge, the output `q` is set to 0. Otherwise, the flip-flop captures the value of `d` on the rising edge of the clock.
 ```
-module dff_syncres (input clk,
-    input sync_reset,
-    input d,
-    output reg q
-);
-    
-    always @(posedge clk) begin
-        if (sync_reset)
-            q <= 1'b0;
-        else
-            q <= d;
-    end
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog dff_async_set.v
+synth -top dff_async_set
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+```
+
+Netlist:
+
+![image](https://github.com/user-attachments/assets/a6b6a03b-0b96-467b-9ad8-3367e746b676)
+
+
+**Optimizations:**
+
+Example 1:
+
+Consider the verilog code 'mult_2.v' :
+
+```
+module mul2 (input [2:0] a, output [3:0] y);
+assign y = a * 2;
 endmodule
 ```
 
-Testbench Code:
+Truth Table:
+
+| a2 | a1 | a0 | y3 | y2 | y1 | y0 |
+|---|---|---|---|---|---|---|
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 | 0 | 1 | 0 |
+| 0 | 1 | 0 | 0 | 1 | 0 | 0 |
+| 0 | 1 | 1 | 0 | 1 | 1 | 0 |
+| 1 | 0 | 0 | 1 | 0 | 0 | 0 |
+| 1 | 0 | 1 | 1 | 0 | 1 | 0 |
+| 1 | 1 | 0 | 1 | 1 | 0 | 0 |
+| 1 | 1 | 1 | 1 | 1 | 1 | 0 |
+
+We can see the multiplication of a number by 2 doesnt really need any extra hardware we just need to append the LSB's with zeroes and the remaining bits are the input bits of same, It can be realised by grouding the LSB's and wiring the input properly to the output.
+
+
+Run the below code to view the netlist:
+
 ```
-module tb_dff_syncres;
-    reg clk, sync_reset, d;
-    wire q;
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog mult_2.v
+synth -top mul2
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+write_verilog -noattr mult_2_net.v
+```
 
-    // Instantiate the Device Under Test (DUT)
-    dff_syncres uut (.clk(clk), .sync_reset(sync_reset), .d(d), .q(q));
+Statistics:
 
-    initial begin
-        // Initialize waveform dump
-        $dumpfile("tb_dff_syncres.vcd");
-        $dumpvars(0, tb_dff_syncres);
+![image](https://github.com/user-attachments/assets/4f5467de-821e-485d-a1ca-595fa438f000)
 
-        // Initialize inputs
-        clk = 0;
-        sync_reset = 1;
-        d = 0;
+Netlist:
 
-        // End simulation after a set time
-        #3000 $finish;
-    end
+![image](https://github.com/user-attachments/assets/d2333712-d710-413c-bec9-ae71c415e3fb)
 
-    // Clock generation
-    always #10 clk = ~clk;
+Netlist code:
 
-    // Toggle the input `d` every 23 time units
-    always #23 d = ~d;
+![image](https://github.com/user-attachments/assets/895a9182-acb0-408f-a715-0b93122b1272)
 
-    // Toggle the reset signal every 547 time units
-    always #547 sync_reset = ~sync_reset;
+Example 2:
+
+Consider the verilog code 'mult_8.v' :
+
+```
+module mult8 (input [2:0] a , output [5:0] y);
+	assign y = a * 9;
 endmodule
 ```
 
-**Steps to Run the Simulation:**
+In this design the 3-bit input number "a" is multiplied by 9 i.e (a*9) which can be re-written as (a*8) + a . The term (a*8) is nothing but a left shifting the number a by three bits. Consider that a = a2 a1 a0. (a*8) results in a2 a1 a0 0 0 0. (a*9)=(a*8)+a = a2 a1 a0 a2 a1 a0 = aa(in 6 bit format). Hence in this case no hardware realization is required. The synthesized netlist of this design is shown below:
 
-1. Navigate to the directory containing the Verilog files:
 ```
-cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
-```
-
-2. Compile the Verilog code and the testbench using Icarus Verilog:
-```
-iverilog dff_async_set.v tb_dff_async_set.v
-ls
-```
-
-The output will be saved as a.out.
-
-3. Run the compiled file and open the waveform in GTKWave:
-```
-./a.out
-gtkwave tb_dff_async_set.vcd
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog mult_8.v
+synth -top mult8
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+write_verilog -noattr mult_8_net.v
 ```
 
-**Result:**
-After running the simulation, we will observe the behavior of the D Flip-Flop with an Synchronous Reset in the waveform viewer. Below is a snapshot of the commands and the resulting waveforms.
+Statistics:
 
-![image](https://github.com/user-attachments/assets/f016b085-b521-45da-b90a-3270b7ca8498)
+![image](https://github.com/user-attachments/assets/dc7480c5-f8f9-4186-b655-408a9381cdd6)
 
-**Observation:** From the waveform, it is evident that the Q output transitions to zero when the synchronous reset is asserted high, but only at the positive edge of the clock signal.
+Netlist:
 
+![image](https://github.com/user-attachments/assets/495a4cdf-7c6e-42a7-abd9-9d538c691cf6)
 
-# Synthesis of Various D-Flip-Flops using Yosys
+Netlist code:
 
-This repository demonstrates the synthesis and simulation of three types of D-Flip-Flops using Yosys:  
-1. **Asynchronous Reset**  
-2. **Asynchronous Set**  
-3. **Synchronous Reset**
-
-## 1. Asynchronous Reset D Flip-Flop
-
-### Command Steps for Synthesis:
-
-Follow the steps below to synthesize the asynchronous reset D Flip-Flop design:
-
-1. Navigate to the required directory:
-
-    ```
-    cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
-    ```
-
-2. Launch Yosys:
-
-    ```
-    yosys
-    ```
-
-3. Read the standard cell library:
-
-    ```
-    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-    ```
-
-4. Read the Verilog design files:
-
-    ```
-    read_verilog dff_asyncres.v
-    ```
-
-5. Synthesize the design:
-
-    ```
-    synth -top dff_asyncres
-    ```
-
-6. Generate the netlist:
-
-    ```
-    dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-    ```
-
-7. Create a graphical representation of the Asynchronous Reset D Flip-Flop:
-
-    ```
-    show
-    ```
-
-![image](https://github.com/user-attachments/assets/016a61ad-2f7e-46c8-8707-27df01599718)
-
-
-## 2. Asynchronous Set D Flip-Flop
-
-### Command Steps for Synthesis
-
-Follow the steps below to synthesize the asynchronous set D Flip-Flop design:
-
-1. Navigate to the required directory:
-
-    ```
-    cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
-    ```
-
-2. Launch Yosys:
-
-    ```
-    yosys
-    ```
-
-3. Read the standard cell library:
-
-    ```
-    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-    ```
-
-4. Read the Verilog design files:
-
-    ```
-    read_verilog dff_async_set.v
-    ```
-
-5. Synthesize the design:
-
-    ```
-    synth -top dff_async_set
-    ```
-
-6. Generate the netlist:
-
-    ```
-    dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-    ```
-
-7. Create a graphical representation of the Asynchronous Set D Flip-Flop:
-
-    ```
-    show
-    ```
-
-![image](https://github.com/user-attachments/assets/e8b707f9-ca5d-4c6d-97c1-387b7f6b4840)
-
-
-## 3. Synchronous Reset D Flip-Flop
-
-### Command Steps for Synthesis
-
-Follow the steps below to synthesize the synchronous reset D Flip-Flop design:
-
-1. Navigate to the required directory:
-
-    ```
-    cd /home/nikhil-bhusari/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
-    ```
-
-2. Launch Yosys:
-
-    ```
-    yosys
-    ```
-
-3. Read the standard cell library:
-
-    ```
-    read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-    ```
-
-4. Read the Verilog design files:
-
-    ```
-    read_verilog dff_syncres.v
-    ```
-
-5. Synthesize the design:
-
-    ```
-    synth -top dff_syncres
-    ```
-
-6. Generate the netlist:
-
-    ```
-    dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
-    ```
-
-7. Create a graphical representation of the Synchronous Reset D Flip-Flop:
-
-    ```
-    show
-    ```
-![image](https://github.com/user-attachments/assets/930de8fb-a284-4420-a034-07ef24de4667)
-
+![image](https://github.com/user-attachments/assets/bde3417b-dc61-4033-92f2-5ff0fae27367)
 </details>
 
 <details>
