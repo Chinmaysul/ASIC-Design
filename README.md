@@ -2569,10 +2569,10 @@ show
 write_verilog -noattr dff_const1_net.v
 ```
 
+![image](https://github.com/user-attachments/assets/f2f3533f-b135-4948-ac9b-164b1505a02a)
 
-![image](https://github.com/user-attachments/assets/080978a6-12a9-443c-8d25-e923d6560b9b)
+![image](https://github.com/user-attachments/assets/0bb44777-718e-4c04-98b1-c77cf4d37bb3)
 
-![image](https://github.com/user-attachments/assets/b66b706b-cc36-4e8a-aeda-1b8a30480bd8)
 
 GTKWave Output:
 
@@ -2582,7 +2582,8 @@ iverilog dff_const1.v tb_dff_const1.v
 gtkwave tb_dff_const1.vcd
 ```
 
-![image](https://github.com/user-attachments/assets/f4e729c1-1130-40f3-ae69-99b1a2015d08)
+![image](https://github.com/user-attachments/assets/8f166a85-d3c8-441d-b825-8a02346adf69)
+
 
 
 **Example 2:**
@@ -2613,10 +2614,9 @@ abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 write_verilog -noattr dff_const2_net.v
 ```
+![image](https://github.com/user-attachments/assets/bee0000e-99b3-4003-a617-b17a53c7bf03)
 
-![image](https://github.com/user-attachments/assets/bb6d4ae1-0cf3-4186-bb6b-aca6476b1840)
-
-![image](https://github.com/user-attachments/assets/3503d2c9-ac1b-4d1b-986e-5aaf494b9059)
+![image](https://github.com/user-attachments/assets/80ae8814-f92b-4b58-8e1d-a197eeb18593)
 
 
 GTKWave Output:
@@ -2627,7 +2627,8 @@ iverilog dff_const2.v tb_dff_const2.v
 gtkwave tb_dff_const2.vcd
 ```
 
-![image](https://github.com/user-attachments/assets/c9147236-4f3a-4d12-b8fe-c506749b3890)
+![image](https://github.com/user-attachments/assets/38835e07-c781-4279-ac70-c455d72fb3da)
+
 
 **Example 3:**
 
@@ -2665,11 +2666,10 @@ abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 write_verilog -noattr dff_const3_net.v
 ```
+![Screenshot from 2024-10-21 23-53-42](https://github.com/user-attachments/assets/cbbaa261-53f0-4c47-99de-5e4a1d682a51)
 
-![image](https://github.com/user-attachments/assets/cdf64a91-3fad-429b-b91e-b2b563d16dc7)
+![image](https://github.com/user-attachments/assets/a8becf85-c765-4b36-9f79-43f4baa0e5e6)
 
-
-![image](https://github.com/user-attachments/assets/3085e4f7-d89f-43e5-a26f-fb1a1fe8999e)
 
 
 GTKWave Output:
@@ -2680,7 +2680,7 @@ iverilog dff_const3.v tb_dff_const3.v
 gtkwave tb_dff_const3.vcd
 ```
 
-![image](https://github.com/user-attachments/assets/a6718736-a93a-4f3e-90f5-f3f85f22292c)
+![image](https://github.com/user-attachments/assets/704bdf19-301d-4e11-8131-5d615e34e911)
 
 
 **Example 4:**
@@ -2719,10 +2719,11 @@ abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 show
 write_verilog -noattr dff_const4_net.v
 ```
-![image](https://github.com/user-attachments/assets/a10095c1-63f2-4343-9304-413d0f941465)
+![image](https://github.com/user-attachments/assets/e7ddc58e-182a-4b3f-8eb1-38647c5fcff3)
 
 
-![image](https://github.com/user-attachments/assets/45dd36fd-035a-4adc-aad8-ffda9c2a3ee2)
+![image](https://github.com/user-attachments/assets/cc08fc4b-8577-44dd-9707-270e5715851c)
+
 
  
 GTKWave Output:
@@ -2733,7 +2734,7 @@ iverilog dff_const4.v tb_dff_const4.v
 gtkwave tb_dff_const4.vcd
 ```
 
-![image](https://github.com/user-attachments/assets/790a1467-b14b-484d-8f1b-7212d66b051d)
+![image](https://github.com/user-attachments/assets/9b413497-2ee9-41f9-9dca-7ffac9b2d7f1)
 
 
 **Example 5:**
@@ -2772,10 +2773,10 @@ show
 write_verilog -noattr dff_const5_net.v
 ```
 
-![image](https://github.com/user-attachments/assets/42cac623-761a-4a4d-9678-7ce0960b0377)
+![image](https://github.com/user-attachments/assets/8cd16a84-c1cf-42b0-8bed-30b580bb206f)
 
+![image](https://github.com/user-attachments/assets/60d02237-77f6-4250-9b8b-2b3d23e6a1a0)
 
-![image](https://github.com/user-attachments/assets/243df51b-d924-465f-9ddf-7523b9d42e60)
 
 
 GTKWave Output:
@@ -2786,7 +2787,8 @@ iverilog dff_const5.v tb_dff_const5.v
 gtkwave tb_dff_const5.vcd
 ```
 
-![image](https://github.com/user-attachments/assets/d695cd08-fc33-44d9-bfa2-ce27ae98e9c6)
+![image](https://github.com/user-attachments/assets/5b99179b-5d7f-4345-9afb-7e51cab20afb)
+
 
 
 **Sequential Logic Optimizations for unused outputs**
