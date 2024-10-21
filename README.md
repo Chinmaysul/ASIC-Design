@@ -2998,10 +2998,11 @@ iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_
 gtkwave tb_bad_mux.vcd
 ```
 
-![image](https://github.com/user-attachments/assets/e258dab9-fd7e-497f-9990-aba52cee89d3)
+![image](https://github.com/user-attachments/assets/0f844ecc-027a-4ee7-b72a-bdbce550d699)
 
 
-The displayed waveforms represent the results of the Gate Level Synthesis (GLS) for the Bad MUX design.
+
+The displayed waveforms represent the results of the Gate Level Synthesis (GLS) for the Bad MUX design shows correct result after GLS.
 
 ### Example 3: Blocking Caveat
 
