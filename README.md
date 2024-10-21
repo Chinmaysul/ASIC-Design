@@ -1979,8 +1979,13 @@ cat good_mux_netlist.v
 </details>
 
 <details>
-<summary>Day-1</summary>
+<summary>Day-2</summary>
 <br>
+	
+## Timing, Hierarchical v/s Flat Synthesis and Flip-Flop Coding:
+
+### Task 1:
+
 Run the below commands to view the contents inside the .lib file:
 
 ```
@@ -2007,7 +2012,7 @@ We can observe that:
 * and2_1 -- taking more area, less delay and high power.
 * and2_2 -- taking the largest area, larger delay and highest power.
 
-Hierarchical vs Flat Synthesis:
+### Task 2: Hierarchical vs Flat Synthesis
 
 Hierarchical synthesis involves synthesizing a complex design by breaking it down into various sub-modules, where each module is synthesized separately to generate gate-level netlists and then integrated. Hierarchical synthesis allows for better organization, reuse of modules, and incremental changes to the design without affecting the entire system. Flat synthesis, on the other hand, treats the entire design as a single, monolithic unit during the synthesis process and regardless of any hierarchical relations, it is synthesized into a single netlist. Flat synthesis can be useful for optimizing certain designs but it becomes challenging to maintain, analyze, and modify the design due to its lack of structural modularity.
 
@@ -2102,6 +2107,7 @@ Netlist:
 
 ![Screenshot from 2024-10-21 22-23-24](https://github.com/user-attachments/assets/bc03775a-28e6-478b-a900-7681136c6b7b)
 
+### Task 3
 
 **Flip-Flop Coding Styles and Optimizations**
 
@@ -2233,7 +2239,7 @@ show
 ![Screenshot from 2024-10-21 22-44-44](https://github.com/user-attachments/assets/329deecf-e155-4c18-9689-ccca36097aa6)
 
 
-**Optimizations:**
+### Task 4: Optimizations
 
 Example 1:
 
@@ -2299,5 +2305,179 @@ Netlist code:
 ![Screenshot from 2024-10-21 22-55-57](https://github.com/user-attachments/assets/5dc579c7-4a21-4dee-8fa9-f973371e2082)
 
 
+</details>
+<details>
+<summary>Day-4</summary>
+<br>
+
+##  GLS, Blocking vs Non-Blocking statements:
+
+### Task 1: Gate Level Simulation (GLS):
+
+Gate Level Simulation is a vital step in verifying digital circuits. It involves simulating the synthesized netlist—a lower-level representation of the design—using a testbench to verify logical correctness and timing behavior. By comparing the simulated outputs with the expected results, GLS ensures that synthesis has not introduced any errors and that the design meets performance requirements.
+
+![image](https://github.com/user-attachments/assets/de76b0ed-1da9-48b5-b215-71350348f87d)
+
+
+Accurate sensitivity lists are critical for ensuring correct circuit behavior. Incomplete sensitivity lists may result in unexpected latches. Similarly, blocking and non-blocking assignments within `always` blocks exhibit different execution behaviors. Incorrect use of blocking assignments may unintentionally create latches, leading to synthesis and simulation mismatches. To avoid these issues, circuit behavior should be carefully analyzed to ensure proper sensitivity lists and assignment usage.
+
+***GLS Example 1: 2-to-1 MUX using Ternary Operator***
+
+Verilog code:
+```
+module ternary_operator_mux (input i0, input i1, input sel, output y);
+assign y = sel ? i1 : i0;
+endmodule
+```
+
+Simulation steps:
+```
+iverilog ternary_operator_mux.v tb_ternary_operator_mux.v
+./a.out
+gtkwave tb_ternary_operator_mux.vcd
+```
+
+![Screenshot from 2024-10-21 23-11-39](https://github.com/user-attachments/assets/8ddc3718-9c16-4e4b-9152-4c7b347e738c)
+
+
+
+***Synthesis:***
+```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog ternary_operator_mux.v
+synth -top ternary_operator_mux
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show
+write_verilog -noattr ternary_operator_mux_net.v
+!gedit ternary_operator_mux_net.v
+```
+
+
+![Screenshot from 2024-10-21 23-13-40](https://github.com/user-attachments/assets/6077f8ef-5d45-49e8-89fd-5c23c98cf8da)
+
+![Screenshot from 2024-10-21 23-13-24](https://github.com/user-attachments/assets/cc777fc0-eb97-4328-8beb-d7b0c1647049)
+
+![Screenshot from 2024-10-21 23-14-30](https://github.com/user-attachments/assets/1cf0e463-a5c7-4d82-b71e-657ba92c688e)
+
+### Task 2: GLS Execution
+
+```
+cd ~/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v ternary_operator_mux_net.v tb_ternary_operator_mux.v
+./a.out
+gtkwave tb_ternary_operator_mux.vcd
+```
+
+![Screenshot from 2024-10-21 23-17-14](https://github.com/user-attachments/assets/92259c06-4b25-4901-a7da-35ea5f313ed4)
+
+
+***Example 2: 2-to-1 Bad MUX Design***
+
+Verilog code:
+```
+module bad_mux(input i0, input i1, input sel, output reg y);
+    always@(sel) begin
+        if(sel) y <= i1;
+        else y <= i0;
+    end
+endmodule
+```
+
+Simulation steps:
+```
+iverilog bad_mux.v tb_bad_mux.v
+./a.out
+gtkwave tb_bad_mux.vcd
+```
+
+![image](https://github.com/user-attachments/assets/855dbd94-9f3b-47ea-9660-b95d997954f1)
+
+
+### Synthesis:
+```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib  
+read_verilog bad_mux.v
+synth -top bad_mux
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
+show
+write_verilog -noattr bad_mux_net.v
+```
+
+
+![Screenshot from 2024-10-21 23-24-23](https://github.com/user-attachments/assets/ea20763b-828b-4d66-b85f-e758d551eaa3)
+![Screenshot from 2024-10-21 23-24-00](https://github.com/user-attachments/assets/0a692192-4cbf-4dcd-8eb9-3170c434f2f5)
+![Screenshot from 2024-10-21 23-23-48](https://github.com/user-attachments/assets/51964979-9c23-47a8-9334-fad65b40fb1b)
+
+
+### Gate Level Synthesis
+
+Navigate to the appropriate directory and simulate:
+```
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v bad_mux.v tb_bad_mux.v
+./a.out
+gtkwave tb_bad_mux.vcd
+```
+
+![image](https://github.com/user-attachments/assets/e258dab9-fd7e-497f-9990-aba52cee89d3)
+
+
+The displayed waveforms represent the results of the Gate Level Synthesis (GLS) for the Bad MUX design.
+
+### Example 3: Blocking Caveat
+
+Verilog code:
+```
+module blocking_caveat(input a, input b, input c, output reg d);
+    reg x;
+    always@(*) begin
+        d = x & c;
+        x = a | b;
+    end
+endmodule
+```
+
+Simulation steps:
+```
+iverilog blocking_caveat.v tb_blocking_caveat.v
+./a.out
+gtkwave tb_blocking_caveat.vcd
+```
+
+![image](https://github.com/user-attachments/assets/31c491b1-1efb-4356-87da-d3528462cdea)
+
+
+As shown in the waveform, when both A and B are zero, the expected output of the OR gate (X) should be zero, which would result in the AND gate output (D) also being zero. However, due to the blocking assignment in the design, the AND gate input X retains the previous value of A|B, which is one. This leads to a mismatch between the expected and actual output, highlighting the discrepancy caused by the blocking statement.
+
+```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib  
+read_verilog blocking_caveat.v
+synth -top blocking_caveat
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
+show
+write_verilog -noattr blocking_caveat_net.v
+!gedit blocking_caveat_net.v
+```
+![image](https://github.com/user-attachments/assets/f2c7fbc6-78f5-4e36-a235-0dceba648040)
+![image](https://github.com/user-attachments/assets/d13ad889-8601-40f0-b62a-2f01358d97e9)
+![image](https://github.com/user-attachments/assets/c8a8d841-096c-4c27-8aa0-6f2a567e5146)
+
+
+### Gate Level Synthesis
+
+Navigate to the appropriate directory and simulate:
+```
+iverilog ../my_lib/verilog_model/primitives.v ../my_lib/verilog_model/sky130_fd_sc_hd.v blocking_caveat_net.v tb_blocking_caveat.v
+./a.out
+gtkwave tb_blocking_caveat.vcd
+```
+![image](https://github.com/user-attachments/assets/878bda15-fbb0-4716-a658-0103b7ed9089)
+
+
+These waveforms illustrate how the design behaves at the gate level simulations with respect to the blocking assignment issue.
+
+</details>
 
 
