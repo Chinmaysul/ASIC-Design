@@ -3108,7 +3108,7 @@ iverilog ../../my_lib/verilog_model/primitives.v ../../my_lib/verilog_model/sky1
 ./a.out
 gtkwave dump.vcd
 ```
-
+![image](https://github.com/user-attachments/assets/264af632-f336-4eb4-ba30-d1982efb8c3d)
 ![Screenshot from 2024-10-24 01-56-24](https://github.com/user-attachments/assets/6c677293-54af-4ac8-bf2d-a166ea909598)
 ![image](https://github.com/user-attachments/assets/7db4fc12-0089-45a8-94ae-a290ed7e633e)
 
@@ -3122,6 +3122,9 @@ iverilog -o ./pre_synth_sim.out -DPRE_SYNTH_SIM src/module/testbench.v -I src/in
 ./pre_synth_sim.out
 gtkwave pre_synth_sim.vcd
 ```
+
+![image](https://github.com/user-attachments/assets/f4a6cf64-a034-4385-9631-5877a44ffa80)
+
 ![Screenshot from 2024-10-24 00-02-07](https://github.com/user-attachments/assets/eac15cda-838d-441c-a074-51a9b6ac28b1)
 
 As we can see comparing both the outputs are same hence verifying our results.
