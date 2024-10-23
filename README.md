@@ -3110,6 +3110,8 @@ gtkwave dump.vcd
 ```
 
 ![Screenshot from 2024-10-24 01-56-24](https://github.com/user-attachments/assets/6c677293-54af-4ac8-bf2d-a166ea909598)
+![image](https://github.com/user-attachments/assets/7db4fc12-0089-45a8-94ae-a290ed7e633e)
+
 
 
  ### Functional Simulations
