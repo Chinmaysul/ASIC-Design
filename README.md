@@ -3064,6 +3064,8 @@ These waveforms illustrate how the design behaves at the gate level simulations 
 Copy the src folder from your VSDBabySoC folder into your sky130RTLDesignAndSynthesisWorkshop folder
 
 ![Screenshot from 2024-10-23 23-43-16](https://github.com/user-attachments/assets/80d66f5d-46fd-49e5-bdda-a956d25547d9)
+![image](https://github.com/user-attachments/assets/89945373-3ec7-4473-b804-4367b21e5487)
+
 
 
 ### Synthesis: 
@@ -3078,9 +3080,27 @@ write_verilog -noattr rvmyth.v
 !gedit rvmyth.v
 
 ```
-
-![Screenshot from 2024-10-23 23-49-58](https://github.com/user-attachments/assets/d07e7783-baed-4234-8ce9-37580916b582)
+![Screenshot from 2024-10-23 23-49-58](https://github.com/user-attachments/assets/fc3639ae-b5dc-4868-95ab-29f4afaf42ec)
 ![Screenshot from 2024-10-23 23-51-37](https://github.com/user-attachments/assets/5d38a3c1-8241-4150-9763-93591df28aef)
+
+
+```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -lib ../lib/avsddac.lib
+read_liberty -lib ../lib/avsdpll.lib  
+read_verilog vsdbabysoc.v
+read_verilog rvmyth_pri.v
+read_verilog clk_gate.v 
+synth -top vsdbabysoc
+dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
+show
+write_verilog -noattr vsdbabysoc.synth.v
+```
+![image](https://github.com/user-attachments/assets/98a1b032-cae0-4f97-b16d-91b52c070292)
+![Screenshot from 2024-10-24 01-03-53](https://github.com/user-attachments/assets/956054fb-5555-4e76-82bd-653e7480a53b)
+![Screenshot from 2024-10-24 01-01-01](https://github.com/user-attachments/assets/6ca72a88-b1a5-45d4-89e7-f70e6f83929f)
 
 ### Generate GTKWave simulations:
 ```
