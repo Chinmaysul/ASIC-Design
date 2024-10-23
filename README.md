@@ -3059,4 +3059,49 @@ These waveforms illustrate how the design behaves at the gate level simulations 
 
 </details>
 
+# ASSIGNMENT 2: RISC-V Synthesis and compare output with functional simulation
+
+Copy the src folder from your VSDBabySoC folder into your sky130RTLDesignAndSynthesisWorkshop folder
+
+![Screenshot from 2024-10-23 23-43-16](https://github.com/user-attachments/assets/80d66f5d-46fd-49e5-bdda-a956d25547d9)
+
+
+### Synthesis: 
+```
+yosys
+read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog clk_gate.v
+read_verilog rvmyth.v
+synth -top rvmyth
+abc -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+write_verilog -noattr rvmyth.v
+!gedit rvmyth.v
+
+```
+![Screenshot from 2024-10-23 23-51-37](https://github.com/user-attachments/assets/5d38a3c1-8241-4150-9763-93591df28aef)
+![Screenshot from 2024-10-23 23-49-58](https://github.com/user-attachments/assets/d07e7783-baed-4234-8ce9-37580916b582)
+
+### Generate GTKWave simulations:
+```
+iverilog ../../my_lib/verilog_model/primitives.v ../../my_lib/verilog_model/sky130_fd_sc_hd.v rvmyth.v testbench.v vsdbabysoc.v avsddac.v avsdpll.v clk_gate.v
+./a.out
+gtkwave dump.vcd
+```
+![Screenshot from 2024-10-23 23-59-42](https://github.com/user-attachments/assets/a75174bc-63fb-442f-96bd-d990866e6beb)
+
+
+ ### Functional Simulations
+ ```
+cd ~
+cd VSDBabySoC
+iverilog -o ./pre_synth_sim.out -DPRE_SYNTH_SIM src/module/testbench.v -I src/include -I src/module/
+./pre_synth_sim.out
+gtkwave pre_synth_sim.vcd
+```
+![Screenshot from 2024-10-24 00-02-07](https://github.com/user-attachments/assets/eac15cda-838d-441c-a074-51a9b6ac28b1)
+
+As we can see comparing both the outputs are same hence verifying our results.
+
+
+
 
