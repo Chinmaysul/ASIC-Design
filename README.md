@@ -3090,7 +3090,7 @@ read_liberty -lib ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 read_liberty -lib ../lib/avsddac.lib
 read_liberty -lib ../lib/avsdpll.lib  
 read_verilog vsdbabysoc.v
-read_verilog rvmyth_pri.v
+read_verilog rvmyth.v
 read_verilog clk_gate.v 
 synth -top vsdbabysoc
 dfflibmap -liberty ../lib/sky130_fd_sc_hd__tt_025C_1v80.lib 
@@ -3108,7 +3108,8 @@ iverilog ../../my_lib/verilog_model/primitives.v ../../my_lib/verilog_model/sky1
 ./a.out
 gtkwave dump.vcd
 ```
-![Screenshot from 2024-10-23 23-59-42](https://github.com/user-attachments/assets/a75174bc-63fb-442f-96bd-d990866e6beb)
+
+![Screenshot from 2024-10-24 01-56-24](https://github.com/user-attachments/assets/6c677293-54af-4ac8-bf2d-a166ea909598)
 
 
  ### Functional Simulations
@@ -3123,6 +3124,6 @@ gtkwave pre_synth_sim.vcd
 
 As we can see comparing both the outputs are same hence verifying our results.
 
-
+![Screenshot from 2024-10-24 01-57-11](https://github.com/user-attachments/assets/a83d658d-4fa0-4c0b-b48a-e621f039024e)
 
 
