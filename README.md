@@ -3132,3 +3132,44 @@ As we can see comparing both the outputs are same hence verifying our results.
 ![Screenshot from 2024-10-24 01-57-11](https://github.com/user-attachments/assets/a83d658d-4fa0-4c0b-b48a-e621f039024e)
 
 
+# ASSIGNMENT 3: Post Synthesis Static Timing Analysis using OpenSTA
+
+First, write the contents of the .sdc in vsdbabysoc_synthesis.sdc:
+
+```
+cd VSDBabySoc/src/sdc
+gedit vsdbabysoc_synthesis.sdc
+
+```
+
+```
+set PERIOD 11.05
+
+set_units -time ns
+create_clock [get_pins {pll/CLK}] -name clk -period $PERIOD
+set_clock_uncertainty -setup  [expr $PERIOD * 0.05] [get_clocks clk]
+set_clock_transition [expr $PERIOD * 0.05] [get_clocks clk]
+set_clock_uncertainty -hold [expr $PERIOD * 0.08] [get_clocks clk]
+set_input_transition [expr $PERIOD * 0.08] [get_ports ENb_CP]
+set_input_transition [expr $PERIOD * 0.08] [get_ports ENb_VCO]
+set_input_transition [expr $PERIOD * 0.08] [get_ports REF]
+set_input_transition [expr $PERIOD * 0.08] [get_ports VCO_IN]
+set_input_transition [expr $PERIOD * 0.08] [get_ports VREFH]
+```
+
+To run OpenSTA, run the following commands:
+
+```
+cd VSDBabySoc/src
+sta
+read_liberty -min ./lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -min ./lib/avsdpll.lib
+read_liberty -min ./lib/avsddac.lib
+read_liberty -max ./lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -max ./lib/avsdpll.lib
+read_liberty -max ./lib/avsddac.lib
+read_verilog ../output/synth/vsdbabysoc.synth.v
+link_design vsdbabysoc
+read_sdc ./sdc/vsdbabysoc_synthesis.sdc
+report_checks -path_delay min_max -format full_clock_expanded -digits 4
+```
