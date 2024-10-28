@@ -3173,3 +3173,8 @@ link_design vsdbabysoc
 read_sdc ./sdc/vsdbabysoc_synthesis.sdc
 report_checks -path_delay min_max -format full_clock_expanded -digits 4
 ```
+![image](https://github.com/user-attachments/assets/849f95fc-6584-495c-b46e-c9a1337bb4b1)
+![image](https://github.com/user-attachments/assets/05ff3192-d063-4540-a9d5-76ac25f1119e)
+![image](https://github.com/user-attachments/assets/49122d0a-2b33-4a20-a206-736c43337118)
+
+
