@@ -3143,7 +3143,7 @@ gedit vsdbabysoc_synthesis.sdc
 ```
 
 ```
-set PERIOD 11.05
+set PERIOD 11.75
 
 set_units -time ns
 create_clock [get_pins {pll/CLK}] -name clk -period $PERIOD
