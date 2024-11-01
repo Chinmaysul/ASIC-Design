@@ -3178,3 +3178,98 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 ![image](https://github.com/user-attachments/assets/49122d0a-2b33-4a20-a206-736c43337118)
 
 
+# ASSIGNMENT 4: Post Synthesis Static Timing Analysis using OpenSTA 
+
+Snapshot of the sdc file vsdbabysoc_synthesis.sdc:
+```
+set PERIOD 11
+set_units -time ns
+create_clock [get_pins {pll/CLK}] -name clk -period $PERIOD
+set_clock_uncertainty -setup  [expr $PERIOD * 0.05] [get_clocks clk]
+set_clock_transition [expr $PERIOD * 0.05] [get_clocks clk]
+set_clock_uncertainty -hold [expr $PERIOD * 0.08] [get_clocks clk]
+set_input_transition [expr $PERIOD * 0.08] [get_ports ENb_CP]
+set_input_transition [expr $PERIOD * 0.08] [get_ports ENb_VCO]
+set_input_transition [expr $PERIOD * 0.08] [get_ports REF]
+set_input_transition [expr $PERIOD * 0.08] [get_ports VCO_IN]
+set_input_transition [expr $PERIOD * 0.08] [get_ports VREFH]
+```
+
+![Screenshot 2024-11-01 150250](https://github.com/user-attachments/assets/9ccc3417-e80d-4852-99d7-a437f8906570)
+
+
+Store all the `lib` files in the `lib` folder in the `VSDBabySoC/src` directory.
+
+![image](https://github.com/user-attachments/assets/927750f8-fd2a-4ce3-bf97-c2c734652ded)
+
+
+Now create a `sta_pvt.tcl` file with the following content.
+
+```
+gedit sta_pvt.tcl
+```
+```
+set list_of_lib_files(1) "sky130_fd_sc_hd__ff_100C_1v65.lib"
+set list_of_lib_files(2) "sky130_fd_sc_hd__ff_100C_1v95.lib"
+set list_of_lib_files(3) "sky130_fd_sc_hd__ff_n40C_1v56.lib"
+set list_of_lib_files(4) "sky130_fd_sc_hd__ff_n40C_1v65.lib"
+set list_of_lib_files(5) "sky130_fd_sc_hd__ff_n40C_1v76.lib"
+set list_of_lib_files(6) "sky130_fd_sc_hd__ff_n40C_1v95.lib"
+set list_of_lib_files(7) "sky130_fd_sc_hd__ff_n40C_1v95_ccsnoise.lib.part1"
+set list_of_lib_files(8) "sky130_fd_sc_hd__ff_n40C_1v95_ccsnoise.lib.part2"
+set list_of_lib_files(9) "sky130_fd_sc_hd__ff_n40C_1v95_ccsnoise.lib.part3"
+set list_of_lib_files(10) "sky130_fd_sc_hd__ss_100C_1v40.lib"
+set list_of_lib_files(11) "sky130_fd_sc_hd__ss_100C_1v60.lib"
+set list_of_lib_files(12) "sky130_fd_sc_hd__ss_n40C_1v28.lib"
+set list_of_lib_files(13) "sky130_fd_sc_hd__ss_n40C_1v35.lib"
+set list_of_lib_files(14) "sky130_fd_sc_hd__ss_n40C_1v40.lib"
+set list_of_lib_files(15) "sky130_fd_sc_hd__ss_n40C_1v44.lib"
+set list_of_lib_files(16) "sky130_fd_sc_hd__ss_n40C_1v60.lib"
+set list_of_lib_files(17) "sky130_fd_sc_hd__ss_n40C_1v60_ccsnoise.lib.part1"
+set list_of_lib_files(18) "sky130_fd_sc_hd__ss_n40C_1v60_ccsnoise.lib.part2"
+set list_of_lib_files(19) "sky130_fd_sc_hd__ss_n40C_1v60_ccsnoise.lib.part3"
+set list_of_lib_files(20) "sky130_fd_sc_hd__ss_n40C_1v76.lib"
+set list_of_lib_files(21) "sky130_fd_sc_hd__tt_025C_1v80.lib"
+set list_of_lib_files(22) "sky130_fd_sc_hd__tt_100C_1v80.lib"
+
+for {set i 1} {$i <= [array size list_of_lib_files]} {incr i} {
+read_liberty ./lib/$list_of_lib_files($i)
+read_verilog ../output/synth/vsdbabysoc.synth.v
+link_design vsdbabysoc
+read_sdc ./sdc/vsdbabysoc_synthesis.sdc
+check_setup -verbose
+report_checks -path_delay min_max -fields {nets cap slew input_pins fanout} -digits {4} > ./sta_output/min_max_$list_of_lib_files($i).txt
+
+}
+```
+
+![image](https://github.com/user-attachments/assets/8511fc7f-c03a-45af-9349-d3984e180232)
+
+Create a folder named `sta_output` in `VSDBabySoC/src` to store the output txt files.
+Now, run the following commands:
+
+```
+cd VSDBabySoC/src
+sta
+source sta_pvt.tcl
+```
+
+![image](https://github.com/user-attachments/assets/b74d36fb-3d69-4168-84e2-d0b839268159)
+![image](https://github.com/user-attachments/assets/cfe93b3d-a0b6-47bc-8b5e-05f94bdb334a)
+![image](https://github.com/user-attachments/assets/c7bc6102-63bf-4c9c-bc19-968e339bf778)
+
+
+
+These `.txt` file will be generated as shown
+
+![image](https://github.com/user-attachments/assets/37cc8ee0-f23b-4832-ba62-2a88e4515d0a)
+![image](https://github.com/user-attachments/assets/8a7d0c11-5706-48b0-88af-5ca8d27b5f64)
+
+
+
+Now put the values in excel and plot the graphs as shown:
+
+![image](https://github.com/user-attachments/assets/1361412f-06b3-4c28-9c44-cec792612b5e)
+![image](https://github.com/user-attachments/assets/8754ea4e-b157-46f1-8ca6-2e05512e8d57)
+![image](https://github.com/user-attachments/assets/09962b6c-929d-4f92-a8aa-dc34dc989149)
+
