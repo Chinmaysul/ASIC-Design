@@ -3182,7 +3182,7 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 
 Snapshot of the sdc file vsdbabysoc_synthesis.sdc:
 ```
-set PERIOD 11
+set PERIOD 11.75
 set_units -time ns
 create_clock [get_pins {pll/CLK}] -name clk -period $PERIOD
 set_clock_uncertainty -setup  [expr $PERIOD * 0.05] [get_clocks clk]
