@@ -3273,3 +3273,1231 @@ Now put the values in excel and plot the graphs as shown:
 ![image](https://github.com/user-attachments/assets/8754ea4e-b157-46f1-8ca6-2e05512e8d57)
 ![image](https://github.com/user-attachments/assets/09962b6c-929d-4f92-a8aa-dc34dc989149)
 
+## Task 12: Advanced Physical Design using OpenLane using Sky130
+
+### Task 1: Open-source EDA, OpenLane and Sky130 PDK
+
+**QFN-48 Package:** A Quad Flat No-leads (QFN) 48 package is a leadless IC package with 48 connection pads around the perimeter. It offers good thermal and electrical performance in a compact form, making it ideal for high-density applications.
+
+![image](https://github.com/user-attachments/assets/2237a9ef-dc38-444f-97a5-ceb4e983c8f0)
+
+
+**Chip:** An integrated circuit (IC) that contains various functional blocks like memory, processing units, and I/O in a silicon substrate, typically used for specific applications in electronics.
+
+![image](https://github.com/user-attachments/assets/7503bcea-4654-4bc9-b77a-de9ced7929be)
+
+
+**Pads:** Small metallic areas on a chip or package used to connect internal circuitry to external connections, enabling signals to be transferred to and from the IC.
+
+**Core:** The central part of a chip containing the main processing unit and functional logic, often optimized for power and performance.
+
+**Die:** The section of a silicon wafer containing an individual IC before it is packaged, housing all active circuits and elements for the chip's functions.
+
+![image](https://github.com/user-attachments/assets/cfa2c482-59c5-4ad5-b74c-a027bfdf16b8)
+
+
+**IPs (Intellectual Properties):** Pre-designed functional blocks or modules within a chip, such as USB controllers or memory interfaces, licensed for reuse across various designs to save time and cost.
+
+![image](https://github.com/user-attachments/assets/1039a7d9-0286-42c7-8da7-17136c3da5aa)
+
+
+**From Software Applications to Hardware Flow**
+
+To run an application on hardware, several processes take place. First, the application enters a layer known as the system software, which prepares it for execution by translating the application program into binary format, understandable by hardware. Key components within system software include the Operating System (OS), Compiler, and Assembler.
+
+The process starts with the OS, which breaks down application functions written in high-level languages such as C, C++, Java, or Visual Basic. These functions are passed to a suitable compiler, which translates them into low-level instructions. The syntax and format of these instructions are tailored to the specific hardware architecture in use.
+
+Next, the assembler converts these hardware-specific instructions into binary format, known as machine language. This binary code is then fed to the hardware, enabling it to perform specific tasks as defined by the received instructions.
+
+![image](https://github.com/user-attachments/assets/14788472-7c91-4860-82c6-2bccb49f91d2)
+
+
+![image](https://github.com/user-attachments/assets/cabbd8f7-f0c4-4a13-bf2e-d6d67392910e)
+
+For the above stopwatch the below figure shows the input and output of the compiler and assembler.
+
+![image](https://github.com/user-attachments/assets/63f2e771-eed8-4953-b501-dd9ff0d209f7)
+
+The compiler generates architecture-specific instructions, while the assembler produces the corresponding binary patterns. To execute these instructions on hardware, an RTL (written in a Hardware Description Language) is used to interpret and implement the instructions. This RTL design is then synthesized into a netlist, represented as interconnected logic gates. Finally, the netlist undergoes physical design implementation to be fabricated onto the chip.
+
+
+**Components of ASIC Design**
+
+![image](https://github.com/user-attachments/assets/560b728b-8e75-4c9d-a3c8-5b640318c4aa)
+
+- RTL IPs: Pre-designed, verified digital circuit blocks (like adders, flip-flops, memory) in HDL (e.g., Verilog, VHDL). They save design time by providing ready-to-use components for complex circuits.
+
+- EDA Tools: Software that automates ASIC design tasks (e.g., synthesis, optimization, placement, timing analysis). Essential for improving productivity and ensuring performance and power requirements are met.
+
+- PDK Data: A set of files and parameters from a semiconductor foundry, detailing its manufacturing process (e.g., transistor models, design rules). PDKs ensure ASIC designs are compatible with the foundry’s fabrication process.
+
+**RTL to GDS flow**
+
+- **RTL Design:** Describes the circuit's functional behavior using HDLs like Verilog or VHDL, defining its logic and data paths.
+
+- **RTL Synthesis:** Converts RTL code to a gate-level netlist which is a collection of standard cells like AND gates, flip-flops, and multiplexers by mapping it to standard cells and optimizing for area, power, and timing. 
+
+- **Floor and Power Planning:** Partitions chip area, places major components, and defines power grid and I/O placement to optimize area, power distribution, and signal flow. This step optimizes the physical layout, aiming to reduce power consumption and improve signal integrity by considering the placement of I/O pads and power distribution cells
+
+- **Placement:** Assigns physical locations to cells, aiming to minimize wirelength, reduce signal delay, and meet design constraints. The placement tool carefully arranges the cells to balance the overall chip design for optimal performance and area utilization.
+
+- **Clock Tree Synthesis (CTS):** Clock Tree Synthesis (CTS) is a critical step that focuses on creating an optimized clock distribution network. CTS ensures the clock is distributed evenly to all flip-flops and registers. It builds an optimized clock network to balance clock signal distribution and reduce clock skew.
+
+- **Routing:** Connects components based on placement, optimizing wire paths to ensure signal integrity, minimize congestion, and meet design rules.
+
+- **Sign-off:** Final verification stage, ensuring the design meets functionality, performance, power, and reliability targets. Timing analysis is performed to check setup and hold times, power analysis ensures the design doesn’t exceed power limits, and physical verification checks ensure that the layout meets manufacturing rules. This stage confirms the design is ready for fabrication.
+
+- **GDSII File Generation:** Creates the GDSII file containing the complete layout details needed for chip fabrication. This file represents the final physical design and is used by manufacturers to create the photomasks required for chip production. The GDSII file serves as the blueprint for the actual fabrication of the chip.
+
+**OpenLane ASIC Flow:**
+
+![image](https://github.com/user-attachments/assets/cdd04b14-fbfe-44a3-8d4e-8fbfe443bd74)
+
+1. RTL Synthesis, Technology Mapping, and Formal Verification: The tools used are Yosys (for RTL synthesis), ABC (for technology mapping and formal verification).
+2. Static Timing Analysis: The tools used are OpenSTA (for static timing analysis).
+3. Floor Planning: The tools used are init_fp (initial floorplanning), ioPlacer (I/O placement), pdn (power distribution network planning), tapcell (tap cell insertion).
+4. Placement: The tools used are RePLace (global placement), Resizer (optional for resizing cells), OpenPhySyn (formerly used for placement), OpenDP (detailed placement).
+5. Clock Tree Synthesis: The tools used are TritonCTS (for clock tree synthesis).
+6. Fill Insertion: The tools used are OpenDP (for filler placement).
+7. Routing: The tools used for global routing are FastRoute or CU-GR (formerly used) and for the detailed routing , we use TritonRoute (for detailed routing) or DR-CU (formerly used).
+8. SPEF Extraction: The tools used are OpenRCX (or SPEF-Extractor, formerly used) for Standard Parasitic Exchange Format (SPEF) extraction.
+9. GDSII Streaming Out: The tools used are Magic and KLayout (for viewing and editing GDSII files).
+10. Design Rule Checking (DRC) Checks: The tools used are Magic and KLayout (for DRC checks).
+11. Layout vs. Schematic (LVS) Check: The tools used are Netgen (for LVS checks).
+12. Antenna Checks: The tools used are Magic (for antenna checks).
+
+**OpenLANE Directory structure**
+
+``` 
+├── OOpenLane             -> directory where the tool can be invoked (run docker first)
+│   ├── designs          -> All designs must be extracted from this folder
+│   │   │   ├── picorv32a -> Design used as case study for this workshop
+│   |   |   ├── ...
+|   |   ├── ...
+├── pdks                 -> contains pdk related files 
+│   ├── skywater-pdk     -> all Skywater 130nm PDKs
+│   ├── open-pdks        -> contains scripts that makes the commerical PDK (which is normally just compatible to commercial tools) to also be compatible with the open-source EDA tool
+│   ├── sky130A          -> pdk variant made especially compatible for open-source tools
+│   │   │  ├── libs.ref  -> files specific to node process (timing lib, cell lef, tech lef) for example is `sky130_fd_sc_hd` (Sky130nm Foundry Standard Cell High Density)  
+│   │   │  ├── libs.tech -> files specific for the tool (klayout,netgen,magic...) 
+```
+
+**Synthesis in Openlane:**
+
+Run the following:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a
+run_synthesis
+
+```
+![image](https://github.com/user-attachments/assets/6a91d34d-d49f-4c95-ab3e-3ede945c4d03)
+
+
+![image](https://github.com/user-attachments/assets/86d6f601-4228-499d-bff7-3bdb91cba919)
+
+
+To view the netlist:
+
+```
+cd designs/picorv32a/runs/09-11_06-33/results/synthesis/
+gedit picorv32a.synthesis.v
+```
+
+![image](https://github.com/user-attachments/assets/0a6405fa-e4c0-41f6-a8ba-2c2f8c018395)
+![image](https://github.com/user-attachments/assets/fec4da7d-6f7b-48f7-9d55-9e742d7db7eb)
+
+
+
+To view the yosys report:
+
+```
+cd ../..
+cd reports/synthesis
+gedit 1-yosys_4.stat.rpt
+```
+![image](https://github.com/user-attachments/assets/923d26e1-8ca7-487f-9eca-4b92d4bed4bb)
+
+![image](https://github.com/user-attachments/assets/25731da9-2a73-4ce6-a752-541af4e51e92)
+
+
+
+Report:
+
+```
+28. Printing statistics.
+
+=== picorv32a ===
+
+   Number of wires:              14596
+   Number of wire bits:          14978
+   Number of public wires:        1565
+   Number of public wire bits:    1947
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:              14876
+     sky130_fd_sc_hd__a2111o_2       1
+     sky130_fd_sc_hd__a211o_2       35
+     sky130_fd_sc_hd__a211oi_2      60
+     sky130_fd_sc_hd__a21bo_2      149
+     sky130_fd_sc_hd__a21boi_2       8
+     sky130_fd_sc_hd__a21o_2        57
+     sky130_fd_sc_hd__a21oi_2      244
+     sky130_fd_sc_hd__a221o_2       86
+     sky130_fd_sc_hd__a22o_2      1013
+     sky130_fd_sc_hd__a2bb2o_2    1748
+     sky130_fd_sc_hd__a2bb2oi_2     81
+     sky130_fd_sc_hd__a311o_2        2
+     sky130_fd_sc_hd__a31o_2        49
+     sky130_fd_sc_hd__a31oi_2        7
+     sky130_fd_sc_hd__a32o_2        46
+     sky130_fd_sc_hd__a41o_2         1
+     sky130_fd_sc_hd__and2_2       157
+     sky130_fd_sc_hd__and3_2        58
+     sky130_fd_sc_hd__and4_2       345
+     sky130_fd_sc_hd__and4b_2        1
+     sky130_fd_sc_hd__buf_1       1656
+     sky130_fd_sc_hd__buf_2          8
+     sky130_fd_sc_hd__conb_1        42
+     sky130_fd_sc_hd__dfxtp_2     1613
+     sky130_fd_sc_hd__inv_2       1615
+     sky130_fd_sc_hd__mux2_1      1224
+     sky130_fd_sc_hd__mux2_2         2
+     sky130_fd_sc_hd__mux4_1       221
+     sky130_fd_sc_hd__nand2_2       78
+     sky130_fd_sc_hd__nor2_2       524
+     sky130_fd_sc_hd__nor2b_2        1
+     sky130_fd_sc_hd__nor3_2        42
+     sky130_fd_sc_hd__nor4_2         1
+     sky130_fd_sc_hd__o2111a_2       2
+     sky130_fd_sc_hd__o211a_2       69
+     sky130_fd_sc_hd__o211ai_2       6
+     sky130_fd_sc_hd__o21a_2        54
+     sky130_fd_sc_hd__o21ai_2      141
+     sky130_fd_sc_hd__o21ba_2      209
+     sky130_fd_sc_hd__o21bai_2       1
+     sky130_fd_sc_hd__o221a_2      204
+     sky130_fd_sc_hd__o221ai_2       7
+     sky130_fd_sc_hd__o22a_2      1312
+     sky130_fd_sc_hd__o22ai_2       59
+     sky130_fd_sc_hd__o2bb2a_2     119
+     sky130_fd_sc_hd__o2bb2ai_2     92
+     sky130_fd_sc_hd__o311a_2        8
+     sky130_fd_sc_hd__o31a_2        19
+     sky130_fd_sc_hd__o31ai_2        1
+     sky130_fd_sc_hd__o32a_2       109
+     sky130_fd_sc_hd__o41a_2         2
+     sky130_fd_sc_hd__or2_2       1088
+     sky130_fd_sc_hd__or2b_2        25
+     sky130_fd_sc_hd__or3_2         68
+     sky130_fd_sc_hd__or3b_2         5
+     sky130_fd_sc_hd__or4_2         93
+     sky130_fd_sc_hd__or4b_2         6
+     sky130_fd_sc_hd__or4bb_2        2
+
+   Chip area for module '\picorv32a': 147712.918400
+```
+
+```
+Flop ratio = Number of D Flip flops = 1613  = 0.1084
+             ______________________   _____
+             Total Number of cells    14876
+```
+
+#### Day-2: Good floorplan vs bad floorplan and introduction to library cells
+
+Utilization Factor and Aspect Ratio: In IC floor planning, two critical parameters are the utilization factor and the aspect ratio. The utilization factor measures the area occupied by the netlist relative to the total core area. Although a utilization of 1 (or 100%) would be ideal, practical designs typically aim for a utilization factor between 0.5 and 0.6. This range provides space for buffer zones, routing channels, and potential future modifications. The aspect ratio, defined as the ratio of height to width, indicates the shape of the chip. An aspect ratio of 1 produces a square shape, while other values yield a rectangular layout. This ratio is determined based on functional requirements, packaging constraints, and manufacturing considerations.
+```
+
+Utilisation Factor =  Area occupied by netlist
+                     __________________________
+                         Total area of core
+```                         
+```
+Aspect Ratio =  Height
+               ________
+                Width
+```
+
+**Pre-placed cells** : Pre-placed cells are essential functional blocks, such as memory, custom processors, and analog circuits, positioned manually in fixed locations. These blocks are crucial for the chip’s performance and remain fixed during placement and routing to preserve their functionality and layout integrity.
+
+**Decoupling Capacitors** : Decoupling capacitors are placed near logic circuits to stabilize power supply voltages during transient events. Acting as local energy reserves, they help reduce voltage fluctuations, crosstalk, and electromagnetic interference (EMI), ensuring reliable power delivery to sensitive circuits.
+
+**Power Planning**: A robust power planning strategy includes creating a power and ground mesh to distribute VDD and VSS evenly across the chip. This setup ensures stable power delivery, minimizes voltage drops, and improves overall efficiency. Multiple power and ground points reduce the risk of instability and voltage drop issues, supporting the design’s power needs effectively.
+
+**Pin Placement**: Pin placement (I/O planning) is crucial for functionality and reliability. Strategic pin assignment minimizes signal degradation, preserves data integrity, and helps manage heat dissipation. Proper positioning of power and ground pins supports thermal management and enhances signal strength, contributing to overall system stability and manufacturability.
+
+Floorplaning using OpenLANE:
+
+Run the following commands:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+```
+
+```
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a
+run_synthesis
+run_floorplan
+```
+![image](https://github.com/user-attachments/assets/947ba6a0-43ef-47be-b705-324914b7f814)
+![image](https://github.com/user-attachments/assets/f9ed0d4e-6098-4f6b-8466-11556751c7c6)
+![image](https://github.com/user-attachments/assets/225a82a5-39f0-4db0-8f18-a3e532f14949)
+
+
+Now, run the below commands in a new terminal:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/09-11_07-10/results/floorplan
+gedit picorv32a.floorplan.def
+```
+![image](https://github.com/user-attachments/assets/a6908056-4b79-4dfa-bf43-5e1e02f26ec3)
+
+
+According to floorplan definition:
+```
+
+1000 Unit Distance = 1 Micron  
+
+Die width in unit distance = 660685
+
+Die height in unit distance = 671405 
+
+​Die width in microns = 660685/1000 = 660.685 Microns  
+
+Die height in microns = 671405/1000 = 671.405 Microns  
+
+Area of die in microns = 660.685 × 671.405 = 443587.212425 Square Microns
+```
+
+
+To view the floorplan in magic. Open a new terminal and run the below commands:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/17-03_12-06/results/floorplan/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
+```
+
+![image](https://github.com/user-attachments/assets/a7390c8f-53fa-45f6-bf6e-07fbaf0d726d)
+![image](https://github.com/user-attachments/assets/cc97b0b9-9322-4f22-bf62-1d4f1d380a3c)
+
+
+Decap and Tap Cells:
+![image](https://github.com/user-attachments/assets/bc9dbc11-01d1-4f04-b6f2-18b322e86924)
+
+Equidistant placement of ports: 
+![image](https://github.com/user-attachments/assets/259edddd-f013-4484-87e0-2cf290721ef2)
+
+
+Unplaces standard cells at origin:
+![image](https://github.com/user-attachments/assets/c5c3f28a-49b0-4e1e-a8b4-5139853ee268)
+
+Command to run placement:
+
+```
+run_placement
+```
+
+To view the placement in magic:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/17-03_12-06/results/placement/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+
+![image](https://github.com/user-attachments/assets/76db7b93-3d9f-4f8d-90a9-e8a24e29c8b7)
+
+![image](https://github.com/user-attachments/assets/6f868524-175a-4244-aaa4-5a69de9fa102)
+
+
+**Cell design and Characterization Flow**
+
+Library is a place where we get information about every cell. It has differents cells with different size, functionality,threshold voltages. There is a typical cell design flow steps.
+
+Inputs : PDKS(process design kit) : DRC & LVS, SPICE Models, library & user-defined specs.
+Design Steps :Circuit design, Layout design (Art of layout Euler's path and stick diagram), Extraction of parasitics, Characterization (timing, noise, power).
+Outputs: CDL (circuit description language), LEF, GDSII, extracted SPICE netlist (.cir), timing, noise and power .lib files
+
+**Standard Cell Characterization Flow**
+
+A typical standard cell characterization flow that is followed in the industry includes the following steps:
+
+- Read in the models and tech files
+- Read extracted spice Netlist
+- Recognise behavior of the cells
+- Read the subcircuits
+- Attach power sources
+- Apply stimulus to characterization setup
+- Provide neccesary output capacitance loads
+- Provide neccesary simulation commands
+- Now all these 8 steps are fed in together as a configuration file to a characterization software called GUNA. This software generates timing, noise, power models. These .libs are classified as Timing characterization, power characterization and noise characterization.
+
+**Timing parameters**
+
+| Timing definition | Value |
+|---|---|
+| slew_low_rise_thr | 20% value |
+| slew_high_rise_thr | 80% value |
+| slew_low_fall_thr | 20% value |
+| slew_high_fall_thr | 80% value |
+| in_rise_thr | 50% value |
+| in_fall_thr | 50% value |
+| out_rise_thr | 50% value |
+| out_fall_thr | 50% value |
+
+**Propagation Delay**: It refers to the time it takes for a change in an input signal to reach 50% of its final value to produce a corresponding change in the output signal to reach 50% of its final value of a digital circuit.
+
+```
+rise delay =  time(out_fall_thr) - time(in_rise_thr)
+```
+
+**Transistion time**: The time it takes the signal to move between states is the transition time , where the time is measured between 10% and 90% or 20% to 80% of the signal levels.
+
+```
+Fall transition time: time(slew_high_fall_thr) - time(slew_low_fall_thr)
+Rise transition time: time(slew_high_rise_thr) - time(slew_low_rise_thr)
+```
+
+#### Day-3: Design library cell using Magic Layout and ngspice characterization
+
+**CMOS inverter ngspice simulations**
+
+Creating a SPICE Deck for a CMOS Inverter Simulation
+
+- Netlist Creation: Define the component connections (netlist) for a CMOS inverter circuit. Ensure each node is labeled appropriately for easy identification in the SPICE simulation. Typical nodes include input, output, ground, and supply nodes.
+- Device Sizing: Specify the Width-to-Length (W/L) ratios for both the PMOS and NMOS transistors.For proper operation, the PMOS width should be larger than the NMOS width, usually 2x to 3x, to balance the drive strength
+- Voltage Levels: Set gate and supply voltages, often in multiples of the transistor length. 
+- Node Naming: Assign node names to each connection point around the components to clearly identify each element in the SPICE netlist (e.g., VDD, GND, IN, OUT). This helps SPICE recognize each component and simulate the circuit effectively.
+  
+
+```
+***syntax for PMOS and NMOS desription***
+[component name] [drain] [gate] [source] [substrate] [transistor type] W=[width] L=[length]
+
+ ***simulation commands***
+.op --- is the start of SPICE simulation operation where Vin sweeps from 0 to 2.5 with 0.5 steps
+tsmc_025um_model.mod  ----  model file which contains the technological parameters for the 0.25um NMOS and PMOS 
+```
+Commands to simulate in SPICE:
+
+```
+source [filename].cir
+run
+setplot 
+dc1 
+plot out vs in 
+```
+
+![image](https://github.com/user-attachments/assets/49f1ed28-c601-4954-a3aa-077a2c650650)
+
+The switching threshold Vm is like a critical voltage level for a component called a CMOS inverter. It's the point at which this inverter switches between sending out a "0" or a "1" in a computer chip. This the point where both PMOS and NMOS is in saturation or kind of turned on, and leakage current is high. If PMOS is thicker than NMOS, the CMOS will have higher switching threshold (1.2V vs 1V) while threshold will be lower when NMOS becomes thicker.
+
+At this point, both the transistors are in saturation region, means both are turned on and have high chances of current flowing directly from VDD to Ground called Leakage current.
+
+
+
+
+Now, we clone the custom inverter
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+cd vsdstdcelldesign
+cp /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech .
+ls
+magic -T sky130A.tech sky130_inv.mag &
+```
+
+![image](https://github.com/user-attachments/assets/3b21d02b-71d6-4b46-8987-14d90ecb7383)
+
+![image](https://github.com/user-attachments/assets/583afeb2-7587-4564-9ee1-68290324ee1a)
+
+
+
+**Inception of Layout CMOS fabrication process**
+
+The 16-mask CMOS design fabrication process:
+
+1. Substrate Preparation: The process begins with preparing a silicon wafer as the foundational substrate for the circuit.
+2. N-Well Formation: The N-well regions are created on the substrate by introducing impurities, typically phosphorus, through ion implantation or diffusion
+3. P-Well Formation: Similar to the N-well formation, P-well regions are created using ion implantation or diffusion with boron or other suitable dopants.
+4. Gate Oxide Deposition: A thin silicon dioxide layer is deposited to form the gate oxide, which insulates the gate from the channel.
+5. Poly-Silicon Deposition: A layer of polysilicon is deposited on the gate oxide to serve as the gate electrode.
+6. Poly-Silicon Masking and Etching: A photoresist mask defines areas where polysilicon should remain, and etching removes exposed portions.
+7. N-Well Masking and Implantation: A photoresist mask is used to define the areas where the N-well regions should be preserved. Phosphorus or other suitable impurities are then implanted into the exposed regions.
+8. P-Well Masking and Implantation: Similarly, a photoresist mask is used to define the areas where the P-well regions should be preserved. Boron or other suitable impurities are implanted into the exposed regions.
+9. Source/Drain Implantation: Using photoresist masks, dopants are implanted to create source and drain regions (e.g., arsenic for NMOS, boron for PMOS).
+10. Gate Formation: The gate electrode is defined by etching the poly-silicon layer using a photoresist mask.
+11. Source/Drain Masking and Etching: A photoresist mask is applied to define the source and drain regions followed by etching to remove the oxide layer in those areas.
+12. Contact/Via Formation: Contact holes or vias are etched through the oxide layer to expose the underlying regions, such as the source/drain regions or poly-silicon gates.
+13. Metal Deposition: A layer of metal, typically aluminum or copper, is deposited on the wafer surface to form the interconnects.
+14. Metal Masking and Etching: A photoresist mask is used to define the metal interconnects, and etching is performed to remove the exposed metal, leaving behind the desired interconnect patterns.
+15. Passivation Layer Deposition: A protective layer, often made of silicon dioxide or nitride, is deposited to isolate and shield the metal interconnects.
+16. Final Testing and Packaging: The fabricated wafer undergoes rigorous testing to ensure the functionality of the integrated circuits. The working chips are then separated, packaged, and prepared for use in various electronic devices.
+
+
+Inverter layout:
+
+Identify NMOS:
+
+![image](https://github.com/user-attachments/assets/7053fb7c-3108-45b6-8aa5-5c297716a990)
+
+
+Identify PMOS:
+
+![image](https://github.com/user-attachments/assets/6777f354-d1f8-4c9e-aa3b-aa390c3fc7ab)
+
+
+Output Y:
+
+![image](https://github.com/user-attachments/assets/f6a8a3de-e767-428a-8e00-10113f4378f7)
+
+
+PMOS source connected to VDD:
+
+![image](https://github.com/user-attachments/assets/eb64926c-080d-4b88-8f64-01c07361a30f)
+
+
+NMOS source connected to VSS:
+
+![image](https://github.com/user-attachments/assets/5e7dcc43-9225-48df-aa3c-95b4ef86cc58)
+
+
+Spice extraction of inverter in Magic. Run these in the tkcon window:
+
+```
+# Check current directory
+pwd
+extract all
+ext2spice cthresh 0 rthresh 0
+ext2spice
+```
+![image](https://github.com/user-attachments/assets/b01c135f-e837-4e0a-937a-07b477192598)
+
+
+To view the spice file:
+
+![image](https://github.com/user-attachments/assets/0ab0f434-0785-41b4-aaad-70aa0738af86)
+
+
+The contents of spice file:
+
+```
+* SPICE3 file created from sky130_inv.ext - technology: sky130A
+
+.option scale=10n
+
+.subckt sky130_inv A Y VPWR VGND
+X0 Y A VGND VGND sky130_fd_pr__nfet_01v8 ad=1.37n pd=0.148m as=1.37n ps=0.148m w=35 l=23
+X1 Y A VPWR VPWR sky130_fd_pr__pfet_01v8 ad=1.44n pd=0.152m as=1.52n ps=0.156m w=37 l=23
+C0  A Y 0.754f
+C1 A VPWR 0.0774f
+C2 VPWR Y 0.11f
+C3 Y VGND 0.279f
+C4 A VGND 0.45f
+C5 VPWR VGND 0.781f
+.ends
+
+```
+
+Now modify the `sky130_inv.spice` file to find the transient respone:
+
+```
+* SPICE3 file created from sky130_inv.ext - technology: sky130A
+
+.option scale=0.01u
+.include ./libs/pshort.lib
+.include ./libs/nshort.lib
+
+//.subckt sky130_inv A Y VPWR VGND
+M1000 Y A VGND VGND nshort_model.0 w=35 l=23
++  ad=1.44n pd=0.152m as=1.37n ps=0.148m
+M1001 Y A VPWR VPWR pshort_model.0 w=37 l=23
++  ad=1.44n pd=0.152m as=1.52n ps=0.156m
+
+VDD VPWR 0 3.3V
+VSS VGND 0 0V
+Va A VGND PULSE(0V 3.3V 0 0.1ns 0.1ns 2ns 4ns)
+
+C0 A VPWR 0.0774f
+C1 VPWR Y 0.117f
+C2 A Y 0.0754f
+C3 Y VGND 2f
+C4 A VGND 0.45f
+C5 VPWR VGND 0.781f
+//.ends
+
+.tran 1n 20n
+.control
+run
+.endc
+.end
+```
+
+Now, simulate the spice netlist
+```
+ngspice sky130_inv.spice
+```
+![image](https://github.com/user-attachments/assets/aac08914-d9fd-4483-bf4e-78d341bd1f53)
+
+
+To plot the waveform:
+
+```
+plot y vs time a
+```
+![image](https://github.com/user-attachments/assets/42338b1c-1274-43db-b450-747554f42982)
+
+![image](https://github.com/user-attachments/assets/9cbaf59d-f58c-467f-b3b3-b945cbb615ee)
+
+Using this transient response, we will now characterize the cell's slew rate and propagation delay:
+
+Rise Transition: Time taken for the output to rise from 20% to 80% of max value
+Fall Transition: Time taken for the output to fall from 80% to 20% of max value
+Cell Rise delay: difference in time(50% output rise) to time(50% input fall)
+Cell Fall delay: difference in time(50% output fall) to time(50% input rise)
+
+```
+Rise Transition : 2.24638 - 2.18242 =  0.06396 ns = 63.96 ps
+Fall Transition : 4.0955 - 4.05536 =  0.0419 ns = 41.9 ps
+Cell Rise Delay : 2.21144 - 2.15008 = 0.06136 ns = 61.36 ps
+Cell Fall Delay : 4.07807 - 4.05 =0.02 ns = 20 ps
+```
+
+Magic Tool options and DRC Rules:
+
+Now, go to home directory and run the below commands:
+
+```
+cd
+wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
+tar xfz drc_tests.tgz
+cd drc_tests
+ls -al
+gvim .magicrc
+magic -d XR &
+```
+
+![image](https://github.com/user-attachments/assets/ec309dde-2de1-4069-87db-a9476a6ec03e)
+
+
+First load the poly file by load poly.mag on tkcon window.
+
+![image](https://github.com/user-attachments/assets/0bdb8a9c-b087-4606-9980-7fce0152b870)
+
+
+We can see that Poly.9 is incorrect.
+
+Add the below commands in the sky130A.tech
+
+![image](https://github.com/user-attachments/assets/9fa3d7be-53a5-4f77-a5aa-eefa64e933af)
+
+![image](https://github.com/user-attachments/assets/9f9f5052-f4e9-42b0-b5bf-1d92b6b3c3e4)
+
+
+Run the commands in tkcon window:
+
+```
+tech load sky130A.tech
+drc check
+drc why
+```
+
+![image](https://github.com/user-attachments/assets/2dd525a3-50a5-490d-b843-fbd5aeca6e08)
+
+
+#### Day-4: Pre-layout timing analysis and importance of good clock tree
+
+Commands to extract `tracks.info` file:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign
+cd ../../pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/
+less tracks.info
+```
+![image](https://github.com/user-attachments/assets/13cb8a9b-0c9e-40f1-a020-c62cd0515980)
+
+Commands for tkcon window to set grid as tracks of locali layer
+
+```
+grid 0.46um 0.34um 0.23um 0.17um
+```
+
+![image](https://github.com/user-attachments/assets/cd02da90-4a0a-4006-97ee-213bd7811734)
+
+The grids show where the routing for the local-interconnet layer can only happen, the distance of the grid lines are the required pitch of the wire. Below, we can see that the guidelines are satisfied:
+
+![image](https://github.com/user-attachments/assets/28a95f97-0330-4835-b762-4bd1c09167b0)
+
+Now, save it by giving a custon mae
+
+```
+save sky130_akainv.mag
+```
+
+![image](https://github.com/user-attachments/assets/3cc23fcf-d81e-4538-b5c2-b21e3e063bbc)
+
+Now, open it by using the following commands:
+
+```
+magic -T sky130A.tech sky130_akainv.mag &
+```
+
+![image](https://github.com/user-attachments/assets/4f03c1dc-753c-4ad0-bb15-62d31d4c71a1)
+
+Now, type the following command in tkcon window:
+
+```
+lef write
+```
+![image](https://github.com/user-attachments/assets/dfb03866-4a7f-42b1-b4ba-cb6ac847ed6f)
+
+![image](https://github.com/user-attachments/assets/44adaa57-013d-4552-99fa-5034075df52f)
+
+Modify config.tcl:
+
+```
+# Design
+set ::env(DESIGN_NAME) "picorv32a"
+
+set ::env(VERILOG_FILES) "./designs/picorv32a/src/picorv32a.v"
+set ::env(SDC_FILES) "./designs/picorv32a/src/picorv32a.sdc"
+
+
+set ::env(CLOCK_PERIOD) "5.000"
+set ::env(CLOCK_PORT) "clk"
+
+set ::env(CLOCK_NET) $::env(CLOCK_PORT) 
+
+
+set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib "
+set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib"
+set ::env(LIB_SLOWEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib "
+set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
+
+set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]   ## this is the new line added to the existing config.tcl file
+
+set filename $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/$::env(PDK)_$::env(STD_CELL_LIBRARY)_config.tcl
+if { [file exists $filename] == 1 } {
+  source $filename
+}
+```
+
+Now, run openlane flow synthesis:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+```
+
+```
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+run_synthesis
+```
+
+![image](https://github.com/user-attachments/assets/497ae8ad-bf3c-4567-a578-c6ac20eb47bc)
+
+![image](https://github.com/user-attachments/assets/dd7ada16-e796-4672-b27b-67236f8aca74)
+
+![image](https://github.com/user-attachments/assets/318360ea-bb6b-4d6e-967f-298a4f70e779)
+
+![image](https://github.com/user-attachments/assets/0d081b77-6f6e-46d7-bedb-1cd78c1d0fd8)
+
+![image](https://github.com/user-attachments/assets/2c862a4f-d992-4710-804a-cdbe5e1a85c1)
+
+**Delay Tables**
+
+Delay plays a crucial role in cell timing, impacted by input transition and output load. Cells of the same type can have different delays depending on wire length due to resistance and capacitance variations. To manage this, "delay tables" are created, using 2D arrays with input slew and load capacitance for each buffer size as timing models. Algorithms compute buffer delays from these tables, interpolating where exact data isn’t available to estimate delays accurately, preserving signal integrity across varying load conditions.
+
+![image](https://github.com/user-attachments/assets/095a59e1-158c-4870-88e3-b73cb3a3692c)
+
+Fixing slack:
+
+```
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a -tag 24-03_10-03 -overwrite
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+echo $::env(SYNTH_STRATEGY)
+set ::env(SYNTH_STRATEGY) "DELAY 3"
+echo $::env(SYNTH_BUFFERING
+echo $::env(SYNTH_SIZING)
+set ::env(SYNTH_SIZING) 1
+echo $::env(SYNTH_DRIVING_CELL)
+run_synthesis
+```
+
+![image](https://github.com/user-attachments/assets/f79fb04d-3753-493d-a765-aea3791fd471)
+
+![image](https://github.com/user-attachments/assets/fe99a71a-9aba-400f-a9ce-5d42276e4a78)
+
+![image](https://github.com/user-attachments/assets/05bf09d2-a00c-44f3-8db9-11717c81bb79)
+
+Now, run floorplan
+
+```
+run_floorplan
+```
+
+![image](https://github.com/user-attachments/assets/474b7966-7f1f-4354-aa29-648b2a365e93)
+
+![image](https://github.com/user-attachments/assets/03c178fe-d327-4242-a9c0-070ed48d0763)
+
+Since we are facing unexpected un-explainable error while using run_floorplan command, we can instead use the following set of commands available based on information from `Desktop/work/tools/openlane_working_dir/openlane/scripts/tcl_commands/floorplan.tcl` and also based on Floorplan Commands section in `Desktop/work/tools/openlane_working_dir/openlane/docs/source/OpenLANE_commands.md`
+
+```
+init_floorplan
+place_io
+tap_decap_or
+```
+
+Now, do placement
+
+```
+run_placement
+```
+
+![image](https://github.com/user-attachments/assets/b4e4d29e-f445-47ce-acb3-86c51661f16f)
+
+![image](https://github.com/user-attachments/assets/292c8d10-aa72-4542-a0e7-e77f5a33dc7e)
+
+Now, open a new terminal and run the below commands to load placement def in magic
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/24-03_10-03/results/placement/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+
+```
+
+![image](https://github.com/user-attachments/assets/22efb80d-96ca-414b-9197-1e2e89ed2a78)
+
+Custom inverter inserted in placement def
+
+![image](https://github.com/user-attachments/assets/c339ff22-4e62-4b10-a2b0-98d711501db7)
+
+Now, select the cell and type `expand` in tkcon window to view internal layers of cells
+
+![image](https://github.com/user-attachments/assets/8682e469-2cb8-42af-b63e-fbad8182b285)
+
+**Timing analysis with ideal clocks using openSTA**
+
+Pre-layout STA will include effects of clock buffers and net-delay due to RC parasitics (wire delay will be derived from PDK library wire model).
+
+![image](https://github.com/user-attachments/assets/a74af227-70dd-4812-930d-b6e9e787a27f)
+
+Since we are getting 0 wns after improved timing run, we will be doing the timing analysis on initial run of synthesis which has lots of violations and no parameters added to improve timing.
+
+Commands to invoke the OpenLANE flow include new lef and perform synthesis:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+./flow.tcl -interactive
+package require openlane 0.9set
+prep -design picorv32a
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+set ::env(SYNTH_SIZING) 1
+run_synthesis
+```
+
+Go, to `Desktop/work/tools/openlane_working_dir/openlane` and create a file `pre_sta.conf`. The contents of the file are:
+
+```
+set_cmd_units -time ns -capacitance pF -current mA -voltage V -resistance kOhm -distance um
+read_liberty -max /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib
+read_liberty -min /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib
+read_verilog /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/24-03_10-03/results/synthesis/picorv32a.synthesis.v
+link_design picorv32a
+read_sdc /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/my_base.sdc
+report_checks -path_delay min_max -fields {slew trans net cap input_pin}
+report_tns
+report_wns
+```
+
+Contents of `my_base.sdc`:
+
+```
+set ::env(CLOCK_PORT) clk
+set ::env(CLOCK_PERIOD) 12.000
+set ::env(SYNTH_DRIVING_CELL) sky130_fd_sc_hd__inv_8
+set ::env(SYNTH_DRIVING_CELL_PIN) Y
+set ::env(SYNTH_CAP_LOAD) 17.65
+create_clock [get_ports $::env(CLOCK_PORT)]  -name $::env(CLOCK_PORT)  -period $::env(CLOCK_PERIOD)
+set IO_PCT  0.2
+set input_delay_value [expr $::env(CLOCK_PERIOD) * $IO_PCT]
+set output_delay_value [expr $::env(CLOCK_PERIOD) * $IO_PCT]
+puts "\[INFO\]: Setting output delay to: $output_delay_value"
+puts "\[INFO\]: Setting input delay to: $input_delay_value"
+
+
+set clk_indx [lsearch [all_inputs] [get_port $::env(CLOCK_PORT)]]
+#set rst_indx [lsearch [all_inputs] [get_port resetn]]
+set all_inputs_wo_clk [lreplace [all_inputs] $clk_indx $clk_indx]
+#set all_inputs_wo_clk_rst [lreplace $all_inputs_wo_clk $rst_indx $rst_indx]
+set all_inputs_wo_clk_rst $all_inputs_wo_clk
+
+
+# correct resetn
+set_input_delay $input_delay_value  -clock [get_clocks $::env(CLOCK_PORT)] $all_inputs_wo_clk_rst
+#set_input_delay 0.0 -clock [get_clocks $::env(CLOCK_PORT)] {resetn}
+set_output_delay $output_delay_value  -clock [get_clocks $::env(CLOCK_PORT)] [all_outputs]
+
+# TODO set this as parameter
+set_driving_cell -lib_cell $::env(SYNTH_DRIVING_CELL) -pin $::env(SYNTH_DRIVING_CELL_PIN) [all_inputs]
+set cap_load [expr $::env(SYNTH_CAP_LOAD) / 1000.0]
+puts "\[INFO\]: Setting load to: $cap_load"
+set_load  $cap_load [all_outputs]
+```
+
+Commands to run STA:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+sta pre_sta.conf
+```
+
+![image](https://github.com/user-attachments/assets/23bce842-bdd3-449c-ba66-da6b51c62a1e)
+
+![image](https://github.com/user-attachments/assets/9a7c6501-475c-4361-b1f6-2d5c94e4b3d0)
+
+We now try to optimise synthesis.
+
+Go to new terminal and run the follwoing commands:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+./flow.tcl -interactive
+prep -design picorv32a -tag 25-03_18-52 -overwrite
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+set ::env(SYNTH_SIZING) 1
+set ::env(SYNTH_MAX_FANOUT) 4
+echo $::env(SYNTH_DRIVING_CELL)
+run_synthesis
+```
+![image](https://github.com/user-attachments/assets/21ea0cdb-e7a0-411c-981b-33ca528fbcc7)
+
+Commands to run STA:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+sta pre_sta.conf
+```
+
+![image](https://github.com/user-attachments/assets/760b99e9-f70b-4bbb-b71e-a838abb52a3f)
+
+![image](https://github.com/user-attachments/assets/3cd8817a-4764-411c-b665-ea526cc450dc)
+
+**Basic timing ECO**
+
+NOR gate of drive strength 2 is driving 5 fanouts
+
+![image](https://github.com/user-attachments/assets/ec8dd4f0-4089-4d30-bf28-40f807171603)
+
+Run the following commands to optimise timing:
+
+```
+report_net -connections _13111_
+replace_cell _16171_ sky130_fd_sc_hd__nor3_2
+report_checks -fields {net cap slew input_pins} -digits 4
+```
+![image](https://github.com/user-attachments/assets/49667f40-1eb1-42a8-ad22-0a287eb92de0)
+
+We can observe that the tns has reduced to -402.45 from -403.54 and wns has reduced to -5.44 from -5.59
+
+**Clock tree synthesis TritonCTS and signal integrity**
+
+Clock Tree Synthesis (CTS) techniques vary based on design needs:
+
+- Balanced Tree CTS: Uses a balanced binary-like tree for equal path lengths, minimizing clock skew but with moderate power efficiency.
+- H-tree CTS: Employs an "H"-shaped structure, good for large areas and power efficiency.
+
+   ![image](https://github.com/user-attachments/assets/d1b13f19-a87f-41b6-8f29-a4e00a8e7216)
+
+- Star CTS: Distributes the clock from a central point, minimizing skew but requiring more buffers near the source.
+- Global-Local CTS: Combines star and tree topologies, with a global tree for clock domains and local trees within domains, balancing global and local timing.
+- Mesh CTS: Uses a grid pattern ideal for structured designs, balancing simplicity and skew.
+- Adaptive CTS: Dynamically adjusts based on timing and congestion, offering flexibility but with added complexity.
+
+**Crosstalk**
+
+Crosstalk is interference from overlapping electromagnetic fields between adjacent circuits, causing unwanted signals. In VLSI, it can lead to data corruption, timing issues, and higher power consumption. Mitigation strategies include optimized layout and routing, shielding, and clock gating to reduce dynamic power and minimize crosstalk effects.
+
+![image](https://github.com/user-attachments/assets/21df4ac0-57aa-492e-adfa-7e04ce385680)
+
+**Clock Net Shielding**
+
+Clock net shielding prevents glitches by isolating the clock network, using shields connected to VDD or GND that don’t switch. It reduces interference by isolating clocks from other signals, often with dedicated routing layers and clock buffers. Additionally, clock domain isolation helps prevent cross-domain interference, avoiding metastability and maintaining synchronization.
+
+![image](https://github.com/user-attachments/assets/bf85dd84-dc29-4962-877a-ce4f535bab2c)
+
+Now to insert this updated netlist to PnR flow and we can use write_verilog and overwrite the synthesis netlist but before that we are going to make a copy of the old old netlist:
+
+Run the following commands:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/25-03_18-52/results/synthesis/
+ls
+cp picorv32a.synthesis.v picorv32a.synthesis_old.v
+ls
+```
+
+Commands to write verilog:
+
+```
+write_verilog /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/25-03_18-52/results/synthesis/picorv32a.synthesis.v
+exit
+```
+Verified that the netlist is overwritten
+
+![image](https://github.com/user-attachments/assets/02b43f95-e067-425a-be03-3d81cbefed28)
+
+Now, run the following commands:
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane
+docker
+./flow.tcl -interactive
+prep -design picorv32a -tag 25-03_18-52 -overwrite
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+set ::env(SYNTH_STRATEGY) "DELAY 3"
+set ::env(SYNTH_SIZING) 1
+run_synthesis
+init_floorplan
+place_io
+tap_decap_or
+run_placement
+run_cts
+```
+![image](https://github.com/user-attachments/assets/7e329a64-2b8c-4006-a2b6-32d3b66ab790)
+
+![image](https://github.com/user-attachments/assets/ec16844c-3c39-48b6-be93-a979503df7e7)
+
+The cts is succesfull as shown below:
+
+![image](https://github.com/user-attachments/assets/588fb2e5-917e-4a93-a3f4-38306f13b2fa)
+
+![image](https://github.com/user-attachments/assets/f6b18d3a-a6a9-478e-9adb-521f2dc46fb5)
+
+**Setup timing analysis using real clocks**
+
+A real clock in timing analysis accounts for practical factors like clock skew and clock jitter. Clock skew is the difference in arrival times of the clock signal at different parts of the circuit due to physical delays, which affects setup and hold timing margins. Clock jitter is the variability in the clock period caused by power, temperature, and noise fluctuations, leading to uncertainty in clock edge timing. Both factors are crucial for accurate timing analysis, ensuring the design performs reliably in real-world conditions.
+
+![image](https://github.com/user-attachments/assets/3526c927-e1a9-445a-9dae-22bc7e0446c7)
+
+![image](https://github.com/user-attachments/assets/0c766405-5f9b-4700-a4cd-6fd19e9ea6cc)
+
+Now, enter the following commands for Post-CTS OpenROAD timing analysis:
+
+```
+openroad
+read_lef /openLANE_flow/designs/picorv32a/runs/25-03_18-52/tmp/merged.lef
+read_def /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/cts/picorv32a.cts.def
+write_db pico_cts.db
+read_db pico_cts.db
+read_verilog /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/synthesis/picorv32a.synthesis_cts.v
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+link_design picorv32a
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+set_propagated_clock [all_clocks]
+report_checks -path_delay min_max -fields {slew trans net cap input_pins} -format full_clock_expanded -digits 4
+exit
+```
+
+![image](https://github.com/user-attachments/assets/7c6b4604-6a86-4e24-a2a0-ec2bb4259aeb)
+
+![image](https://github.com/user-attachments/assets/8d8d1a9b-187f-4680-8f9c-8d3bfab2976e)
+
+![image](https://github.com/user-attachments/assets/ada3e13a-58d7-4363-a458-e7a67c3bce4d)
+
+Now, enter the following commands for exploring post-CTS OpenROAD timing analysis by removing 'sky130_fd_sc_hd__clkbuf_1' cell from clock buffer list variable 'CTS_CLK_BUFFER_LIST':
+
+```
+echo $::env(CTS_CLK_BUFFER_LIST)
+set ::env(CTS_CLK_BUFFER_LIST) [lreplace $::env(CTS_CLK_BUFFER_LIST) 0 0]
+echo $::env(CTS_CLK_BUFFER_LIST)
+echo $::env(CURRENT_DEF)
+set ::env(CURRENT_DEF) /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/placement/picorv32a.placement.def
+run_cts
+echo $::env(CTS_CLK_BUFFER_LIST)
+openroad
+read_lef /openLANE_flow/designs/picorv32a/runs/25-03_18-52/tmp/merged.lef
+read_def /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/cts/picorv32a.cts.def
+write_db pico_cts1.db
+read_db pico_cts.db
+read_verilog /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/synthesis/picorv32a.synthesis_cts.v
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+link_design picorv32a
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+set_propagated_clock [all_clocks]
+report_checks -path_delay min_max -fields {slew transd net cap input_pins} -format full_clock_expanded -digits 4
+report_clock_skew -hold
+report_clock_skew -setup
+exit
+echo $::env(CTS_CLK_BUFFER_LIST)
+set ::env(CTS_CLK_BUFFER_LIST) [linsert $::env(CTS_CLK_BUFFER_LIST) 0 sky130_fd_sc_hd__clkbuf_1]
+echo $::env(CTS_CLK_BUFFER_LIST)
+```
+
+![image](https://github.com/user-attachments/assets/3fcd48ab-1c5e-4c46-815b-87ce2cb3480b)
+
+![image](https://github.com/user-attachments/assets/317f453b-8b56-4a3d-a4be-1d3609d70c85)
+
+![image](https://github.com/user-attachments/assets/865ebf67-40b8-4c1e-9b4b-e9edf394b114)
+
+### Day 5 - Final steps for RTL2GDS using tritonRoute and openSTA
+
+**Maze Routing and Lee's algorithm**
+
+Routing establishes a physical connection between pins, and algorithms like Maze Routing (e.g., the Lee algorithm) are used to find efficient paths on a routing grid. The Lee algorithm starts at a source pin, assigning incremental labels to neighboring cells until reaching the target pin, prioritizing L-shaped routes and using zigzag paths if needed. While effective for finding the shortest path between two pins, the Lee algorithm can be slow for large-scale designs, prompting the use of faster alternatives for handling complex routing tasks.
+
+![image](https://github.com/user-attachments/assets/9016ae8d-1a9f-4b22-ba5f-a445af7bc92d)
+
+**Design Rule Check**
+
+Command to generate Power Distribution Network (PDN):
+
+```
+gen_pdn
+```
+
+Now, in a new terminal
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/25-03_18-52/tmp/floorplan/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read 18-pdn.def &
+```
+![image](https://github.com/user-attachments/assets/3cb4e182-7a3d-4eb0-b223-61f7d7a4d451)
+
+![image](https://github.com/user-attachments/assets/97591be9-402e-4a0a-bf92-4e320f30ec70)
+
+When the power distribution network (PDN) generation command is issued, the system creates the PDN using the design_cts.def file as input.
+
+The PDN consists of power rings, straps, and rails:
+
+- Power is initially drawn from the VDD and VSS pads to the power rings.
+- Horizontal and vertical straps are connected to the rings to further distribute power, with these straps channeling power to the rails connected to standard cells.
+- Rails are placed at standard cell height intervals, which align with multiples of the track pitch (2.72 in this design), allowing proper power delivery to all standard cells.
+
+In this design:
+
+-Straps are placed on metal layers 4 and 5, while standard cell rails are on metal layer 1.
+-Vias are used to interconnect these layers, ensuring seamless power flow from pads to cells across the different metal levels.
+
+![image](https://github.com/user-attachments/assets/1c9f164b-9414-4d71-a9f7-6eef3cb1fe5a)
+
+Now, we perfrom detailed routing using TritonRoute:
+
+```
+echo $::env(CURRENT_DEF)
+echo $::env(ROUTING_STRATEGY)
+run_routing
+```
+
+![image](https://github.com/user-attachments/assets/dbbe20fc-dcd4-412a-8d56-b839a9576ca3)
+
+Now, in a new terminal
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/25-03_18-52/results/routing/
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.def &
+```
+
+![image](https://github.com/user-attachments/assets/31f6533e-ad22-4efe-94d9-b51a2518a2b1)
+
+Expanded layout showing the custom inverter `sky130_akainv`
+
+![image](https://github.com/user-attachments/assets/fc178a51-17e3-498b-be9b-7f6b273d3e68)
+
+Fast route guide present in `openlane/designs/picorv32a/runs/25-03_18-52/tmp/routing` 
+
+![image](https://github.com/user-attachments/assets/e3ece9df-c2a3-40fa-989a-09eb75755c8e)
+
+
+**TritonRoute**
+
+TritonRoute performs detailed routing by following pre-processed global route guides and using a MILP-based panel routing scheme. It supports intra-layer parallel routing (simultaneous routing within a layer) and inter-layer sequential routing (from bottom to top metal layers). TritonRoute respects each metal layer's preferred direction (e.g., met1 horizontal, met2 vertical) as defined in the LEF file, minimizing overlapping and potential capacitance issues for improved signal integrity.
+
+![image](https://github.com/user-attachments/assets/25fb2a50-7080-4622-8222-42b49ab59a1f)
+
+![image](https://github.com/user-attachments/assets/56a1e05b-e8dc-44f5-95eb-5a3224a2a7d4)
+
+Feature:
+
+- Pre-processed Route Guides : TritonRoute uses pre-processed route guides generated by the global router. These guides provide an initial path outline, helping TritonRoute achieve efficient, detailed routing by following these predefined paths while optimizing for connectivity and minimizing conflicts.
+
+![image](https://github.com/user-attachments/assets/e4110bf2-ed04-45f5-a5fe-5bc2ef892178)
+
+- Inter-guide Connectivity : In TritonRoute, inter-guide connectivity ensures seamless connections between adjacent route guides. This feature maintains continuity across guide boundaries, allowing signals to pass smoothly from one guide to the next, which helps to reduce routing gaps and improve overall connectivity throughout the design.
+
+![image](https://github.com/user-attachments/assets/65e6a2aa-27f6-4924-829e-b1307c691773)
+
+- Intra-layer Routing: Routing within a single metal layer, performed in parallel to optimize path efficiency.
+  
+- Inter-layer Routing: Sequential routing across metal layers, starting from the bottom, following layer direction rules to minimize interference.
+
+![image](https://github.com/user-attachments/assets/b2698b8c-c2bc-476a-bc55-4507b44f2a2c)
+
+
+**TritonRoute method to handle connectivity**
+
+TritonRoute ensures robust connectivity by following global route guides and managing both intra-layer and inter-layer routing. It connects paths within each layer (intra-layer) in parallel and links them across layers (inter-layer) sequentially, from the bottom to the top. This structured approach helps avoid congestion and maintains consistent signal flow throughout the design.
+
+![image](https://github.com/user-attachments/assets/dac5f965-d7a8-4cb4-b667-9d01ffcf36ec)
+
+**Routing Topology Algorithm**
+
+A routing topology algorithm defines the structure and path configuration of connections between pins in an integrated circuit. It aims to create an efficient, minimal-cost layout by determining the best routing paths and shapes.
+
+![image](https://github.com/user-attachments/assets/5b921b96-da9e-4735-a6eb-51d5319bbfb0)
+
+
+Commands for SPEF extraction Post-Route parasitic extraction using SPEF extractor
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/scripts/spef_extractor
+python3 main.py -l /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/25-03_18-52/tmp/merged.lef -d /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/25-03_18-52/results/routing/picorv32a.def
+```
+
+![image](https://github.com/user-attachments/assets/50df375e-a4bf-4c62-9d05-324594b05f2b)
+
+
+Commands for Post-Route OpenSTA timing analysis with the extracted parasitics of the route:
+
+```
+openroad
+read_lef /openLANE_flow/designs/picorv32a/runs/25-03_18-52/tmp/merged.lef
+read_def /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/routing/picorv32a.def
+write_db pico_route.db
+read_db pico_route.db
+read_verilog /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/synthesis/picorv32a.synthesis_preroute.v
+read_liberty $::env(LIB_SYNTH_COMPLETE)
+link_design picorv32a
+read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
+set_propagated_clock [all_clocks]
+read_spef /openLANE_flow/designs/picorv32a/runs/25-03_18-52/results/routing/picorv32a.spef
+report_checks -path_delay min_max -fields {slew trans net cap input_pins} -format full_clock_expanded -digits 4
+exit
+```
+
+![image](https://github.com/user-attachments/assets/fc6175b6-2237-4343-af65-a5bafbdecd09)
+
+![image](https://github.com/user-attachments/assets/eb91bd4f-443f-4e38-b927-5dcba9ff6476)
+
+![image](https://github.com/user-attachments/assets/0c2d04bd-f641-45e2-8975-b9b633bd7734)
