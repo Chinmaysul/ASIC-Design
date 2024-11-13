@@ -4143,7 +4143,8 @@ magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs
 
 Custom inverter inserted in placement def
 
-![image](https://github.com/user-attachments/assets/c339ff22-4e62-4b10-a2b0-98d711501db7)
+![image](https://github.com/user-attachments/assets/c4124f73-3328-4ef8-b3f8-af7336874f63)
+
 
 Now, select the cell and type `expand` in tkcon window to view internal layers of cells
 
@@ -4171,6 +4172,9 @@ add_lefs -src $lefs
 set ::env(SYNTH_SIZING) 1
 run_synthesis
 ```
+
+![image](https://github.com/user-attachments/assets/53e63456-156d-4095-96f8-5ac41f88f4d0)
+
 
 Go, to `Desktop/work/tools/openlane_working_dir/openlane` and create a file `pre_sta.conf`. The contents of the file are:
 
@@ -4228,13 +4232,13 @@ cd Desktop/work/tools/openlane_working_dir/openlane
 sta pre_sta.conf
 ```
 
-![image](https://github.com/user-attachments/assets/23bce842-bdd3-449c-ba66-da6b51c62a1e)
+![image](https://github.com/user-attachments/assets/1a54a342-ed2a-4d96-b2e0-000f1b2e1f66)
 
-![image](https://github.com/user-attachments/assets/9a7c6501-475c-4361-b1f6-2d5c94e4b3d0)
+![image](https://github.com/user-attachments/assets/57b25588-ef75-4d07-ae5a-b30174752250)
 
 We now try to optimise synthesis.
 
-Go to new terminal and run the follwoing commands:
+Go to new terminal and run the following commands:
 
 ```
 cd Desktop/work/tools/openlane_working_dir/openlane
@@ -4248,7 +4252,10 @@ set ::env(SYNTH_MAX_FANOUT) 4
 echo $::env(SYNTH_DRIVING_CELL)
 run_synthesis
 ```
-![image](https://github.com/user-attachments/assets/21ea0cdb-e7a0-411c-981b-33ca528fbcc7)
+
+![image](https://github.com/user-attachments/assets/4cc9504f-4de0-4c81-aaf5-7025578d3f3c)
+
+![image](https://github.com/user-attachments/assets/a898e02a-b1bb-4c5b-889a-217204acf123)
 
 Commands to run STA:
 
@@ -4257,26 +4264,32 @@ cd Desktop/work/tools/openlane_working_dir/openlane
 sta pre_sta.conf
 ```
 
-![image](https://github.com/user-attachments/assets/760b99e9-f70b-4bbb-b71e-a838abb52a3f)
+![image](https://github.com/user-attachments/assets/448a6117-6c9e-457a-96cc-68f82ee7cfdf)
 
-![image](https://github.com/user-attachments/assets/3cd8817a-4764-411c-b665-ea526cc450dc)
+![image](https://github.com/user-attachments/assets/1ae7b1c8-8b13-4b59-91ca-2de1372addd0)
+
 
 **Basic timing ECO**
 
 NOR gate of drive strength 2 is driving 5 fanouts
 
-![image](https://github.com/user-attachments/assets/ec8dd4f0-4089-4d30-bf28-40f807171603)
+![image](https://github.com/user-attachments/assets/73fdc61e-40d1-4496-9a05-2737556b9064)
+
 
 Run the following commands to optimise timing:
 
 ```
-report_net -connections _13111_
-replace_cell _16171_ sky130_fd_sc_hd__nor3_2
+report_net -connections _13295_
+replace_cell _16155_ sky130_fd_sc_hd__nor3_4
 report_checks -fields {net cap slew input_pins} -digits 4
 ```
-![image](https://github.com/user-attachments/assets/49667f40-1eb1-42a8-ad22-0a287eb92de0)
 
-We can observe that the tns has reduced to -402.45 from -403.54 and wns has reduced to -5.44 from -5.59
+![image](https://github.com/user-attachments/assets/11d5e71b-6be9-415e-864f-bde0da3c39b0)
+
+![image](https://github.com/user-attachments/assets/4efdb86c-0614-4880-8139-577eab8bfc5d)
+
+
+We can observe that the tns has reduced to -402.10 from -403.54 and wns has reduced to -5.38 from -5.59
 
 **Clock tree synthesis TritonCTS and signal integrity**
 
@@ -4323,7 +4336,8 @@ exit
 ```
 Verified that the netlist is overwritten
 
-![image](https://github.com/user-attachments/assets/02b43f95-e067-425a-be03-3d81cbefed28)
+![image](https://github.com/user-attachments/assets/463de151-df01-4ba6-bc03-00c3785932fd)
+
 
 Now, run the following commands:
 
@@ -4343,15 +4357,16 @@ tap_decap_or
 run_placement
 run_cts
 ```
-![image](https://github.com/user-attachments/assets/7e329a64-2b8c-4006-a2b6-32d3b66ab790)
+![image](https://github.com/user-attachments/assets/9e2f473c-afb3-464d-8e03-26c13a80b46c)
+![image](https://github.com/user-attachments/assets/2379cf3b-4e6a-40d0-8c28-41db83c8cfb6)
 
-![image](https://github.com/user-attachments/assets/ec16844c-3c39-48b6-be93-a979503df7e7)
+The placement & cts is succesfull as shown below:
+![image](https://github.com/user-attachments/assets/9ec8869f-19bc-443e-aff5-69c1c750aed0)
 
-The cts is succesfull as shown below:
+![image](https://github.com/user-attachments/assets/8b612dc6-37c9-48ac-8596-6fb6edfbd774)
+![image](https://github.com/user-attachments/assets/c74f87eb-c7eb-46d3-a78e-b4b34013d1ea)
 
-![image](https://github.com/user-attachments/assets/588fb2e5-917e-4a93-a3f4-38306f13b2fa)
 
-![image](https://github.com/user-attachments/assets/f6b18d3a-a6a9-478e-9adb-521f2dc46fb5)
 
 **Setup timing analysis using real clocks**
 
@@ -4378,11 +4393,15 @@ report_checks -path_delay min_max -fields {slew trans net cap input_pins} -forma
 exit
 ```
 
-![image](https://github.com/user-attachments/assets/7c6b4604-6a86-4e24-a2a0-ec2bb4259aeb)
+![image](https://github.com/user-attachments/assets/b73ef414-6669-420d-9cd7-273a2605ba30)
 
-![image](https://github.com/user-attachments/assets/8d8d1a9b-187f-4680-8f9c-8d3bfab2976e)
+![image](https://github.com/user-attachments/assets/a329908f-59ad-48ed-99a1-51dd4a591dcb)
 
-![image](https://github.com/user-attachments/assets/ada3e13a-58d7-4363-a458-e7a67c3bce4d)
+![image](https://github.com/user-attachments/assets/cb125b21-5688-4a63-9fe3-d7c1e5f99218)
+
+![image](https://github.com/user-attachments/assets/df5b369f-47bd-42bc-a700-7a1608fe9f73)
+
+
 
 Now, enter the following commands for exploring post-CTS OpenROAD timing analysis by removing 'sky130_fd_sc_hd__clkbuf_1' cell from clock buffer list variable 'CTS_CLK_BUFFER_LIST':
 
@@ -4413,11 +4432,16 @@ set ::env(CTS_CLK_BUFFER_LIST) [linsert $::env(CTS_CLK_BUFFER_LIST) 0 sky130_fd_
 echo $::env(CTS_CLK_BUFFER_LIST)
 ```
 
-![image](https://github.com/user-attachments/assets/3fcd48ab-1c5e-4c46-815b-87ce2cb3480b)
+![image](https://github.com/user-attachments/assets/e59766d3-9368-4f61-b2a8-bc84a49a4449)
 
-![image](https://github.com/user-attachments/assets/317f453b-8b56-4a3d-a4be-1d3609d70c85)
+![image](https://github.com/user-attachments/assets/f37c80ea-9423-4de9-947a-62a547dea373)
 
-![image](https://github.com/user-attachments/assets/865ebf67-40b8-4c1e-9b4b-e9edf394b114)
+![image](https://github.com/user-attachments/assets/c1a143d5-95a9-4bb2-8544-137fee15f607)
+
+![image](https://github.com/user-attachments/assets/db87f93a-27d0-477c-b687-14ee93f53be2)
+
+![image](https://github.com/user-attachments/assets/e27eb812-4972-4daa-8797-0b51430268bb)
+
 
 ### Day 5 - Final steps for RTL2GDS using tritonRoute and openSTA
 
