@@ -3866,6 +3866,27 @@ Cell Rise delay: difference in time(50% output rise) to time(50% input fall)
 Cell Fall delay: difference in time(50% output fall) to time(50% input rise)
 
 ```
+20% of output(3.3V) = 0.66V
+80% of output(3.3V) = 2.64V
+50% of output(3.3V) = 1.15V
+```
+20% Screenshots:
+
+![image](https://github.com/user-attachments/assets/7f1c0019-1d96-47ab-ae7b-ad1b27fd512a)
+![Screenshot from 2024-11-13 22-21-37](https://github.com/user-attachments/assets/c7e6f656-e73c-46a0-84b4-0b7d66c6e7e6)
+
+80% Screenshots:
+![image](https://github.com/user-attachments/assets/46d6a38e-99f0-4f39-92a4-a15dea7b27a3)
+![image](https://github.com/user-attachments/assets/f4ab0100-0c70-4f9c-aaca-3b164b2e0789)
+
+50% Screenshots:
+![image](https://github.com/user-attachments/assets/1284c62a-0067-45f1-bcf2-a476829fc266)
+![image](https://github.com/user-attachments/assets/afbfaf7a-7692-4ec1-9c0b-c4cd0eb4282a)
+
+
+
+
+```
 Rise Transition : 2.24638 - 2.18242 =  0.06396 ns = 63.96 ps
 Fall Transition : 4.0955 - 4.05536 =  0.0419 ns = 41.9 ps
 Cell Rise Delay : 2.21144 - 2.15008 = 0.06136 ns = 61.36 ps
@@ -3923,7 +3944,8 @@ cd Desktop/work/tools/openlane_working_dir/openlane/vsdstdcelldesign
 cd ../../pdks/sky130A/libs.tech/openlane/sky130_fd_sc_hd/
 less tracks.info
 ```
-![image](https://github.com/user-attachments/assets/13cb8a9b-0c9e-40f1-a020-c62cd0515980)
+
+![image](https://github.com/user-attachments/assets/6e0cfb41-80f6-4abf-99f6-1c5230161cf4)
 
 Commands for tkcon window to set grid as tracks of locali layer
 
@@ -3931,11 +3953,12 @@ Commands for tkcon window to set grid as tracks of locali layer
 grid 0.46um 0.34um 0.23um 0.17um
 ```
 
-![image](https://github.com/user-attachments/assets/cd02da90-4a0a-4006-97ee-213bd7811734)
+![image](https://github.com/user-attachments/assets/64127f27-7552-4dee-bf55-cbec9dfb9bfe)
+
 
 The grids show where the routing for the local-interconnet layer can only happen, the distance of the grid lines are the required pitch of the wire. Below, we can see that the guidelines are satisfied:
 
-![image](https://github.com/user-attachments/assets/28a95f97-0330-4835-b762-4bd1c09167b0)
+
 
 Now, save it by giving a custon mae
 
