@@ -3953,37 +3953,49 @@ Commands for tkcon window to set grid as tracks of locali layer
 grid 0.46um 0.34um 0.23um 0.17um
 ```
 
-![image](https://github.com/user-attachments/assets/64127f27-7552-4dee-bf55-cbec9dfb9bfe)
+![image](https://github.com/user-attachments/assets/db7446b9-f1b1-480e-af15-c9aab4d0a24b)
+![image](https://github.com/user-attachments/assets/ba8ed4c1-1e08-4b68-8182-d764f14198ee)
+
 
 
 The grids show where the routing for the local-interconnet layer can only happen, the distance of the grid lines are the required pitch of the wire. Below, we can see that the guidelines are satisfied:
 
 
 
-Now, save it by giving a custon mae
+Now, save it by giving a custon name
 
 ```
-save sky130_akainv.mag
+save sky130_chiinv.mag
 ```
 
-![image](https://github.com/user-attachments/assets/3cc23fcf-d81e-4538-b5c2-b21e3e063bbc)
+![image](https://github.com/user-attachments/assets/f732b164-d33f-487f-a46b-3c1d03de28ad)
+
+
 
 Now, open it by using the following commands:
 
 ```
-magic -T sky130A.tech sky130_akainv.mag &
+magic -T sky130A.tech sky130_chiinv.mag &
 ```
 
-![image](https://github.com/user-attachments/assets/4f03c1dc-753c-4ad0-bb15-62d31d4c71a1)
+![image](https://github.com/user-attachments/assets/ecb09169-6212-49fd-879d-c201fd2803a2)
+
+![image](https://github.com/user-attachments/assets/841c2253-da8a-409a-97e9-254cc1931df1)
+
+
 
 Now, type the following command in tkcon window:
 
 ```
 lef write
 ```
-![image](https://github.com/user-attachments/assets/dfb03866-4a7f-42b1-b4ba-cb6ac847ed6f)
+![image](https://github.com/user-attachments/assets/81cdcdf0-1be8-4be5-8cb4-282f8a90cd72)
 
-![image](https://github.com/user-attachments/assets/44adaa57-013d-4552-99fa-5034075df52f)
+
+```
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a
+gedit config.tcl
+```
 
 Modify config.tcl:
 
@@ -4013,6 +4025,24 @@ if { [file exists $filename] == 1 } {
   source $filename
 }
 ```
+![image](https://github.com/user-attachments/assets/926c8581-b837-4a97-b34b-19a0f453892e)
+
+
+Copy the newly generated lef and associated required lib files to 'picorv32a' design 'src' directory.
+
+```
+# Copy lef file
+cp sky130_vsdinv.lef ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+
+# List and check whether it's copied
+ls ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+
+# Copy lib files
+cp libs/sky130_fd_sc_hd__* ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+
+# List and check whether it's copied
+ls ~/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/src/
+```
 
 Now, run openlane flow synthesis:
 
@@ -4029,16 +4059,15 @@ set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
 add_lefs -src $lefs
 run_synthesis
 ```
+![image](https://github.com/user-attachments/assets/f6dbf40d-b6f7-4bd9-a1fd-b5497d70a2d9)
 
-![image](https://github.com/user-attachments/assets/497ae8ad-bf3c-4567-a578-c6ac20eb47bc)
+![image](https://github.com/user-attachments/assets/a182280a-bd58-414c-8e43-35fa03535890)
 
-![image](https://github.com/user-attachments/assets/dd7ada16-e796-4672-b27b-67236f8aca74)
+![image](https://github.com/user-attachments/assets/3b33b0bb-2bae-4bbd-844f-e019349e7d07)
+![image](https://github.com/user-attachments/assets/875bff1b-5bb3-4359-9dc9-5504f5225736)
 
-![image](https://github.com/user-attachments/assets/318360ea-bb6b-4d6e-967f-298a4f70e779)
+![image](https://github.com/user-attachments/assets/e7b26f65-3fc8-4fd7-a2ce-7c1c63ed3174)
 
-![image](https://github.com/user-attachments/assets/0d081b77-6f6e-46d7-bedb-1cd78c1d0fd8)
-
-![image](https://github.com/user-attachments/assets/2c862a4f-d992-4710-804a-cdbe5e1a85c1)
 
 **Delay Tables**
 
@@ -4063,21 +4092,22 @@ echo $::env(SYNTH_DRIVING_CELL)
 run_synthesis
 ```
 
-![image](https://github.com/user-attachments/assets/f79fb04d-3753-493d-a765-aea3791fd471)
+![image](https://github.com/user-attachments/assets/cc9a9100-7626-443d-9785-b22d00f0bcd1)
 
-![image](https://github.com/user-attachments/assets/fe99a71a-9aba-400f-a9ce-5d42276e4a78)
+![image](https://github.com/user-attachments/assets/32625a97-80e6-4925-8709-6c51763dfcb9)
 
-![image](https://github.com/user-attachments/assets/05bf09d2-a00c-44f3-8db9-11717c81bb79)
+![image](https://github.com/user-attachments/assets/082c9d5a-fde0-42f1-83d8-1a4a23bba542)
+
 
 Now, run floorplan
 
 ```
 run_floorplan
 ```
+![image](https://github.com/user-attachments/assets/144d67d9-d775-4024-bbf8-258706b4058f)
 
-![image](https://github.com/user-attachments/assets/474b7966-7f1f-4354-aa29-648b2a365e93)
+![image](https://github.com/user-attachments/assets/d4b202ae-5469-4b42-aa08-006f1f882edf)
 
-![image](https://github.com/user-attachments/assets/03c178fe-d327-4242-a9c0-070ed48d0763)
 
 Since we are facing unexpected un-explainable error while using run_floorplan command, we can instead use the following set of commands available based on information from `Desktop/work/tools/openlane_working_dir/openlane/scripts/tcl_commands/floorplan.tcl` and also based on Floorplan Commands section in `Desktop/work/tools/openlane_working_dir/openlane/docs/source/OpenLANE_commands.md`
 
@@ -4086,6 +4116,9 @@ init_floorplan
 place_io
 tap_decap_or
 ```
+![image](https://github.com/user-attachments/assets/3c078305-d12b-4532-91d0-8c70957cbf90)
+
+
 
 Now, do placement
 
@@ -4093,9 +4126,9 @@ Now, do placement
 run_placement
 ```
 
-![image](https://github.com/user-attachments/assets/b4e4d29e-f445-47ce-acb3-86c51661f16f)
+![image](https://github.com/user-attachments/assets/e8ad32e9-0f9c-4925-a57a-f15683695918)
 
-![image](https://github.com/user-attachments/assets/292c8d10-aa72-4542-a0e7-e77f5a33dc7e)
+![image](https://github.com/user-attachments/assets/7f45b065-6b76-47ac-9e29-bae6a514721a)
 
 Now, open a new terminal and run the below commands to load placement def in magic
 
@@ -4105,7 +4138,8 @@ magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs
 
 ```
 
-![image](https://github.com/user-attachments/assets/22efb80d-96ca-414b-9197-1e2e89ed2a78)
+![image](https://github.com/user-attachments/assets/6180b6e4-ee06-4e16-a787-fa77e9f5f8c3)
+
 
 Custom inverter inserted in placement def
 
@@ -4113,7 +4147,8 @@ Custom inverter inserted in placement def
 
 Now, select the cell and type `expand` in tkcon window to view internal layers of cells
 
-![image](https://github.com/user-attachments/assets/8682e469-2cb8-42af-b63e-fbad8182b285)
+![image](https://github.com/user-attachments/assets/ab793e39-8ca8-4d88-9e2d-bb8d8a09b6ee)
+
 
 **Timing analysis with ideal clocks using openSTA**
 
