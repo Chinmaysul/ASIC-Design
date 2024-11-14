@@ -3932,7 +3932,7 @@ We can see that Poly.9 is incorrect.
 
 The Poly rules can be seen here:
 
-![image](https://github.com/user-attachments/assets/b92ad27a-8e19-408f-8ae9-207afb0f9177)
+![image](https://github.com/user-attachments/assets/c4ae9a60-be7c-4840-99e6-5c21aaa460f1)
 
 
 Add the below commands in the sky130A.tech
