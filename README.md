@@ -3516,6 +3516,7 @@ Flop ratio = Number of D Flip flops = 1613  = 0.1084
 <details>
 <summary>Day-2</summary>
 <br>
+	
 ### Good floorplan vs bad floorplan and introduction to library cells
 
 Utilization Factor and Aspect Ratio: In IC floor planning, two critical parameters are the utilization factor and the aspect ratio. The utilization factor measures the area occupied by the netlist relative to the total core area. Although a utilization of 1 (or 100%) would be ideal, practical designs typically aim for a utilization factor between 0.5 and 0.6. This range provides space for buffer zones, routing channels, and potential future modifications. The aspect ratio, defined as the ratio of height to width, indicates the shape of the chip. An aspect ratio of 1 produces a square shape, while other values yield a rectangular layout. This ratio is determined based on functional requirements, packaging constraints, and manufacturing considerations.
@@ -3798,6 +3799,7 @@ To view the spice file:
 
 ![image](https://github.com/user-attachments/assets/0ab0f434-0785-41b4-aaad-70aa0738af86)
 
+![Screenshot from 2024-11-15 02-55-15](https://github.com/user-attachments/assets/110969bb-3f4f-43ae-89a9-c3c3d8d353b5)
 
 The contents of spice file:
 
@@ -3927,6 +3929,11 @@ First load the poly file by load poly.mag on tkcon window.
 
 
 We can see that Poly.9 is incorrect.
+
+The Poly rules can be seen here:
+
+![image](https://github.com/user-attachments/assets/b92ad27a-8e19-408f-8ae9-207afb0f9177)
+
 
 Add the below commands in the sky130A.tech
 
