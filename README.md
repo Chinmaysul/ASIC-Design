@@ -3975,7 +3975,30 @@ Commands for tkcon window to set grid as tracks of locali layer
 grid 0.46um 0.34um 0.23um 0.17um
 ```
 
+![image](https://github.com/user-attachments/assets/202c84c1-ebea-49a4-b0eb-a9960f3e4ddd)
+
+Condition 1 verified:
 ![image](https://github.com/user-attachments/assets/db7446b9-f1b1-480e-af15-c9aab4d0a24b)
+
+Condition 2 verified:
+
+```
+Horizontal Track Pitch = 0.46um
+Width of the standard cell = 3 * 0.46 = 1.38um
+
+```
+![image](https://github.com/user-attachments/assets/abbd0ba2-b56b-46f9-b965-a7d9a98e1998)
+
+Condition 3 verified:
+
+```
+Veritical Track Pitch = 0.34um
+Length of the standard cell = 8 * 0.34 = 2.72um
+```
+
+![image](https://github.com/user-attachments/assets/205da43a-a9c5-40de-aece-25dfee3afb66)
+
+
 ![image](https://github.com/user-attachments/assets/ba8ed4c1-1e08-4b68-8182-d764f14198ee)
 
 
