@@ -5520,7 +5520,8 @@ In summary, Clock Tree Synthesis is a fundamental aspect of VLSI design that dir
 
 ![image](https://github.com/user-attachments/assets/2ee65db1-8810-443e-beaf-97d3709e0a05)
 ![image](https://github.com/user-attachments/assets/aa199c21-8fac-4b3b-9e20-15ad4c9ea48c)
-![cts_gui](https://github.com/user-attachments/assets/2f0c9ff6-55b0-4e88-bbf9-51573cd5d188)
+![image](https://github.com/user-attachments/assets/2d81d0e8-22c4-4e4f-8ae4-1222d79f58bc)
+
 
 **Heat Map:**
 
@@ -5548,7 +5549,7 @@ The routing flow consists of four main stages:
 
 *	Detailed Routing: Completes the actual metal and via connections between pins. It fixes all remaining violations through multiple iterations. The block is divided into switch boxes (Sboxes) for routing.
 
-*	Search and Repair: Performed after the first detailed routing iteration to locate and fix any remaining shorts or spacing violations[2][3].
+*	Search and Repair: Performed after the first detailed routing iteration to locate and fix any remaining shorts or spacing violations.
 
 **Routing Constraints:**
 
@@ -5559,16 +5560,6 @@ Key routing constraints include:
 *	Routing density constraints to avoid congestion
 *	Constraints on off-grid routing
 *	Blocked routing regions
-
-**Routing Outputs:**
-
-The main outputs of routing are:
-
-*	Geometric layout of all nets in GDS format
-*	SPEF file for parasitics
-*	Updated SDC file with routed timing
-
-In summary, routing is a critical step that completes the physical connections in the design while meeting various constraints. Efficient routing is essential for manufacturability and performance closure in modern VLSI designs.
 
 
 
