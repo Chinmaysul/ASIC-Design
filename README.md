@@ -5516,7 +5516,10 @@ After completing the CTS, several checks are necessary to ensure the clock tree 
 In summary, Clock Tree Synthesis is a fundamental aspect of VLSI design that directly impacts the performance, power efficiency, and reliability of integrated circuits. Proper execution of CTS ensures that the clock signal is effectively distributed, enabling synchronous operation of all components within the design.
 
 
+**CTS Reports**
 
+![image](https://github.com/user-attachments/assets/2ee65db1-8810-443e-beaf-97d3709e0a05)
+![image](https://github.com/user-attachments/assets/aa199c21-8fac-4b3b-9e20-15ad4c9ea48c)
 ![cts_gui](https://github.com/user-attachments/assets/2f0c9ff6-55b0-4e88-bbf9-51573cd5d188)
 
 **Heat Map:**
@@ -5567,13 +5570,6 @@ The main outputs of routing are:
 
 In summary, routing is a critical step that completes the physical connections in the design while meeting various constraints. Efficient routing is essential for manufacturability and performance closure in modern VLSI designs.
 
-**Lab - Routing of VSDBabySoC :**
-
-Command to run routing for the design file:
-```
-make DESIGN_CONFIG=./designs/sky130hd/VSDbabysoc_pri/config.mk route
-```
-![routing_done](https://github.com/user-attachments/assets/f72f3505-6db3-44c6-b002-76ed19a65d55)
 
 
 Screenshot of GUI of routed design:
@@ -5581,17 +5577,16 @@ Screenshot of GUI of routed design:
 
 ![route_with_cts](https://github.com/user-attachments/assets/f7d5e82a-604f-49da-9551-42224f5aa658)
 
-**riscv_pri macro:**
-
-![route_riscv](https://github.com/user-attachments/assets/eb7d0fde-ed28-4a2d-a57b-5f3c244bf27f)
 
 **Heat map for routing congestion:**
 
-![heat_map_gui](https://github.com/user-attachments/assets/93680564-cf33-4d65-a898-e26c54cf1f41)
+![Screenshot from 2024-11-26 04-32-43](https://github.com/user-attachments/assets/537e08e4-73e8-4fd6-9890-6957a103c326)
+
 
 **Heat map for placement congestion:**
 
-![Heat_map_placement](https://github.com/user-attachments/assets/b82f8003-4796-44d7-b295-86dfe4aa2c36)
+![Screenshot from 2024-11-26 04-32-16](https://github.com/user-attachments/assets/254a11d1-e3ce-4970-a2a1-2ec972b96c36)
+
 
 
 
