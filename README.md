@@ -4785,3 +4785,2217 @@ Screenshots of commands run and timing report generated
 
 
 </details>   
+
+# Lab 6: Physical Design using OpenRoad
+
+**1. FinFET Basics:**
+Path to Zetta-Scale Computing
+
+Introduction:
+
+* **Bombe:** The Bombe was an electro-mechanical machine designed during World War II to decrypt German Enigma-encrypted messages. It was refined and built by Alan Turing and Gordon Welchman at Bletchley Park, UK. The Bombe systematically tested possible rotor settings of the Enigma machine by exploiting known plaintext patterns. Its logical operations helped narrow down the vast number of possible keys, significantly accelerating the decryption process. The Bombe played a critical role in the Allied war effort.
+
+* **ENIAC (Electronic Numerical Integrator and Computer):** It was developed during World War II by John Presper Eckert and John Mauchly at the University of Pennsylvania, was the first general-purpose, fully electronic digital computer. Completed in 1945, it was designed to compute artillery firing tables for the U.S. Army. ENIAC used vacuum tubes instead of mechanical or electromechanical components. However, it lacked a stored-program capability, requiring manual reconfiguration for each new task. ENIAC demonstrated the immense potential of electronic computing for large-scale numerical problems.
+
+* **EDVAC (Electronic Discrete Variable Automatic Computer):** EDVAC, also developed by Eckert and Mauchly with conceptual input from John von Neumann, was one of the first computers to implement the stored-program concept. Completed in 1949, EDVAC represented a significant improvement over ENIAC by using binary representation instead of decimal and storing both data and instructions in memory. This innovation simplified programming and laid the groundwork for the modern von Neumann architecture.
+
+**50 Years of Microprocessor Trend Data:**
+
+![image](https://github.com/user-attachments/assets/663e8079-4932-4856-ae71-222a6a40527a)
+
+**The Key metrics are:**
+
+**Transistors (Orange Triangles):** The number of transistors on a microprocessor chip (in thousands) has increased exponentially, following Moore's Law, which predicts a doubling approximately every two years. This growth enabled more complex and capable processors, reaching the range of billions of transistors by the 2020s.
+
+**Single-Thread Performance (Blue Circles):** It is measured using SpecINT. It indicates the computational ability of a single processor core. Performance grew steadily due to improvements in architecture, instruction-level parallelism, and clock speeds, but the growth rate slowed post-2005 due to physical limitations like power and heat.
+
+**Frequency (Green Diamonds):** Processor clock speed (in MHz) rose steadily until the early 2000s but then stagnated as increasing clock speeds became inefficient due to heat dissipation issues.
+
+**Typical Power (Red Triangles):** Power consumption increased with transistor density and frequency, becoming a critical design challenge around the mid-2000s.
+
+**Number of Logical Cores (Black Dots):** The transition to multi-core processors gained momentum in the mid-2000s as a response to the stagnation in single-thread performance. By increasing the number of cores, processors enabled more efficient parallel processing, leading to significant improvements in overall performance
+
+
+**Path to zetta-scale computing**
+
+![image](https://github.com/user-attachments/assets/e56e21c0-e51f-4a81-988b-d055e6c6647f)image
+
+
+
+**Key Performance Levels**
+
+1. Gigascale (10⁹ FLOPS): The starting point in 1984, marking the capability of early supercomputers.
+2. Terascale (10¹² FLOPS): Achieved around 1997, a significant milestone where systems like Jaguar (Cray XT5) delivered teraflop performance with power consumption of 7 MW.
+3. Petascale (10¹⁵ FLOPS): Achieved in 2008 with systems like Titan (Cray XK6) at 27 petaflops, consuming 9 MW. This milestone represents the era of petascale high-performance computing (HPC).
+4. Exascale (10¹⁸ FLOPS): Reached by systems like Frontier (Cray Shasta) in 2021, delivering 1.5 exaflops using 4 AMD GPUs and 1 AMD CPU, consuming 29 MW of power. Exascale computing enables highly detailed simulations and large-scale AI workloads.
+5. Zettascale (10²¹ FLOPS): Projected to be achieved by around 2035. At this scale, systems will handle unprecedented computational workloads, such as advanced climate modeling, AI, and large-scale simulations. Power consumption is estimated to range between 50-100 MW for a single zettascale machine.
+
+**CMOS Evolution and Next-Gen Candidates**
+
+![image](https://github.com/user-attachments/assets/b138fedc-ecdd-4207-8ee5-faf1ce11e4e7)
+
+
+This diagram illustrates the evolving landscape of CMOS (Complementary Metal-Oxide-Semiconductor) technology and highlights emerging materials, structures, and processes being explored for next-generation semiconductor devices. These innovations aim to address the challenges of scaling CMOS technology down to the 1nm node and beyond.
+
+**Channel Material**
+
+*	Current Trends:
+            Silicon (Si) is the primary material used for the channel in traditional CMOS transistors, with strained SiGe (Silicon-Germanium) being used in some high-performance applications to enhance carrier mobility.
+
+*	Future Materials:
+            2D materials such as MoS₂ (Molybdenum Disulfide) are being explored due to their potential for better electrical characteristics at smaller scales.
+            Germanium (Ge) is gaining interest as it offers higher electron mobility, which could significantly boost transistor performance at small nodes.
+
+**Patterning**
+
+*	Current Techniques:
+            Deep Ultraviolet (DUV) lithography is the most commonly used technique for defining transistor features, with ArF (Argon Fluoride) and KrF (Krypton Fluoride) lasers operating at different wavelengths.
+
+*	Next-Gen:
+            Extreme Ultraviolet (EUV) lithography is expected to be a key technology for sub-7nm nodes. High-NA (Numerical Aperture) EUV will further improve the resolution for even smaller transistor nodes, pushing the boundaries of Moore's Law.
+
+**Gate Stack Material**
+
+*	Current Materials:
+            High-K metal gates (HKMG) are used in the gate stack of modern FETs to reduce gate leakage current and improve switching performance.
+
+*	Next-Gen Candidates:
+            NC-FET (Negative Capacitance FET): This is a promising transistor design that leverages ferroelectric materials to reduce power consumption by enabling lower voltage operation.
+            TFET (Tunnel FET): TFETs use quantum tunneling to switch on and off, offering a significant reduction in power consumption compared to conventional FETs, especially for low-power applications.
+
+**Interconnection Material**
+
+*	Current Materials:
+            Copper (Cu) is the primary material used for interconnects due to its low resistivity, which helps in minimizing power loss and delays in transistor connections.
+
+*	Next-Gen Materials:
+            Ruthenium (Ru) and Compound metals are being investigated for their potential to reduce resistance and improve performance in ultra-small transistors.
+            Topological semi-metals may offer unique properties, such as lower resistivity and increased performance at the atomic scale.
+
+**Device Structure**
+
+*	Current Architectures:
+            FinFET and planar transistors are used to maintain performance at smaller nodes. FinFETs, in particular, help improve control over short-channel effects by using a 3D structure.
+
+*	Next-Gen Architectures:
+            3DS-FET (3D Stacked FET): These are three-dimensional transistors where multiple layers of devices are stacked vertically, reducing footprint and improving performance.
+            MBC-FET (Multi-Bridge Channel FET): This structure aims to enhance drive current by creating multiple channels within the same device.
+            VFET (Vertical FET): VFETs utilize vertical channels to improve density and reduce power consumption.
+
+**Design Co-Optimization**
+
+*	DTCO (Design-Technology Co-Optimization):
+            DTCO focuses on integrating new design techniques with advanced process technologies to maximize chip performance, often involving backside interconnects (BSI), where interconnections are made at the back of the wafer for improved signal integrity and reduced latency.
+
+*	STCO (System-Technology Co-Optimization):
+            This approach involves optimizing both the system architecture and the underlying technology. One example is the use of chiplets, which allow for modular, customized designs by integrating multiple smaller chips into one package, offering flexibility and reducing the complexity of scaling single-chip designs.
+
+**FinFETs**
+
+![image](https://github.com/user-attachments/assets/4b50ff18-aab0-4ac0-bb92-a5a52712fb43)
+
+
+This diagram illustrates the evolution of transistor technology from planar to more advanced architectures like FinFET and Gate-All-Around (GAA):
+
+*	Planar Transistor (Traditional):
+        Early transistor design with a flat channel and gate structure.
+        The gate controls the channel from one side only, leading to limited performance as scaling continues.
+
+*	FinFET (2011):
+        The channel is shaped like a vertical fin, allowing the gate to wrap around three sides of the channel.
+        Provides better control over the channel, reducing leakage and improving performance at smaller sizes.
+
+*	Gate-All-Around (GAA) Transistor (2025?):
+        The gate completely surrounds the channel, typically implemented using stacked nanosheets or nanowires.
+        Offers even better control over the channel compared to FinFET, allowing higher performance and efficiency with continued scaling.
+
+Each step improves drive current capability and enhances control over the transistor's on/off states, critical for power efficiency and miniaturization in modern electronics.
+
+Why FinFETs and Gate-All-Around Transistors?
+
+![image](https://github.com/user-attachments/assets/febc2fa2-2898-430d-867b-4f7e8d79355d)
+
+
+This diagram explains the advantages of FinFETs and Gate-All-Around (GAA) transistors compared to traditional planar structures:
+
+**Planar Transistors:**
+
+*	Challenges:
+        Sub-channel leakage occurs where current leaks underneath the gate.
+        Results in reduced efficiency.
+        Increases power consumption.
+
+*	FinFET Transistors:
+        The gate wraps around the channel (fin) on three sides, providing better control over the channel.
+        **Benefits:**
+           - 	Reduces sub-threshold leakage.
+           - 	Enhances drive current ((I_{ON})).
+           - 	Allows a smaller transistor area while maintaining high performance.
+
+*	Gate-All-Around (GAA) Transistors:
+        The gate completely surrounds the channel, offering superior electrostatic control.
+        **Advantages:**
+            -	Improves short-channel performance by reducing drain capacitance and enhancing gate capacitance.
+            -	Improves scaling efficiency as indicated by the formula (S \propto (1 + C_d / C_{ox})).
+            -	Provides reduced sub-threshold slope and better performance at smaller scales.
+
+*	Graph Comparison:
+            -	Illustrates the performance advantages of FinFETs and GAA over planar transistors.
+  	    -	Shows better efficiency and reduced sub-threshold slope as dimensions shrink.
+
+![image](https://github.com/user-attachments/assets/2598f386-9ccf-455a-8744-987de8245c99)
+
+
+**Reduced Leakage:** Tri-Gate transistors exhibit significantly lower leakage current compared to planar transistors at the same gate voltage. Lower leakage results in both reduced off-current at the same on-current and lower power dissipation.
+
+**Higher Drive Current:** Tri-Gate transistors provide higher drive current compared to planar transistors at the same off-current. This results in improved circuit performance and greater efficiency in modern electronic applications.
+
+**FEOL Innovations:**
+
+FEOL refers to the initial stages of semiconductor manufacturing where the active devices (e.g., transistors) are built on the silicon wafer. It involves creating components such as transistors, capacitors, and isolation structures before metal interconnects are added. FEOL Innovations help drive Moore's Law forward by enabling smaller, more efficient, and more powerful transistors.
+
+**CMOS Technology Inflection Points**
+
+![image](https://github.com/user-attachments/assets/fb763b75-19f1-4dfd-9d52-4a7ec1bb0779)
+
+
+**1. Dennard Scaling:**
+-	States that power density remains constant as transistors shrink.
+-	Initially allowed voltage scaling with smaller gate lengths, shown in the bottom-left graph.
+
+**2. Technology Nodes and Innovations:**
+       *	~1 µm ("End of Scaling"): Start of CMOS miniaturization.
+       *	180 nm (Voltage Scaling): Start of drive voltage reduction.
+       *	130 nm (Cu BEOL): Introduction of copper interconnects for better conductivity.
+       *	90 nm (Uniaxial Strained Si NMOS): Strained silicon enhances electron mobility.
+       *	65 nm (eSiGe CVD ULK): Embedded SiGe improves PMOS performance.
+       *	45 nm (HK-first MG-last): High-k dielectrics and metal gates reduce leakage and improve gate control.
+       *	32 nm (HKMG with Raised S/D NMOS): Advanced HKMG implementation and raised source/drain regions.
+
+**2. SEM Images**
+
+*	**Left Image:** Shows the cross-sectional view of a transistor structure with High-k materials and embedded SiGe (Silicon-Germanium).It has high-k dielectric and metal gates are used to improve performance. SiGe regions enhance PMOS performance by applying strain to the silicon channel.
+
+*	**Right Image:** Demonstrates the raised source/drain (S/D) regions and gate channel in PMOS transistors at smaller nodes.
+
+**3. Drive Voltage Scaling Graph (Bottom-left):** The graph shows the relationship between gate length (x-axis, logarithmic scale) and drive voltage (y-axis, logarithmic scale). The Ideal scaling behavior indicates that the voltage decreases linearly with shrinking gate length. Red and green markers show practical trends for low-power and high-performance devices, which deviate from ideal scaling due to challenges like leakage currents and increased power density.
+
+![image](https://github.com/user-attachments/assets/2e8b56c7-cb3d-4eb4-977d-64bc6701d124)
+
+
+**Key Technology Nodes and Innovations**
+
+**1. 22 nm:**
+        Introduction of FinFET (Tri-Gate) transistors, which reduce leakage and improve gate control.
+        Use of self-aligned contacts (SAC) and copper interconnects (Co+Cu BEOL).
+
+**2. 14 nm:**
+        Transition to unidirectional metal routing for better density.
+        Implementation of SADP (Self-Aligned Double Patterning) and SDB (Single Diffusion Break) for precise layout.
+
+**3. 10 nm:**
+        Adoption of advanced patterning techniques such as:
+        -	SA-SDB (Self-Aligned SDB)
+        -	LELELE (Litho-Etch-Litho-Etch-Litho-Etch)
+        -	SAQP (Self-Aligned Quadruple Patterning) for tighter geometries.
+
+**4. 7 nm:**
+        -	Introduction of Extreme Ultraviolet Lithography (EUV) to simplify the patterning process and reduce overlay errors.
+
+**5. 5 nm:**
+        -	Integration of SiGe (Silicon-Germanium) channels for PMOS to enhance hole mobility.
+        -	Use of EUV SA-LELE (Self-Aligned Litho-Etch-Litho-Etch).
+
+**6. 3 nm / 2 nm / 1.4 nm:**
+        -	Transition to Gate-All-Around (GAA) nanosheet transistors for improved electrostatic control.
+        -	GAA stacks nanosheets or nanowires horizontally to maximize current drive.
+
+**7. Sub-1 nm:**
+        -	Development of CFET (Complementary FET), which vertically stacks NMOS over PMOS to save area.
+        -	Use of 2D materials, such as MoS₂, for atomic-scale channel thickness in 2D FETs.
+
+![image](https://github.com/user-attachments/assets/b0955ae3-73fe-441e-aa85-5e64bbbea3ce)
+
+
+The image illustrates how Samsung has scaled down the size of transistors in their successive generations of nodes (10nm, 8nm, 7nm, and 5nm) using a technique called Fin Depopulation. In FinFET transistors, the "fin" is the vertical channel that carries the current. Fin Depopulation involves reducing the number of fins per transistor while keeping the fin width constant. This allows for smaller transistors without compromising performance.
+
+    *	10nm (HD): The transistor has a fin height of 420nm and uses 10 fins.
+    *	8nm (UHD): The fin height is reduced to 378nm, and the number of fins is decreased to 9.
+    *	7nm (HD): The fin height remains at 27nm, but the number of fins is further reduced to 8.
+    *	5nm (UHD): The fin height is maintained at 27nm, and the number of fins is decreased to 7.
+
+![image](https://github.com/user-attachments/assets/06809cea-45b6-47c9-867c-4802faedf13e)
+
+
+*	**Double Diffusion Break (DDB):** Double Diffusion Break (DDB) involves creating a gap between the source and drain regions of a transistor. This gap is filled with an insulating material, which reduces the effective width of the transistor. By doing so, DDB enables the design of smaller cell sizes, allowing for higher transistor density and improved scalability. A cross-sectional view of a transistor with DDB highlights the insulating gap between the source and drain regions.
+
+*	**Single Diffusion Break (SDB):** Single Diffusion Break (SDB) is similar to DDB but less aggressive. It involves introducing a gap on only one side of the transistor. This approach provides a balanced trade-off between size reduction and maintaining transistor performance. A cross-section of a transistor with SDB highlights the gap on one side, showcasing its simplicity compared to DDB.
+
+*	**Contact Over Field Gate (COFG):** Contact Over Field Gate (COFG) places the gate contact directly over the field oxide region of a transistor. This design reduces lateral spacing between adjacent transistors, enabling smaller cell sizes without significant performance loss. A cross-sectional representation of a transistor with COFG illustrates the positioning of the gate contact over the field oxide.
+
+*	**Contact Over Active Gate (COAG):** Contact Over Active Gate (COAG) is a more aggressive technique than COFG. Here, the gate contact is placed directly over the active gate region of the transistor. This approach enables even smaller cell sizes and higher transistor density, which are critical for advanced semiconductor nodes. A cross-sectional image of a transistor with COAG highlights the gate contact placement over the active gate.
+
+*	**Back-Side Power Delivery Network (BS-PDN):** The Back-Side Power Delivery Network (BS-PDN) is an innovative approach where power supply rails are routed on the backside of the chip. This method reduces the height of the standard cell, creating space for more transistors and improving overall transistor density. Additionally, it enhances power delivery efficiency and reduces resistance, which is crucial for high-performance applications. A schematic of a standard cell with BS-PDN illustrates the positioning of power rails on the backside of the chip.
+
+![image](https://github.com/user-attachments/assets/b7a3fff3-158c-45ee-9f8d-cbc8638ae0d1)
+
+
+*	**Planar Technology:** In early planar technology nodes (100nm and above), the Vt variability is significantly high, around 130mV. This is due to various factors like process variations, temperature fluctuations, and line-edge roughness.
+
+*	**FinFET Technology:** With the advent of FinFET technology (around 22nm), the Vt variability reduces significantly to around 14mV. This improvement is attributed to the better control over the channel length and width in FinFETs compared to planar transistors.
+
+*	**NW Technology (Nanowire):** In the latest nanowire technology (14nm and below), the Vt variability is even lower, around 7mV. This further reduction is due to the precise control over the nanowire dimensions and the reduced impact of process variations.
+
+![image](https://github.com/user-attachments/assets/d52ffa2a-7dd3-4ed7-8486-8cf73fe02282)
+
+
+**Planar MOSFETs**
+
+Planar MOSFETs, the traditional architecture, have a simple structure where the gate sits above the channel. In this design, the contact width ((W_C)) and gate width ((W_G)) are nearly equal, resulting in a ratio of (W_C / W_G \approx 1). This leads to a low parasitic resistance, with (R_{EXT}) being much smaller than (R_{ch}) ((R_{EXT} / R_{ch} < 1)). As a result, planar MOSFETs suffer minimal performance degradation due to parasitic resistance.
+
+**FinFETs**
+
+FinFETs, a 3D transistor design, introduce vertical fins with the gate wrapping around them for improved control. However, the effective contact width decreases relative to the gate width, leading to (W_C / W_G \approx 1/3). Consequently, the parasitic resistance becomes comparable to the channel resistance ((R_{EXT} / R_{ch} \approx 1)), which begins to impact the performance of the device as it scales.
+
+**Gate-All-Around (GAA) FETs**
+
+Gate-All-Around (GAA) FETs, which use nanosheets or nanowires, offer even better electrostatic control by fully surrounding the channel with the gate. However, the contact width further decreases compared to the gate width, resulting in (W_C / W_G \approx 1/6). This causes a significant increase in parasitic resistance, with (R_{EXT}) being approximately three times the channel resistance ((R_{EXT} / R_{ch} \approx 3)). While GAA FETs improve transistor density, the higher parasitic resistance becomes a challenge for maintaining performance.
+
+**Complementary FETs (CFETs)**
+
+Complementary FETs (CFETs) take transistor stacking to the next level by vertically integrating NMOS and PMOS transistors. This approach maximizes space efficiency in advanced nodes but inherits the high parasitic resistance of GAA FETs. With (W_C / W_G) remaining small, the (R_{EXT} / R_{ch}) ratio is around 3, posing similar challenges to those faced by GAA FETs.
+
+**Explanation of Parasitic Resistance**
+
+![image](https://github.com/user-attachments/assets/f2d602b0-07b8-4a13-a55d-eb5fdd378ede)
+
+The image highlights the breakdown of parasitic resistance ((R_{EXT})) and approaches for reducing it in transistors. Here is a detailed explanation:
+
+Components of Parasitic Resistance ((R_{EXT})) The leftmost diagram illustrates the various contributors to (R_{EXT}) in a transistor:
+
+    *	(R_{CA-BEOL}): Resistance from the contact in the Back-End-Of-Line (BEOL).
+    *	(R_{CA}): Resistance at the contact area.
+    *	(R_{CA-TS}): Resistance at the contact to the transition structure.
+    *	(R_{TS}): Resistance in the transition structure.
+    *	(R_{MOL}): Middle-Of-Line resistance (includes lateral and vertical contributions).
+    *	(R_C): Contact resistance at the metal-semiconductor interface.
+    *	(R_{EPI}): Epitaxial layer resistance (contributes to current spreading).
+    *	(R_{FEOL}): Front-End-Of-Line resistance from the source/drain extensions.
+
+Initial vs. Improved (R_{EXT}) Breakdown The two pie charts in the center show the contributions of different resistance components for NFETs and PFETs before and after improvements:
+
+**NFET:**
+        -	Initial: Majority of (R_{EXT}) comes from (R_C) (63%) and (R_{CA-BEOL}) (31%).
+        -	Improved: Significant reduction in (R_C) (48%) and (R_{CA-BEOL}) (12%).
+**PFET:**
+        -	Initial: (R_{FEOL}) (50%) and (R_C) (45%) dominate.
+        -	Improved: Major reduction in (R_{FEOL}) (78%) and (R_C) (16%).
+
+Improving Ohmic/Tunneling Contacts The right section discusses methods to improve the metal-semiconductor interface:
+
+**Key Objectives:**
+        -	Low Schottky Barrier Height (SBH) ((\phi_b)): Reduces the energy barrier for carrier injection, enabling better contact conductivity.
+        -	High Doping Concentration ((N_d)): Increases carrier density at the interface, reducing contact resistance.
+
+Equation for Specific Contact Resistivity ((\rho_c)): [ \rho_c \propto \exp\left(\frac{2\phi_b}{\hbar} \sqrt{\frac{\epsilon_s m_x}{N_d}}\right) ] This equation shows how lowering (\phi_b) and increasing (N_d) can reduce (\rho_c).
+
+**Metal-Semiconductor Energy Diagram:**
+	The energy diagram shows how a reduction in (\phi_b) (Schottky Barrier Height) facilitates easier carrier injection from the metal to the semiconductor.
+
+![image](https://github.com/user-attachments/assets/ba2911e6-0be6-4643-84b8-33745a16fbe7)
+
+
+The bar chart on the left shows how the composition of (C_{eff}) evolves from 22nm to 7nm technology nodes:
+
+*	At 22nm, the dominant contributor to (C_{eff}) is (C_{fr}) (56%), while parasitic capacitances (C_{pc-ca}) (25%) and (C_{g}) (19%) contribute less.
+*	At 14nm and 10nm, parasitic capacitances ((C_{pc-ca}) and (C_{fr})) start dominating, with (C_{fr}) decreasing to 38% and 25%, respectively, while (C_{pc-ca}) increases.
+*	At 7nm, (C_{g}) becomes the most significant contributor (45%), with (C_{pc-ca}) and (C_{fr}) still present but reduced. This highlights the increasing impact of parasitic capacitance as node sizes shrink.
+
+**Plot Descriptions:**
+
+*	The first scatter plot shows a reduction in normalized delay for a ring oscillator when using SiBCN spacers instead of SiN spacers, indicating improved performance.
+*	The second scatter plot demonstrates an 8% reduction in (C_{eff}) with SiBCN spacers, which corresponds to the delay improvement observed in the first plot.
+*	The rightmost figure shows the evolution of spacer materials from SiOCN to SiCO. This material transition aims to significantly reduce the gate-contact capacitance across nodes. At 14nm and beyond, low-(k) spacers improve performance by decoupling parasitic effects and maintaining capacitance at manageable levels.
+*	The bottom middle image shows a cross-sectional TEM view of a transistor with air spacers around the gate: i) Air, with its extremely low dielectric constant ((k \approx 1)), significantly reduces parasitic capacitance. The adjacent plot quantifies this improvement, showing a 15% reduction in (C_{eff}) when using air spacers compared to solid spacers.
+
+![image](https://github.com/user-attachments/assets/bb4fa79b-3767-40ca-a895-8ea4494ad8d9)
+
+
+**Key Properties of 2D Layered Materials (Compared to Silicon):**
+
+-	Uniform Atomic Scale Thickness: A single layer of MoS₂ is approximately 0.65 nm thick, offering an ideal thickness for scaling compared to silicon.
+-	Higher Effective Mass (( m^ )):* MoS₂ has an effective mass of about 0.55 times the mass of a free electron (( m_0 )), whereas silicon’s effective mass is around 0.22 ( m_0 ).
+-	Bandgap: Additionally, 2D materials like MoS₂ possess favorable bandgaps for electronic devices, with a monolayer bandgap of ~1.85 eV, which reduces to ~1.5 eV for a bilayer.
+
+![image](https://github.com/user-attachments/assets/fd6b3e48-1998-461f-b54b-81b1a16aa0b4)
+
+**Transistor Scaling:**
+        To achieve smaller gate lengths, devices must address various physical and material constraints to ensure reliable operation.
+
+**Challenges for Scaling:**
+-	Direct Source-to-Drain Tunneling: As the gate length decreases, electrons can tunnel directly from the source to the drain, bypassing the gate control. To mitigate this, materials with a high effective mass (( m^* )) are needed.
+-	Surface Roughness and Thickness Variations: Variability at atomic scales can cause performance issues. Uniform, atomically thin materials are essential for minimizing such variations.
+-	Capacitance Ratios (( C_D ) and ( C_{ox} )): The capacitance of the depletion region (( C_D )) must remain low relative to the gate oxide capacitance (( C_{ox} )) to improve gate control. Materials with a low in-plane dielectric constant (( \epsilon )) are necessary for this.
+
+**Diagrams:**
+-	The left shows the transistor structure with key components like the source, drain, gate, oxide, and silicon substrate.
+-	The right illustrates two scenarios:
+        	a. Thermionic Emission: Electrons cross the energy barrier as intended.
+        	b. Direct Tunneling: At extremely small gate lengths, electrons tunnel directly from source to drain, leading to leakage.
+
+**Key Takeaway:**
+        New channel materials, such as 2D materials, are required to overcome these challenges while maintaining high performance and scalability.
+
+![image](https://github.com/user-attachments/assets/04001199-bb59-4efe-bf62-854e9ab07692)
+
+
+Concept of Direct Source-to-Drain Tunneling: As the gate length ((L_G)) in MOSFETs decreases, direct tunneling of electrons from the source to the drain becomes significant, leading to increased leakage currents. This leakage is influenced by material properties, such as the effective mass ((m^*)) and the bandgap ((E_G)).
+
+A higher (m^) in MoS₂ suppresses tunneling leakage compared to silicon. The graph shows the leakage current ((I_{SD, \text{leak}})) as a function of gate length ((L_G)) for various channel thicknesses ((T_{CH})). MoS₂ exhibits lower leakage at smaller gate lengths compared to silicon, achieving up to 100x reduction in leakage due to its higher (m^), larger (E_G), and lower dielectric constant ((\epsilon)).
+
+The superior performance of MoS₂ in minimizing leakage currents results in significant energy savings, making it a promising material for future transistor scaling.
+
+![image](https://github.com/user-attachments/assets/217727ce-441a-4aff-8af1-215451b3889d)
+
+
+The MoS₂ transistor with a 1 nm gate length represents a breakthrough in miniaturization, featuring a thin MoS₂ channel for its excellent electronic properties. A single-walled carbon nanotube (SWCNT) serves as the ultra-small gate electrode, while Zirconium Dioxide (ZrO₂) acts as a high-k dielectric, reducing leakage and ensuring precise control. Built on a SiO₂ substrate with an n⁺ silicon back gate, the transistor uses the CNT gate to deplete a small region of the MoS₂ channel, enabling efficient modulation. This innovative design showcases the potential of 2D materials and nanoscale gates in advancing transistor technology.
+
+![image](https://github.com/user-attachments/assets/4a685f55-49a0-4a9f-9fe1-68751dae440d)
+
+
+The slide illustrates the structure and fabrication of an All-2D MOSFET (Metal-Oxide-Semiconductor Field-Effect Transistor), where all key components, including the channel, gate, and contacts, are made using two-dimensional materials. This device leverages the exceptional properties of 2D materials to improve performance and scalability. Below is a breakdown of the key components and the fabrication process:
+*	Graphene Contacts (S, D, G): Graphene is used as the source, drain, and gate electrodes. Its high conductivity and 2D nature make it ideal for ensuring low-resistance electrical contacts. MoS₂ Channel:
+
+*	Molybdenum Disulfide (MoS₂) serves as the semiconductor channel. MoS₂ is widely used in 2D MOSFETs due to its excellent on/off current ratio and atomic-scale thickness. h-BN Dielectric:
+
+*	Hexagonal Boron Nitride (h-BN) acts as the insulating dielectric layer. It is a 2D material with excellent insulating properties and high thermal stability, making it suitable for separating the graphene gate from the MoS₂ channel. Si/SiO₂ Substrate:
+
+The device is fabricated on a silicon dioxide (SiO₂) layer on top of a silicon substrate, which provides mechanical support and a global back gate. Fabrication Process:
+
+*	A layer of graphene is deposited on the SiO₂ substrate, which will later serve as the gate electrode.
+*	Graphene is patterned to define the source and drain regions, leaving gaps for the channel.
+*	A monolayer of MoS₂ is transferred onto the patterned graphene, forming the channel region.
+*	An h-BN layer is added on top of the MoS₂ as the gate dielectric.
+*	A top layer of graphene is deposited and aligned as the gate electrode.
+*	The completed device is contacted using metallic electrodes (Ni/Au) for testing.
+
+![image](https://github.com/user-attachments/assets/2fc69f53-adba-4d11-99b1-2906b2745946)
+
+
+**The All-2D MOSFET exhibits excellent electrical performance:**
+
+*	Transfer Characteristics (I(_D) vs V(_G)): Achieves a high on/off current ratio (>10⁵), demonstrating strong gate control for effective switching.
+*	Output Characteristics (I(D) vs V({DS})): Smooth current modulation with increasing V(G) and V({DS}), indicating good output performance.
+*	Mobility: Field-effect mobility remains constant with increasing gate electric field, showing minimal scattering and high-quality interfaces in the 2D materials stack.
+
+These results highlight the potential of 2D materials like MoS₂, graphene, and h-BN for scalable, high-performance transistor applications.
+
+![image](https://github.com/user-attachments/assets/5e645878-5fc1-4e39-bbed-e7287002c676)
+
+
+**The diagram on the top left shows a non-planar transistor with key components:**
+
+*	Gate: Controls the flow of current through the channel.
+*	Channel: Region where current flows between the source (S) and drain (D).
+*	Body: Underlying region connected to the substrate.
+*	STI (Shallow Trench Isolation): Insulates neighboring devices.
+
+The biggest challenge is to form a single-crystalline semiconductors on a non-planar surface is difficult using conventional semiconductor fabrication techniques.
+
+![image](https://github.com/user-attachments/assets/6299f7de-dcd6-4d0a-9996-5b389c879e9f)
+
+
+**Single-Layer CMOS (a):**
+	This is the traditional CMOS design where NMOS and PMOS transistors are fabricated on a single silicon layer. Each transistor operates in the same planar layer, with devices connected laterally.
+
+**Monolithic 3D CMOS (b):**
+	In this design, NMOS and PMOS transistors are stacked in two separate layers, enabling higher density. The P-Channel (PMOS) is placed on top of the N-Channel (NMOS), separated by an oxide layer. This approach reduces the footprint and allows better performance due to shorter interconnects.
+
+**Single-Layer CMOS Logic (c):**	
+	Shows logic gates (inverter, 2-input NAND, and 2-input NOR) built using traditional single-layer CMOS. Transistors are laid out horizontally, with interconnections taking more space.
+
+**Monolithic 3D CMOS Logic (d):**
+	Logic gates are constructed with two transistor layers (Layer 1 and Layer 2), reducing the area required for interconnections. Vertical integration improves performance and reduces delay by shortening signal paths.
+
+![image](https://github.com/user-attachments/assets/8bd054cb-4827-4d0a-b0cc-b8a03d2ca775)
+
+
+
+**2. Tool Installation:**
+
+**Commands to install openroad:**
+```
+git clone --recursive https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts
+cd OpenROAD-flow-scripts
+sudo ./setup.sh
+```
+
+![Screenshot from 2024-11-26 00-58-53](https://github.com/user-attachments/assets/d65ea6fe-a7be-44d7-a51d-c4c2c9418896)
+
+
+
+**Build tool on local machine command:**
+```
+./build_openroad.sh --local
+```
+![Screenshot from 2024-11-26 00-59-18](https://github.com/user-attachments/assets/30ceafd3-46e6-4c45-aa67-275ba8ef5acc)
+
+
+
+**Verify Installation**:
+```
+source ./env.sh
+yosys -help
+openroad -help
+cd flow
+make
+```
+
+![Screenshot from 2024-11-26 01-13-04](https://github.com/user-attachments/assets/a48dae43-1f1c-416c-85b5-8d0e0f70bb8d)
+![Screenshot from 2024-11-26 01-12-50](https://github.com/user-attachments/assets/69cd31e5-700d-463a-9e6a-6e59ede697ec)
+
+```
+make gui_final
+```
+
+![Screenshot from 2024-11-26 01-13-37](https://github.com/user-attachments/assets/0bb5b5ce-6bbe-428f-91e1-129c4af437a7)
+
+![Screenshot from 2024-11-26 01-14-18](https://github.com/user-attachments/assets/b2fddd6e-a040-4497-9927-f8fe603ff260)
+
+
+**3. Flow Structure:**
+
+Physical Design Flow :
+
+![image](https://github.com/user-attachments/assets/d56698f9-2dbb-4589-affa-468219542cc3)
+
+Physical Design is the process of translating the gate level netlist into a physical layout. This physical layout consists of various metal shapes and sizes which can be drawn onto masks and manufactured on the silicon wafer.
+
+The Physical Design process can be broken down into multiple stages as illustrated below. It is often an iterative process where a number of optimizations are performed at each step to meet the design performance, area & power requirements.
+
+**Floorplanning :**
+	Floorplanning is the first step of physical design. The design is first partitioned into various smaller subsystems based on the system architecture and design requirements. Floorplanning determines the aspect ratio and area of the layout. Here we create the placement rows for standard cells and fix the placement of I/Os around the boundary. Any macros in the design are also placed during the floorplan stage.
+
+Power planning is also typically done during floorplanning. The power grid network is created to distribute power to all the std cells rows, macros and all other components of the design. If there are any special IPs being used in the design then all the IP integration guidelines are also considered in floorplanning.
+
+A good floorplan is very critical to the overall quality of your design.
+
+
+**Logic Placement :**
+	In this stage all the standard cells in the design are placed and assigned a legal location. After the placement EDA tools performs a number of optimizations to improve placement and congestion. A bad placement might lead to larger area utilization and timing issues.
+
+EDA tools also use timing driven placement algorithms to optimize the placement while considering the timing requirements of the design.
+
+**Clock Tree Synthesis :**
+	During the Floorplanning & placement stage, the clock is considered as an ideal network. The optimizations in the placement stage are performed based on the assumption of an ideal clock reaching to all flops at the same time. In CTS, a clock network is created to distribute the clock to all flops. This clock tree is built using buffers or inverters along the clock paths of design in order to achieve zero/minimum skew based on design requirement. A good quality clock network is very crucial to meet the timing requirements of the design.
+
+ **Routing :**
+ 	Once all the standard cells are legally placed and the clock network is synthesized, all the connecting data nets need to be laid out on the metal layers. This is done during the routing stage. After routing all the nets, a number of optimizations are performed based on the design timing requirements and analysis.
+
+**Timing Analysis & Signoff :**
+	After the design Routing, static timing analysis is performed on the design. This step is critical to analyze the performance of the design. During STA, we break down the design into timing paths and calculate the signal propagation delay along each path. Then each path is checked for violations of timing constraints. If any path is violated then these violations need to be addressed before signing off on the design.
+
+The timing signoff ensures that all the design elements are meeting the specified timing requirements and the design is working at the desired frequency.
+
+**Physical Verification & Signoff :**
+After the routing is completed, the layout must be completely verified to ensure its correct electrical and logical functionality. The physical verification signoff ensures that the design meets all the fabrication specified rules and can be easily manufactured. Various checks that are performed at this stage includes :
+
+    *	DRC (Design Rule Check)
+    *	LVS (Layout Vs Schematic)
+    *	ERC (Electrical Rule Check)
+    *	Antenna check
+    *	EM (Electromigration Analysis)
+
+Once the physical verification is done, the layout is streamed out in the form of a GDSII or OASIS file for fabrication which is called design tapeout.
+  
+The ORFS Directory Structure and File formats:
+
+![Screenshot from 2024-11-26 01-15-07](https://github.com/user-attachments/assets/ef29fbea-3da9-4977-96f6-fc4035aee363)
+
+
+```
+├── OpenROAD-flow-scripts             
+│   ├── docker           -> It has Docker based installation, run scripts and all saved here
+│   ├── docs             -> Documentation for OpenROAD or its flow scripts.  
+│   ├── flow             -> Files related to run RTL to GDS flow  
+|   ├── jenkins          -> It contains the regression test designed for each build update
+│   ├── tools            -> It contains all the required tools to run RTL to GDS flow
+│   ├── etc              -> Has the dependency installer script and other things
+│   ├── setup_env.sh     -> Its the source file to source all our OpenROAD rules to run the RTL to GDS flow
+```
+Now, go to flow directory
+
+![Screenshot from 2024-11-26 01-15-59](https://github.com/user-attachments/assets/3434f9c7-ccc2-42c9-a9ed-34896588bd41)
+
+```
+├── flow           
+│   ├── design           -> It has built-in examples from RTL to GDS flow across different technology nodes
+│   ├── makefile         -> The automated flow runs through makefile setup
+│   ├── platform         -> It has different technology note libraries, lef files, GDS etc 
+|   ├── tutorials        
+│   ├── util            
+│   ├── scripts             
+```
+
+**4. Automated RTL2GDS for for GCD example:**
+
+In this section, we run the physical design and explore the gui file of gcd design of nangate45 platform. The commands are:-
+
+```
+# Assuming you should be inside the OpenROad directory inside flow folder then run below commands.
+make # by default makefile will have the gcd as the default design
+# or
+make DESIGN_CONFIG=./designs/nangate45/gcd/config.mk
+make gui_floorplan
+make gui_place
+make gui_cts
+make gui_route
+make gui_final
+# or we can open the gui file and their we select the .odb file going through the results folder of nangate45 platform
+source ./env.sh # go to the OpenROAD directory then run this command then below command
+openroad -gui
+make metadata
+gedit designs/nangate45/gcd/metadata-base-ok.json
+```
+
+**Command Screenshot:**
+
+![synth](https://github.com/user-attachments/assets/26e73bf9-750e-4187-b767-84fb0fcfadad)
+
+**Floorplan:**
+
+![floorplan](https://github.com/user-attachments/assets/ae566118-b201-4be3-ad27-09b7f5bbf6e4)
+
+![floorplan_gui1](https://github.com/user-attachments/assets/92695e6d-8224-40fd-b359-761764afa027)
+
+
+![fplan](https://github.com/user-attachments/assets/22451f5c-5980-4885-bf4f-f49f7aed3ebd)
+
+**Place:**
+
+![place](https://github.com/user-attachments/assets/53ec457b-3073-4341-984d-5fefa509e485)
+
+**CTS:**
+
+![cts](https://github.com/user-attachments/assets/3d1abfeb-404a-4d45-bce3-45165e3af115)
+
+**Route:**
+
+![route](https://github.com/user-attachments/assets/44a494cc-4ef0-4d7e-9770-5e6d96df815a)
+
+**Final GUI:**
+
+![final_gui](https://github.com/user-attachments/assets/7ab4aac4-cb36-4c5d-a3ee-bebb8eb065e2)
+
+
+## **Using above flow and commands we ran automated RTL2GDS flow for physical design of VSDbabysoc:**
+
+Initial Steps:
+
+*	We need to create a directory vsdbabysoc inside OpenROAD-flow-scripts/flow/designs/sky130hd
+*	Now copy the folders gds, include, lef and lib from the VSDBabySoC folder in your system into this directory.
+        -	The gds folder would contain the files avsddac.gds and avsdpll.gds
+        -	The include folder would contain the files sandpiper.vh, sandpiper_gen.vh, sp_default.vh and sp_verilog.vh
+        -	The gds folder would contain the files avsddac.lef and avsdpll.lef
+        -	The lib folder would contain the files avsddac.lib and avsdpll.lib
+*	Copy the constraints file(vsdbabysoc_synthesis.sdc) from the VSDBabySoC folder in your system into this directory.
+*	Copy the files(macro.cfg and pin_order.cfg) from the VSDBabySoC folder in your system into this directory.
+*	Create a macro.cfg file whose contents are shown below:
+
+![image](https://github.com/user-attachments/assets/909f4f0f-3079-47bc-8e64-0fa314cb8f95)
+
+![image](https://github.com/user-attachments/assets/d3ba1bf7-9e0a-411e-8d99-cf4f093bb8f4)
+
+Go to terminal and run the following commands:
+
+```
+cd OpenROAD-flow-scripts
+source env.sh
+cd flow
+make DESIGN_CONFIG=./designs/sky130hd/vsdbabysoc/config.mk 
+```
+
+**Step1: Synthesis and Floorplanning:**
+
+	In VLSI design, Floorplanning is a crucial step in physical design that involves placing blocks and macros in the chip or core area.
+
+The primary objectives of floorplanning are to minimize area, timing, wire length, and power consumption while ensuring easy routing and reliability.
+
+
+**Synthesis reports:**
+
+![synth_report1](https://github.com/user-attachments/assets/a4dfdb2b-469c-4a7a-b0bb-f166e7740448)
+
+
+![synth_report2](https://github.com/user-attachments/assets/b45d7faa-871a-4e14-a762-b67f9cd03d47)
+
+
+![synth_report3](https://github.com/user-attachments/assets/2fece6b0-b929-4549-98b5-c8105eacd86e)
+
+
+**Floorplan Timing reoprt:**
+
+
+![floorplan_rprt1](https://github.com/user-attachments/assets/9c0e1f18-1de6-419f-a4c0-1a253fd8cc58)
+
+
+![floorplan_rprt2](https://github.com/user-attachments/assets/021739f8-9271-4646-9e3d-1232b5e89ca1)
+
+
+![floorplan_rprt3](https://github.com/user-attachments/assets/c6d8756e-a812-4794-bdd3-ef09d92a85af)
+
+
+**Floorplan openroad GUI output:**
+
+![floorplan_gui1](https://github.com/user-attachments/assets/13808dfa-044d-4084-b7f3-0345bebda9eb)
+
+
+**Step2: Placement:**
+
+Placement occurs after logic synthesis and before routing in the VLSI design flow. The primary goals of placement include:
+
+*	Timing Optimization: Ensuring that the placement minimizes delays in signal propagation.
+
+*	Power Optimization: Reducing power consumption by minimizing capacitive loads and optimizing wire lengths.
+
+*	Area Optimization: Efficiently utilizing the chip area to avoid congestion and ensure routability.
+
+**Steps in Placement:**
+
+Placement can be divided into several key stages:
+
+*	**Pre-Placement:** This initial stage involves checks and the placement of physical-only cells (e.g., end-cap cells, well-tap cells) to ensure a clean design environment before standard cell placement begins.
+
+*	**Global Placement:** During this phase, the tool determines approximate locations for each standard cell based on various constraints such as timing, congestion, and power. This step does not enforce design rule checks (DRCs), allowing for overlaps.
+
+*	**Legalization:** After global placement, the tool adjusts the positions of cells to eliminate overlaps and ensure that all cells are in legal locations according to the design rules. This process may involve flipping cells to match power pin requirements.
+
+*	**High Fanout Net Synthesis (HFNS):** This step addresses nets with high fanout by distributing the load across multiple drivers and adding buffers as necessary to meet timing constraints[1][2].
+
+*	**Post-Placement Optimization:** After initial placement, further iterations are conducted to refine the design, focusing on timing, congestion, and power optimizations. This may include techniques like scan-chain reordering and tie cell insertion.
+
+
+In summary, placement is a multi-step process that plays a vital role in the VLSI design flow, impacting timing, power, area optimization, and overall circuit performance.
+
+
+**Synthesis Report:**
+
+```
+
+==========================================================================
+detailed place report_tns
+--------------------------------------------------------------------------
+tns 0.00
+
+==========================================================================
+detailed place report_wns
+--------------------------------------------------------------------------
+wns 0.00
+
+==========================================================================
+detailed place report_worst_slack
+--------------------------------------------------------------------------
+worst slack 6.71
+
+==========================================================================
+detailed place report_checks -path_delay min
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_is_slt_a2$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_is_slt_a3$_DFF_P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                  0.00    0.00    0.00   clock clk (rise edge)
+                          3.00    3.00   clock network delay (ideal)
+                  0.00    0.00    3.00 ^ core_pri.CPU_is_slt_a2$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+     1    0.00    0.04    0.28    3.28 ^ core_pri.CPU_is_slt_a2$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_1)
+                                         core_pri.CPU_is_slt_a2 (net)
+                  0.04    0.00    3.28 ^ core_pri.CPU_is_slt_a3$_DFF_P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  3.28   data arrival time
+
+                  0.00    0.00    0.00   clock clk (rise edge)
+                          3.00    3.00   clock network delay (ideal)
+                          0.92    3.92   clock uncertainty
+                          0.00    3.92   clock reconvergence pessimism
+                                  3.92 ^ core_pri.CPU_is_slt_a3$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                         -0.04    3.88   library hold time
+                                  3.88   data required time
+-----------------------------------------------------------------------------
+                                  3.88   data required time
+                                 -3.28   data arrival time
+-----------------------------------------------------------------------------
+                                 -0.61   slack (VIOLATED)
+
+
+
+==========================================================================
+detailed place report_checks -path_delay max
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                  0.00    0.00    0.00   clock clk (rise edge)
+                          3.00    3.00   clock network delay (ideal)
+                  0.00    0.00    3.00 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+    51    0.28    0.76    0.83    3.83 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+                                         core_pri.CPU_imm_a3[10] (net)
+                  0.76    0.00    3.83 ^ _11540_/B (sky130_fd_sc_hd__ha_2)
+     6    0.03    0.10    0.49    4.33 v _11540_/SUM (sky130_fd_sc_hd__ha_2)
+                                         _05659_ (net)
+                  0.10    0.00    4.33 v _08036_/A_N (sky130_fd_sc_hd__nand2b_1)
+     1    0.01    0.07    0.18    4.51 v _08036_/Y (sky130_fd_sc_hd__nand2b_1)
+                                         _02663_ (net)
+                  0.07    0.00    4.51 v _08038_/B1 (sky130_fd_sc_hd__a221oi_2)
+     2    0.01    0.27    0.29    4.80 ^ _08038_/Y (sky130_fd_sc_hd__a221oi_2)
+                                         _02665_ (net)
+                  0.27    0.00    4.80 ^ _08089_/A3 (sky130_fd_sc_hd__o31a_1)
+     1    0.01    0.11    0.20    5.00 ^ _08089_/X (sky130_fd_sc_hd__o31a_1)
+                                         _02714_ (net)
+                  0.11    0.00    5.00 ^ _08090_/B1 (sky130_fd_sc_hd__a311oi_4)
+     5    0.03    0.18    0.09    5.09 v _08090_/Y (sky130_fd_sc_hd__a311oi_4)
+                                         _02715_ (net)
+                  0.18    0.00    5.09 v _08283_/A2 (sky130_fd_sc_hd__o31a_2)
+     4    0.02    0.09    0.43    5.53 v _08283_/X (sky130_fd_sc_hd__o31a_2)
+                                         _02899_ (net)
+                  0.09    0.00    5.53 v _08499_/A2 (sky130_fd_sc_hd__o2111ai_2)
+     1    0.01    0.21    0.22    5.75 ^ _08499_/Y (sky130_fd_sc_hd__o2111ai_2)
+                                         _03107_ (net)
+                  0.21    0.00    5.75 ^ _08500_/C1 (sky130_fd_sc_hd__o311ai_4)
+     1    0.01    0.14    0.14    5.89 v _08500_/Y (sky130_fd_sc_hd__o311ai_4)
+                                         _03108_ (net)
+                  0.14    0.00    5.89 v _08505_/B1 (sky130_fd_sc_hd__a211oi_4)
+    17    0.10    1.06    0.90    6.79 ^ _08505_/Y (sky130_fd_sc_hd__a211oi_4)
+                                         _03113_ (net)
+                  1.06    0.01    6.80 ^ _09971_/A1 (sky130_fd_sc_hd__o21ai_0)
+     1    0.00    0.18    0.23    7.03 v _09971_/Y (sky130_fd_sc_hd__o21ai_0)
+                                         _01013_ (net)
+                  0.18    0.00    7.03 v core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  7.03   data arrival time
+
+                  0.00   11.50   11.50   clock clk (rise edge)
+                          3.00   14.50   clock network delay (ideal)
+                         -0.57   13.93   clock uncertainty
+                          0.00   13.93   clock reconvergence pessimism
+                                 13.93 ^ core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                         -0.18   13.75   library setup time
+                                 13.75   data required time
+-----------------------------------------------------------------------------
+                                 13.75   data required time
+                                 -7.03   data arrival time
+-----------------------------------------------------------------------------
+                                  6.71   slack (MET)
+
+
+
+==========================================================================
+detailed place report_checks -unconstrained
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                  0.00    0.00    0.00   clock clk (rise edge)
+                          3.00    3.00   clock network delay (ideal)
+                  0.00    0.00    3.00 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+    51    0.28    0.76    0.83    3.83 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+                                         core_pri.CPU_imm_a3[10] (net)
+                  0.76    0.00    3.83 ^ _11540_/B (sky130_fd_sc_hd__ha_2)
+     6    0.03    0.10    0.49    4.33 v _11540_/SUM (sky130_fd_sc_hd__ha_2)
+                                         _05659_ (net)
+                  0.10    0.00    4.33 v _08036_/A_N (sky130_fd_sc_hd__nand2b_1)
+     1    0.01    0.07    0.18    4.51 v _08036_/Y (sky130_fd_sc_hd__nand2b_1)
+                                         _02663_ (net)
+                  0.07    0.00    4.51 v _08038_/B1 (sky130_fd_sc_hd__a221oi_2)
+     2    0.01    0.27    0.29    4.80 ^ _08038_/Y (sky130_fd_sc_hd__a221oi_2)
+                                         _02665_ (net)
+                  0.27    0.00    4.80 ^ _08089_/A3 (sky130_fd_sc_hd__o31a_1)
+     1    0.01    0.11    0.20    5.00 ^ _08089_/X (sky130_fd_sc_hd__o31a_1)
+                                         _02714_ (net)
+                  0.11    0.00    5.00 ^ _08090_/B1 (sky130_fd_sc_hd__a311oi_4)
+     5    0.03    0.18    0.09    5.09 v _08090_/Y (sky130_fd_sc_hd__a311oi_4)
+                                         _02715_ (net)
+                  0.18    0.00    5.09 v _08283_/A2 (sky130_fd_sc_hd__o31a_2)
+     4    0.02    0.09    0.43    5.53 v _08283_/X (sky130_fd_sc_hd__o31a_2)
+                                         _02899_ (net)
+                  0.09    0.00    5.53 v _08499_/A2 (sky130_fd_sc_hd__o2111ai_2)
+     1    0.01    0.21    0.22    5.75 ^ _08499_/Y (sky130_fd_sc_hd__o2111ai_2)
+                                         _03107_ (net)
+                  0.21    0.00    5.75 ^ _08500_/C1 (sky130_fd_sc_hd__o311ai_4)
+     1    0.01    0.14    0.14    5.89 v _08500_/Y (sky130_fd_sc_hd__o311ai_4)
+                                         _03108_ (net)
+                  0.14    0.00    5.89 v _08505_/B1 (sky130_fd_sc_hd__a211oi_4)
+    17    0.10    1.06    0.90    6.79 ^ _08505_/Y (sky130_fd_sc_hd__a211oi_4)
+                                         _03113_ (net)
+                  1.06    0.01    6.80 ^ _09971_/A1 (sky130_fd_sc_hd__o21ai_0)
+     1    0.00    0.18    0.23    7.03 v _09971_/Y (sky130_fd_sc_hd__o21ai_0)
+                                         _01013_ (net)
+                  0.18    0.00    7.03 v core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  7.03   data arrival time
+
+                  0.00   11.50   11.50   clock clk (rise edge)
+                          3.00   14.50   clock network delay (ideal)
+                         -0.57   13.93   clock uncertainty
+                          0.00   13.93   clock reconvergence pessimism
+                                 13.93 ^ core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                         -0.18   13.75   library setup time
+                                 13.75   data required time
+-----------------------------------------------------------------------------
+                                 13.75   data required time
+                                 -7.03   data arrival time
+-----------------------------------------------------------------------------
+                                  6.71   slack (MET)
+
+
+
+==========================================================================
+detailed place report_check_types -max_slew -max_cap -max_fanout -violators
+--------------------------------------------------------------------------
+
+==========================================================================
+detailed place max_slew_check_slack
+--------------------------------------------------------------------------
+0.23974600434303284
+
+==========================================================================
+detailed place max_slew_check_limit
+--------------------------------------------------------------------------
+1.5
+
+==========================================================================
+detailed place max_slew_check_slack_limit
+--------------------------------------------------------------------------
+0.1598
+
+==========================================================================
+detailed place max_fanout_check_slack
+--------------------------------------------------------------------------
+1.0000000150474662e+30
+
+==========================================================================
+detailed place max_fanout_check_limit
+--------------------------------------------------------------------------
+1.0000000150474662e+30
+
+==========================================================================
+detailed place max_capacitance_check_slack
+--------------------------------------------------------------------------
+0.018143348395824432
+
+==========================================================================
+detailed place max_capacitance_check_limit
+--------------------------------------------------------------------------
+0.021067000925540924
+
+==========================================================================
+detailed place max_capacitance_check_slack_limit
+--------------------------------------------------------------------------
+0.8612
+
+==========================================================================
+detailed place max_slew_violation_count
+--------------------------------------------------------------------------
+max slew violation count 0
+
+==========================================================================
+detailed place max_fanout_violation_count
+--------------------------------------------------------------------------
+max fanout violation count 0
+
+==========================================================================
+detailed place max_cap_violation_count
+--------------------------------------------------------------------------
+max cap violation count 0
+
+==========================================================================
+detailed place setup_violation_count
+--------------------------------------------------------------------------
+setup violation count 0
+
+==========================================================================
+detailed place hold_violation_count
+--------------------------------------------------------------------------
+hold violation count 1263
+
+==========================================================================
+detailed place report_checks -path_delay max reg to reg
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock clk (rise edge)
+   3.00    3.00   clock network delay (ideal)
+   0.00    3.00 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+   0.83    3.83 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+   0.50    4.33 v _11540_/SUM (sky130_fd_sc_hd__ha_2)
+   0.18    4.51 v _08036_/Y (sky130_fd_sc_hd__nand2b_1)
+   0.29    4.80 ^ _08038_/Y (sky130_fd_sc_hd__a221oi_2)
+   0.20    5.00 ^ _08089_/X (sky130_fd_sc_hd__o31a_1)
+   0.09    5.09 v _08090_/Y (sky130_fd_sc_hd__a311oi_4)
+   0.43    5.53 v _08283_/X (sky130_fd_sc_hd__o31a_2)
+   0.22    5.75 ^ _08499_/Y (sky130_fd_sc_hd__o2111ai_2)
+   0.14    5.89 v _08500_/Y (sky130_fd_sc_hd__o311ai_4)
+   0.90    6.79 ^ _08505_/Y (sky130_fd_sc_hd__a211oi_4)
+   0.25    7.03 v _09971_/Y (sky130_fd_sc_hd__o21ai_0)
+   0.00    7.03 v core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+           7.03   data arrival time
+
+  11.50   11.50   clock clk (rise edge)
+   3.00   14.50   clock network delay (ideal)
+  -0.57   13.93   clock uncertainty
+   0.00   13.93   clock reconvergence pessimism
+          13.93 ^ core_pri.CPU_Xreg_value_a4[9][29]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+  -0.18   13.75   library setup time
+          13.75   data required time
+---------------------------------------------------------
+          13.75   data required time
+          -7.03   data arrival time
+---------------------------------------------------------
+           6.71   slack (MET)
+
+
+
+==========================================================================
+detailed place report_checks -path_delay min reg to reg
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_is_slt_a2$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_is_slt_a3$_DFF_P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock clk (rise edge)
+   3.00    3.00   clock network delay (ideal)
+   0.00    3.00 ^ core_pri.CPU_is_slt_a2$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.28    3.28 ^ core_pri.CPU_is_slt_a2$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_1)
+   0.00    3.28 ^ core_pri.CPU_is_slt_a3$_DFF_P_/D (sky130_fd_sc_hd__dfxtp_1)
+           3.28   data arrival time
+
+   0.00    0.00   clock clk (rise edge)
+   3.00    3.00   clock network delay (ideal)
+   0.92    3.92   clock uncertainty
+   0.00    3.92   clock reconvergence pessimism
+           3.92 ^ core_pri.CPU_is_slt_a3$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+  -0.04    3.88   library hold time
+           3.88   data required time
+---------------------------------------------------------
+           3.88   data required time
+          -3.28   data arrival time
+---------------------------------------------------------
+          -0.61   slack (VIOLATED)
+
+
+
+==========================================================================
+detailed place critical path target clock latency max path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+detailed place critical path target clock latency min path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+detailed place critical path source clock latency min path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+detailed place critical path delay
+--------------------------------------------------------------------------
+7.0342
+
+==========================================================================
+detailed place critical path slack
+--------------------------------------------------------------------------
+6.7119
+
+==========================================================================
+detailed place slack div critical path delay
+--------------------------------------------------------------------------
+95.418100
+
+==========================================================================
+detailed place report_power
+--------------------------------------------------------------------------
+Group                  Internal  Switching    Leakage      Total
+                          Power      Power      Power      Power (Watts)
+----------------------------------------------------------------
+Sequential             4.93e-03   7.48e-04   1.04e-08   5.68e-03  55.0%
+Combinational          1.41e-03   3.23e-03   1.10e-08   4.64e-03  45.0%
+Clock                  0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+Macro                  0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+Pad                    0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+----------------------------------------------------------------
+Total                  6.35e-03   3.98e-03   2.14e-08   1.03e-02 100.0%
+                          61.5%      38.5%       0.0%
+```
+
+**Screenshots of VSDbabysoc placed macros:**
+
+![place_gui](https://github.com/user-attachments/assets/e9976afc-0a7c-4b9b-a25d-0b563b3320ba)
+
+![pll_place](https://github.com/user-attachments/assets/66158f03-74ee-4588-8acb-2241996fbaa5)
+
+![riscv_place](https://github.com/user-attachments/assets/52fc0858-a73f-48a2-ab05-3d86520f3018)
+
+
+**Step3: Clock Tree Synthesis:**
+
+CTS involves connecting the clock signal from the clock port to the clock pins of sequential cells while minimizing insertion delay and balancing skew. The clock network is typically categorized as a high fanout net, which requires special handling due to its significant power consumption—often accounting for 30-40% of total chip power—and its susceptibility to electromigration (EM) effects.
+
+**Steps in Clock Tree Synthesis:**
+
+The CTS process typically includes the following steps:
+
+*	Preparation: This involves checking the legality of the design, ensuring power connections are correct, and verifying that the timing quality of results (QoR) is acceptable.
+
+*	Clustering: Grouping sink pins based on their geometric locations to facilitate better skew management.
+
+*	Buffer Insertion: Automatically inserting buffers and inverters along the clock paths to manage load and reduce insertion delay.
+
+*	Balancing: Using clock buffers and inverters to achieve a balanced clock distribution across the design.
+
+*	Post-Conditioning: Final adjustments to ensure that all design rules are met and that the clock tree operates within specified parameters for skew and insertion delay.
+
+
+**Quality Checks Post-CTS:**
+
+After completing the CTS, several checks are necessary to ensure the clock tree meets design goals:
+
+*	Insertion Delay: Must meet target values.
+*	Skew Balancing: Should be within acceptable limits.
+*	Signal Integrity: Ensuring minimal crosstalk and other noise effects.
+*	Power Consumption: Evaluating the clock tree's power usage to ensure it aligns with design specifications.
+
+In summary, Clock Tree Synthesis is a fundamental aspect of VLSI design that directly impacts the performance, power efficiency, and reliability of integrated circuits. Proper execution of CTS ensures that the clock signal is effectively distributed, enabling synchronous operation of all components within the design.
+
+
+
+**CTS Report:**
+
+```
+
+==========================================================================
+cts final report_tns
+--------------------------------------------------------------------------
+tns 0.00
+
+==========================================================================
+cts final report_wns
+--------------------------------------------------------------------------
+wns 0.00
+
+==========================================================================
+cts final report_worst_slack
+--------------------------------------------------------------------------
+worst slack 6.33
+
+==========================================================================
+cts final report_clock_skew
+--------------------------------------------------------------------------
+Clock clk
+   2.94 source latency core_pri.CPU_is_addi_a3$_DFF_P_/CLK ^
+  -2.85 target latency core_pri.CPU_Xreg_value_a4[4][2]$_SDFFE_PP1P_/CLK ^
+   0.57 clock uncertainty
+   0.00 CRPR
+--------------
+   0.67 setup skew
+
+
+==========================================================================
+cts final report_checks -path_delay min
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_dmem_rd_data_a5[22]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[11][22]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     1    0.22    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.03    0.01    2.01 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.23    0.24    0.27    2.28 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.24    0.00    2.28 ^ clkbuf_3_4_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.04    0.07    0.21    2.49 ^ clkbuf_3_4_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_3_4_0_clk_pri (net)
+                  0.07    0.00    2.49 ^ clkbuf_4_8__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     9    0.16    0.17    0.23    2.72 ^ clkbuf_4_8__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_8__leaf_clk_pri (net)
+                  0.17    0.00    2.72 ^ clkbuf_leaf_9_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     9    0.03    0.06    0.18    2.90 ^ clkbuf_leaf_9_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_9_clk_pri (net)
+                  0.06    0.00    2.90 ^ core_pri.CPU_dmem_rd_data_a5[22]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+     1    0.02    0.11    0.37    3.27 v core_pri.CPU_dmem_rd_data_a5[22]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_1)
+                                         core_pri.CPU_dmem_rd_data_a5[22] (net)
+                  0.11    0.00    3.27 v _08321_/A_N (sky130_fd_sc_hd__nand2b_4)
+    15    0.06    0.14    0.26    3.53 v _08321_/Y (sky130_fd_sc_hd__nand2b_4)
+                                         _02936_ (net)
+                  0.14    0.00    3.53 v _08714_/A (sky130_fd_sc_hd__nor2_1)
+     1    0.00    0.08    0.13    3.66 ^ _08714_/Y (sky130_fd_sc_hd__nor2_1)
+                                         _03293_ (net)
+                  0.08    0.00    3.66 ^ _08715_/C1 (sky130_fd_sc_hd__a2111oi_0)
+     1    0.00    0.05    0.06    3.72 v _08715_/Y (sky130_fd_sc_hd__a2111oi_0)
+                                         _00590_ (net)
+                  0.05    0.00    3.72 v core_pri.CPU_Xreg_value_a4[11][22]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  3.72   data arrival time
+
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     1    0.22    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.03    0.01    2.01 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.23    0.24    0.27    2.28 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.24    0.00    2.28 ^ clkbuf_3_1_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.04    0.06    0.21    2.49 ^ clkbuf_3_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_3_1_0_clk_pri (net)
+                  0.06    0.00    2.49 ^ clkbuf_4_2__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     7    0.10    0.12    0.20    2.69 ^ clkbuf_4_2__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_2__leaf_clk_pri (net)
+                  0.12    0.00    2.69 ^ clkbuf_leaf_3_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    11    0.04    0.06    0.17    2.85 ^ clkbuf_leaf_3_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_3_clk_pri (net)
+                  0.06    0.00    2.85 ^ core_pri.CPU_Xreg_value_a4[11][22]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                          0.92    3.77   clock uncertainty
+                          0.00    3.77   clock reconvergence pessimism
+                         -0.05    3.72   library hold time
+                                  3.72   data required time
+-----------------------------------------------------------------------------
+                                  3.72   data required time
+                                 -3.72   data arrival time
+-----------------------------------------------------------------------------
+                                  0.00   slack (MET)
+
+
+
+==========================================================================
+cts final report_checks -path_delay max
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     1    0.22    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.03    0.01    2.01 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.23    0.24    0.27    2.28 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.24    0.00    2.28 ^ clkbuf_3_6_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.04    0.06    0.21    2.49 ^ clkbuf_3_6_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_3_6_0_clk_pri (net)
+                  0.06    0.00    2.49 ^ clkbuf_4_13__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    13    0.19    0.20    0.26    2.75 ^ clkbuf_4_13__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_13__leaf_clk_pri (net)
+                  0.20    0.00    2.75 ^ clkbuf_leaf_73_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    10    0.04    0.06    0.19    2.94 ^ clkbuf_leaf_73_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_73_clk_pri (net)
+                  0.06    0.00    2.94 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+    51    0.28    0.77    0.85    3.80 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+                                         core_pri.CPU_imm_a3[10] (net)
+                  0.77    0.01    3.80 ^ _11532_/B (sky130_fd_sc_hd__ha_2)
+     6    0.02    0.09    0.49    4.29 v _11532_/SUM (sky130_fd_sc_hd__ha_2)
+                                         _05641_ (net)
+                  0.09    0.00    4.29 v _07986_/C (sky130_fd_sc_hd__nor3_2)
+     3    0.02    0.31    0.26    4.55 ^ _07986_/Y (sky130_fd_sc_hd__nor3_2)
+                                         _02614_ (net)
+                  0.31    0.00    4.55 ^ _07988_/A (sky130_fd_sc_hd__nand2_1)
+     2    0.01    0.14    0.18    4.73 v _07988_/Y (sky130_fd_sc_hd__nand2_1)
+                                         _02616_ (net)
+                  0.14    0.00    4.73 v _07992_/A2 (sky130_fd_sc_hd__a21oi_2)
+     2    0.02    0.22    0.27    4.99 ^ _07992_/Y (sky130_fd_sc_hd__a21oi_2)
+                                         _02620_ (net)
+                  0.22    0.00    4.99 ^ _08110_/A1 (sky130_fd_sc_hd__o21ai_4)
+     4    0.03    0.14    0.13    5.12 v _08110_/Y (sky130_fd_sc_hd__o21ai_4)
+                                         _02734_ (net)
+                  0.14    0.00    5.12 v _08312_/A1 (sky130_fd_sc_hd__a21oi_2)
+     3    0.02    0.24    0.28    5.40 ^ _08312_/Y (sky130_fd_sc_hd__a21oi_2)
+                                         _02927_ (net)
+                  0.24    0.00    5.40 ^ _08525_/A1 (sky130_fd_sc_hd__o211ai_2)
+     2    0.01    0.12    0.14    5.54 v _08525_/Y (sky130_fd_sc_hd__o211ai_2)
+                                         _03130_ (net)
+                  0.12    0.00    5.54 v _08529_/B (sky130_fd_sc_hd__and3_1)
+     1    0.01    0.06    0.22    5.77 v _08529_/X (sky130_fd_sc_hd__and3_1)
+                                         _03134_ (net)
+                  0.06    0.00    5.77 v _08544_/B (sky130_fd_sc_hd__nor3_4)
+    17    0.10    0.94    0.76    6.53 ^ _08544_/Y (sky130_fd_sc_hd__nor3_4)
+                                         _03149_ (net)
+                  0.94    0.01    6.54 ^ _09607_/B2 (sky130_fd_sc_hd__o221ai_1)
+     1    0.00    0.16    0.19    6.73 v _09607_/Y (sky130_fd_sc_hd__o221ai_1)
+                                         _00887_ (net)
+                  0.16    0.00    6.73 v hold1511/A (sky130_fd_sc_hd__dlygate4sd3_1)
+     1    0.00    0.05    0.60    7.33 v hold1511/X (sky130_fd_sc_hd__dlygate4sd3_1)
+                                         net1643 (net)
+                  0.05    0.00    7.33 v core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  7.33   data arrival time
+
+                         11.50   11.50   clock clk (rise edge)
+                          2.00   13.50   clock source latency
+     1    0.22    0.00    0.00   13.50 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.03    0.01   13.51 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.23    0.24    0.27   13.78 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.24    0.00   13.78 ^ clkbuf_3_0_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.04    0.06    0.21   13.99 ^ clkbuf_3_0_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_3_0_0_clk_pri (net)
+                  0.06    0.00   13.99 ^ clkbuf_4_1__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     7    0.10    0.12    0.20   14.19 ^ clkbuf_4_1__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_1__leaf_clk_pri (net)
+                  0.12    0.00   14.19 ^ clkbuf_leaf_124_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    11    0.04    0.06    0.17   14.35 ^ clkbuf_leaf_124_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_124_clk_pri (net)
+                  0.06    0.00   14.35 ^ core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                         -0.57   13.78   clock uncertainty
+                          0.00   13.78   clock reconvergence pessimism
+                         -0.11   13.67   library setup time
+                                 13.67   data required time
+-----------------------------------------------------------------------------
+                                 13.67   data required time
+                                 -7.33   data arrival time
+-----------------------------------------------------------------------------
+                                  6.33   slack (MET)
+
+
+
+==========================================================================
+cts final report_checks -unconstrained
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     1    0.22    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.03    0.01    2.01 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.23    0.24    0.27    2.28 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.24    0.00    2.28 ^ clkbuf_3_6_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.04    0.06    0.21    2.49 ^ clkbuf_3_6_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_3_6_0_clk_pri (net)
+                  0.06    0.00    2.49 ^ clkbuf_4_13__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    13    0.19    0.20    0.26    2.75 ^ clkbuf_4_13__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_13__leaf_clk_pri (net)
+                  0.20    0.00    2.75 ^ clkbuf_leaf_73_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    10    0.04    0.06    0.19    2.94 ^ clkbuf_leaf_73_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_73_clk_pri (net)
+                  0.06    0.00    2.94 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+    51    0.28    0.77    0.85    3.80 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+                                         core_pri.CPU_imm_a3[10] (net)
+                  0.77    0.01    3.80 ^ _11532_/B (sky130_fd_sc_hd__ha_2)
+     6    0.02    0.09    0.49    4.29 v _11532_/SUM (sky130_fd_sc_hd__ha_2)
+                                         _05641_ (net)
+                  0.09    0.00    4.29 v _07986_/C (sky130_fd_sc_hd__nor3_2)
+     3    0.02    0.31    0.26    4.55 ^ _07986_/Y (sky130_fd_sc_hd__nor3_2)
+                                         _02614_ (net)
+                  0.31    0.00    4.55 ^ _07988_/A (sky130_fd_sc_hd__nand2_1)
+     2    0.01    0.14    0.18    4.73 v _07988_/Y (sky130_fd_sc_hd__nand2_1)
+                                         _02616_ (net)
+                  0.14    0.00    4.73 v _07992_/A2 (sky130_fd_sc_hd__a21oi_2)
+     2    0.02    0.22    0.27    4.99 ^ _07992_/Y (sky130_fd_sc_hd__a21oi_2)
+                                         _02620_ (net)
+                  0.22    0.00    4.99 ^ _08110_/A1 (sky130_fd_sc_hd__o21ai_4)
+     4    0.03    0.14    0.13    5.12 v _08110_/Y (sky130_fd_sc_hd__o21ai_4)
+                                         _02734_ (net)
+                  0.14    0.00    5.12 v _08312_/A1 (sky130_fd_sc_hd__a21oi_2)
+     3    0.02    0.24    0.28    5.40 ^ _08312_/Y (sky130_fd_sc_hd__a21oi_2)
+                                         _02927_ (net)
+                  0.24    0.00    5.40 ^ _08525_/A1 (sky130_fd_sc_hd__o211ai_2)
+     2    0.01    0.12    0.14    5.54 v _08525_/Y (sky130_fd_sc_hd__o211ai_2)
+                                         _03130_ (net)
+                  0.12    0.00    5.54 v _08529_/B (sky130_fd_sc_hd__and3_1)
+     1    0.01    0.06    0.22    5.77 v _08529_/X (sky130_fd_sc_hd__and3_1)
+                                         _03134_ (net)
+                  0.06    0.00    5.77 v _08544_/B (sky130_fd_sc_hd__nor3_4)
+    17    0.10    0.94    0.76    6.53 ^ _08544_/Y (sky130_fd_sc_hd__nor3_4)
+                                         _03149_ (net)
+                  0.94    0.01    6.54 ^ _09607_/B2 (sky130_fd_sc_hd__o221ai_1)
+     1    0.00    0.16    0.19    6.73 v _09607_/Y (sky130_fd_sc_hd__o221ai_1)
+                                         _00887_ (net)
+                  0.16    0.00    6.73 v hold1511/A (sky130_fd_sc_hd__dlygate4sd3_1)
+     1    0.00    0.05    0.60    7.33 v hold1511/X (sky130_fd_sc_hd__dlygate4sd3_1)
+                                         net1643 (net)
+                  0.05    0.00    7.33 v core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  7.33   data arrival time
+
+                         11.50   11.50   clock clk (rise edge)
+                          2.00   13.50   clock source latency
+     1    0.22    0.00    0.00   13.50 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.03    0.01   13.51 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.23    0.24    0.27   13.78 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.24    0.00   13.78 ^ clkbuf_3_0_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     2    0.04    0.06    0.21   13.99 ^ clkbuf_3_0_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_3_0_0_clk_pri (net)
+                  0.06    0.00   13.99 ^ clkbuf_4_1__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     7    0.10    0.12    0.20   14.19 ^ clkbuf_4_1__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_1__leaf_clk_pri (net)
+                  0.12    0.00   14.19 ^ clkbuf_leaf_124_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    11    0.04    0.06    0.17   14.35 ^ clkbuf_leaf_124_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_124_clk_pri (net)
+                  0.06    0.00   14.35 ^ core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                         -0.57   13.78   clock uncertainty
+                          0.00   13.78   clock reconvergence pessimism
+                         -0.11   13.67   library setup time
+                                 13.67   data required time
+-----------------------------------------------------------------------------
+                                 13.67   data required time
+                                 -7.33   data arrival time
+-----------------------------------------------------------------------------
+                                  6.33   slack (MET)
+
+
+
+==========================================================================
+cts final report_check_types -max_slew -max_cap -max_fanout -violators
+--------------------------------------------------------------------------
+
+==========================================================================
+cts final max_slew_check_slack
+--------------------------------------------------------------------------
+0.23587177693843842
+
+==========================================================================
+cts final max_slew_check_limit
+--------------------------------------------------------------------------
+1.5
+
+==========================================================================
+cts final max_slew_check_slack_limit
+--------------------------------------------------------------------------
+0.1572
+
+==========================================================================
+cts final max_fanout_check_slack
+--------------------------------------------------------------------------
+1.0000000150474662e+30
+
+==========================================================================
+cts final max_fanout_check_limit
+--------------------------------------------------------------------------
+1.0000000150474662e+30
+
+==========================================================================
+cts final max_capacitance_check_slack
+--------------------------------------------------------------------------
+0.01796080358326435
+
+==========================================================================
+cts final max_capacitance_check_limit
+--------------------------------------------------------------------------
+0.021067000925540924
+
+==========================================================================
+cts final max_capacitance_check_slack_limit
+--------------------------------------------------------------------------
+0.8526
+
+==========================================================================
+cts final max_slew_violation_count
+--------------------------------------------------------------------------
+max slew violation count 0
+
+==========================================================================
+cts final max_fanout_violation_count
+--------------------------------------------------------------------------
+max fanout violation count 0
+
+==========================================================================
+cts final max_cap_violation_count
+--------------------------------------------------------------------------
+max cap violation count 0
+
+==========================================================================
+cts final setup_violation_count
+--------------------------------------------------------------------------
+setup violation count 0
+
+==========================================================================
+cts final hold_violation_count
+--------------------------------------------------------------------------
+hold violation count 0
+
+==========================================================================
+cts final report_checks -path_delay max reg to reg
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock clk (rise edge)
+   2.00    2.00   clock source latency
+   0.00    2.00 ^ avsdpll/CLK (avsdpll)
+   0.28    2.28 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.21    2.49 ^ clkbuf_3_6_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.26    2.75 ^ clkbuf_4_13__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.20    2.94 ^ clkbuf_leaf_73_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00    2.94 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+   0.85    3.80 ^ core_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+   0.49    4.29 v _11532_/SUM (sky130_fd_sc_hd__ha_2)
+   0.26    4.55 ^ _07986_/Y (sky130_fd_sc_hd__nor3_2)
+   0.18    4.73 v _07988_/Y (sky130_fd_sc_hd__nand2_1)
+   0.27    4.99 ^ _07992_/Y (sky130_fd_sc_hd__a21oi_2)
+   0.13    5.12 v _08110_/Y (sky130_fd_sc_hd__o21ai_4)
+   0.28    5.40 ^ _08312_/Y (sky130_fd_sc_hd__a21oi_2)
+   0.14    5.54 v _08525_/Y (sky130_fd_sc_hd__o211ai_2)
+   0.22    5.77 v _08529_/X (sky130_fd_sc_hd__and3_1)
+   0.76    6.53 ^ _08544_/Y (sky130_fd_sc_hd__nor3_4)
+   0.20    6.73 v _09607_/Y (sky130_fd_sc_hd__o221ai_1)
+   0.60    7.33 v hold1511/X (sky130_fd_sc_hd__dlygate4sd3_1)
+   0.00    7.33 v core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+           7.33   data arrival time
+
+  11.50   11.50   clock clk (rise edge)
+   2.00   13.50   clock source latency
+   0.00   13.50 ^ avsdpll/CLK (avsdpll)
+   0.28   13.78 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.21   13.99 ^ clkbuf_3_0_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.20   14.19 ^ clkbuf_4_1__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.17   14.35 ^ clkbuf_leaf_124_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00   14.35 ^ core_pri.CPU_Xreg_value_a4[5][30]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+  -0.57   13.78   clock uncertainty
+   0.00   13.78   clock reconvergence pessimism
+  -0.11   13.67   library setup time
+          13.67   data required time
+---------------------------------------------------------
+          13.67   data required time
+          -7.33   data arrival time
+---------------------------------------------------------
+           6.33   slack (MET)
+
+
+
+==========================================================================
+cts final report_checks -path_delay min reg to reg
+--------------------------------------------------------------------------
+Startpoint: core_pri.CPU_dmem_rd_data_a5[22]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: core_pri.CPU_Xreg_value_a4[11][22]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock clk (rise edge)
+   2.00    2.00   clock source latency
+   0.00    2.00 ^ avsdpll/CLK (avsdpll)
+   0.28    2.28 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.21    2.49 ^ clkbuf_3_4_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.23    2.72 ^ clkbuf_4_8__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.18    2.90 ^ clkbuf_leaf_9_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00    2.90 ^ core_pri.CPU_dmem_rd_data_a5[22]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.37    3.27 v core_pri.CPU_dmem_rd_data_a5[22]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_1)
+   0.26    3.53 v _08321_/Y (sky130_fd_sc_hd__nand2b_4)
+   0.13    3.66 ^ _08714_/Y (sky130_fd_sc_hd__nor2_1)
+   0.06    3.72 v _08715_/Y (sky130_fd_sc_hd__a2111oi_0)
+   0.00    3.72 v core_pri.CPU_Xreg_value_a4[11][22]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+           3.72   data arrival time
+
+   0.00    0.00   clock clk (rise edge)
+   2.00    2.00   clock source latency
+   0.00    2.00 ^ avsdpll/CLK (avsdpll)
+   0.28    2.28 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.21    2.49 ^ clkbuf_3_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.20    2.69 ^ clkbuf_4_2__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.17    2.85 ^ clkbuf_leaf_3_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00    2.85 ^ core_pri.CPU_Xreg_value_a4[11][22]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.92    3.77   clock uncertainty
+   0.00    3.77   clock reconvergence pessimism
+  -0.05    3.72   library hold time
+           3.72   data required time
+---------------------------------------------------------
+           3.72   data required time
+          -3.72   data arrival time
+---------------------------------------------------------
+           0.00   slack (MET)
+
+
+
+==========================================================================
+cts final critical path target clock latency max path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+cts final critical path target clock latency min path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+cts final critical path source clock latency min path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+cts final critical path delay
+--------------------------------------------------------------------------
+7.3347
+
+==========================================================================
+cts final critical path slack
+--------------------------------------------------------------------------
+6.3315
+
+==========================================================================
+cts final slack div critical path delay
+--------------------------------------------------------------------------
+86.322549
+
+==========================================================================
+cts final report_power
+--------------------------------------------------------------------------
+Group                  Internal  Switching    Leakage      Total
+                          Power      Power      Power      Power (Watts)
+----------------------------------------------------------------
+Sequential             4.83e-03   6.58e-04   1.04e-08   5.49e-03  34.5%
+Combinational          1.77e-03   3.41e-03   2.31e-08   5.18e-03  32.6%
+Clock                  3.01e-03   2.22e-03   2.55e-09   5.23e-03  32.9%
+Macro                  0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+Pad                    0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+----------------------------------------------------------------
+Total                  9.61e-03   6.28e-03   3.60e-08   1.59e-02 100.0%
+                          60.5%      39.5%       0.0%
+```
+
+![cts_gui](https://github.com/user-attachments/assets/2f0c9ff6-55b0-4e88-bbf9-51573cd5d188)
+
+**Heat Map:**
+
+![heatmap](https://github.com/user-attachments/assets/3a217f42-4ad6-4636-9b39-72e7df5186da)
+
+**Routing Congestion and IO nets:**
+![routing_congestion](https://github.com/user-attachments/assets/acf09520-8a68-4d44-9f0e-b88b763b19bf)
+
+**Step4: Routing:**
+-------
+There are three main types of routing:
+
+*	Pre-routing (also known as power routing) which is done during power planning.
+*	Clock routing performed while building the clock tree in the clock tree synthesis (CTS) stage.
+*	Signal routing done after CTS to connect all signal pins.
+
+**Routing Flow**
+
+The routing flow consists of four main stages:
+
+*	Global Routing: Divides the core area into global cells (gcells) and finds the shortest path for each net using algorithms like maze routing and Steiner tree. It assigns nets to specific gcells but does not define actual tracks.
+
+*	Track Assignment: Assigns actual metal layers to global routes while fixing some design rule violations. However, many DRC, signal integrity, and timing violations still remain.
+
+*	Detailed Routing: Completes the actual metal and via connections between pins. It fixes all remaining violations through multiple iterations. The block is divided into switch boxes (Sboxes) for routing.
+
+*	Search and Repair: Performed after the first detailed routing iteration to locate and fix any remaining shorts or spacing violations[2][3].
+
+**Routing Constraints:**
+
+Key routing constraints include:
+
+*	Design rule constraints related to manufacturing
+*	Performance constraints to meet timing
+*	Routing density constraints to avoid congestion
+*	Constraints on off-grid routing
+*	Blocked routing regions
+
+**Routing Outputs:**
+
+The main outputs of routing are:
+
+*	Geometric layout of all nets in GDS format
+*	SPEF file for parasitics
+*	Updated SDC file with routed timing
+
+In summary, routing is a critical step that completes the physical connections in the design while meeting various constraints. Efficient routing is essential for manufacturability and performance closure in modern VLSI designs.
+
+**Lab - Routing of VSDBabySoC :**
+
+Command to run routing for the design file:
+```
+make DESIGN_CONFIG=./designs/sky130hd/VSDbabysoc_pri/config.mk route
+```
+![routing_done](https://github.com/user-attachments/assets/f72f3505-6db3-44c6-b002-76ed19a65d55)
+
+
+Screenshot of GUI of routed design:
+**all macro cells:**
+
+![route_with_cts](https://github.com/user-attachments/assets/f7d5e82a-604f-49da-9551-42224f5aa658)
+
+**riscv_pri macro:**
+
+![route_riscv](https://github.com/user-attachments/assets/eb7d0fde-ed28-4a2d-a57b-5f3c244bf27f)
+
+**Heat map for routing congestion:**
+
+![heat_map_gui](https://github.com/user-attachments/assets/93680564-cf33-4d65-a898-e26c54cf1f41)
+
+**Heat map for placement congestion:**
+
+![Heat_map_placement](https://github.com/user-attachments/assets/b82f8003-4796-44d7-b295-86dfe4aa2c36)
+
+**Routing reports:**
+
+```
+
+==========================================================================
+global route report_tns
+--------------------------------------------------------------------------
+tns 0.00
+
+==========================================================================
+global route report_wns
+--------------------------------------------------------------------------
+wns 0.00
+
+==========================================================================
+global route report_worst_slack
+--------------------------------------------------------------------------
+worst slack 5.67
+
+==========================================================================
+global route report_clock_skew
+--------------------------------------------------------------------------
+Clock clk
+   3.09 source latency riscv_pri.CPU_Dmem_value_a5[11][22]$_SDFFE_PP0P_/CLK ^
+  -3.01 target latency riscv_pri.CPU_dmem_rd_data_a5[22]$_DFF_P_/CLK ^
+   0.57 clock uncertainty
+   0.00 CRPR
+--------------
+   0.66 setup skew
+
+
+==========================================================================
+global route report_checks -path_delay min
+--------------------------------------------------------------------------
+Startpoint: riscv_pri.CPU_Xreg_value_a4[9][8]$_SDFFE_PP0P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: riscv_pri.CPU_src1_value_a3[8]$_DFF_P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     2    0.23    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.04    0.02    2.02 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.20    0.21    0.25    2.27 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.21    0.01    2.27 ^ clkbuf_2_1_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.15    0.16    0.27    2.55 ^ clkbuf_2_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_2_1_0_clk_pri (net)
+                  0.16    0.01    2.55 ^ clkbuf_4_4__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    12    0.21    0.22    0.30    2.85 ^ clkbuf_4_4__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_4__leaf_clk_pri (net)
+                  0.22    0.00    2.86 ^ clkbuf_leaf_143_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.04    0.06    0.20    3.06 ^ clkbuf_leaf_143_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_143_clk_pri (net)
+                  0.06    0.00    3.06 ^ riscv_pri.CPU_Xreg_value_a4[9][8]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+     2    0.01    0.06    0.32    3.38 ^ riscv_pri.CPU_Xreg_value_a4[9][8]$_SDFFE_PP0P_/Q (sky130_fd_sc_hd__dfxtp_1)
+                                         riscv_pri.CPU_Xreg_value_a4[9][8] (net)
+                  0.06    0.00    3.38 ^ _10554_/B2 (sky130_fd_sc_hd__a221oi_1)
+     1    0.01    0.05    0.09    3.47 v _10554_/Y (sky130_fd_sc_hd__a221oi_1)
+                                         _04641_ (net)
+                  0.05    0.00    3.47 v _10557_/A (sky130_fd_sc_hd__nand3_1)
+     1    0.01    0.14    0.13    3.60 ^ _10557_/Y (sky130_fd_sc_hd__nand3_1)
+                                         _04644_ (net)
+                  0.14    0.00    3.60 ^ _10558_/B2 (sky130_fd_sc_hd__o22ai_4)
+     1    0.04    0.11    0.14    3.74 v _10558_/Y (sky130_fd_sc_hd__o22ai_4)
+                                         _04645_ (net)
+                  0.11    0.01    3.75 v _10560_/A2 (sky130_fd_sc_hd__o21ai_0)
+     1    0.00    0.09    0.20    3.95 ^ _10560_/Y (sky130_fd_sc_hd__o21ai_0)
+                                         riscv_pri.CPU_src1_value_a2[8] (net)
+                  0.09    0.00    3.95 ^ riscv_pri.CPU_src1_value_a3[8]$_DFF_P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  3.95   data arrival time
+
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     2    0.23    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.04    0.02    2.02 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.20    0.21    0.25    2.27 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.21    0.01    2.27 ^ clkbuf_2_1_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.15    0.16    0.27    2.55 ^ clkbuf_2_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_2_1_0_clk_pri (net)
+                  0.16    0.00    2.55 ^ clkbuf_4_6__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    12    0.20    0.21    0.30    2.85 ^ clkbuf_4_6__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_6__leaf_clk_pri (net)
+                  0.21    0.00    2.85 ^ clkbuf_leaf_99_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.05    0.07    0.20    3.05 ^ clkbuf_leaf_99_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_99_clk_pri (net)
+                  0.07    0.00    3.06 ^ riscv_pri.CPU_src1_value_a3[8]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                          0.92    3.98   clock uncertainty
+                          0.00    3.98   clock reconvergence pessimism
+                         -0.04    3.94   library hold time
+                                  3.94   data required time
+-----------------------------------------------------------------------------
+                                  3.94   data required time
+                                 -3.95   data arrival time
+-----------------------------------------------------------------------------
+                                  0.01   slack (MET)
+
+
+
+==========================================================================
+global route report_checks -path_delay max
+--------------------------------------------------------------------------
+Startpoint: riscv_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     2    0.23    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.04    0.02    2.02 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.20    0.21    0.25    2.27 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.21    0.01    2.27 ^ clkbuf_2_2_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.14    0.16    0.27    2.54 ^ clkbuf_2_2_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_2_2_0_clk_pri (net)
+                  0.16    0.00    2.54 ^ clkbuf_4_9__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     9    0.18    0.19    0.28    2.82 ^ clkbuf_4_9__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_9__leaf_clk_pri (net)
+                  0.19    0.00    2.83 ^ clkbuf_leaf_40_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.04    0.06    0.19    3.01 ^ clkbuf_leaf_40_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_40_clk_pri (net)
+                  0.06    0.00    3.01 ^ riscv_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+    51    0.43    1.18    1.12    4.13 ^ riscv_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+                                         riscv_pri.CPU_imm_a3[10] (net)
+                  1.18    0.03    4.16 ^ _11532_/B (sky130_fd_sc_hd__ha_2)
+     6    0.03    0.11    0.55    4.71 v _11532_/SUM (sky130_fd_sc_hd__ha_2)
+                                         _05641_ (net)
+                  0.11    0.00    4.71 v _07986_/C (sky130_fd_sc_hd__nor3_2)
+     3    0.02    0.36    0.31    5.02 ^ _07986_/Y (sky130_fd_sc_hd__nor3_2)
+                                         _02614_ (net)
+                  0.36    0.00    5.02 ^ _07988_/A (sky130_fd_sc_hd__nand2_2)
+     2    0.02    0.15    0.17    5.19 v _07988_/Y (sky130_fd_sc_hd__nand2_2)
+                                         _02616_ (net)
+                  0.15    0.00    5.19 v _07992_/A2 (sky130_fd_sc_hd__a21oi_4)
+     2    0.03    0.22    0.27    5.46 ^ _07992_/Y (sky130_fd_sc_hd__a21oi_4)
+                                         _02620_ (net)
+                  0.22    0.00    5.47 ^ _08110_/A1 (sky130_fd_sc_hd__o21ai_2)
+     4    0.02    0.15    0.16    5.62 v _08110_/Y (sky130_fd_sc_hd__o21ai_2)
+                                         _02734_ (net)
+                  0.15    0.00    5.62 v _08312_/A1 (sky130_fd_sc_hd__a21oi_4)
+     3    0.02    0.20    0.24    5.86 ^ _08312_/Y (sky130_fd_sc_hd__a21oi_4)
+                                         _02927_ (net)
+                  0.20    0.00    5.86 ^ _08525_/A1 (sky130_fd_sc_hd__o211ai_1)
+     2    0.01    0.15    0.17    6.03 v _08525_/Y (sky130_fd_sc_hd__o211ai_1)
+                                         _03130_ (net)
+                  0.15    0.00    6.03 v _08529_/B (sky130_fd_sc_hd__and3_1)
+     1    0.01    0.08    0.25    6.28 v _08529_/X (sky130_fd_sc_hd__and3_1)
+                                         _03134_ (net)
+                  0.08    0.00    6.28 v _08544_/B (sky130_fd_sc_hd__nor3_4)
+    17    0.13    1.24    0.97    7.26 ^ _08544_/Y (sky130_fd_sc_hd__nor3_4)
+                                         _03149_ (net)
+                  1.24    0.04    7.29 ^ _08748_/B2 (sky130_fd_sc_hd__o221ai_1)
+     1    0.01    0.23    0.26    7.55 v _08748_/Y (sky130_fd_sc_hd__o221ai_1)
+                                         _00599_ (net)
+                  0.23    0.00    7.55 v hold1504/A (sky130_fd_sc_hd__dlygate4sd3_1)
+     1    0.00    0.06    0.65    8.20 v hold1504/X (sky130_fd_sc_hd__dlygate4sd3_1)
+                                         net1755 (net)
+                  0.06    0.00    8.20 v riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  8.20   data arrival time
+
+                         11.50   11.50   clock clk (rise edge)
+                          2.00   13.50   clock source latency
+     2    0.23    0.00    0.00   13.50 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.04    0.02   13.52 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.20    0.21    0.25   13.77 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.21    0.01   13.77 ^ clkbuf_2_1_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.15    0.16    0.27   14.05 ^ clkbuf_2_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_2_1_0_clk_pri (net)
+                  0.16    0.00   14.05 ^ clkbuf_4_6__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    12    0.20    0.21    0.30   14.35 ^ clkbuf_4_6__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_6__leaf_clk_pri (net)
+                  0.21    0.00   14.35 ^ clkbuf_leaf_146_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     9    0.04    0.06    0.20   14.55 ^ clkbuf_leaf_146_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_146_clk_pri (net)
+                  0.06    0.00   14.55 ^ riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                         -0.57   13.98   clock uncertainty
+                          0.00   13.98   clock reconvergence pessimism
+                         -0.11   13.86   library setup time
+                                 13.86   data required time
+-----------------------------------------------------------------------------
+                                 13.86   data required time
+                                 -8.20   data arrival time
+-----------------------------------------------------------------------------
+                                  5.67   slack (MET)
+
+
+
+==========================================================================
+global route report_checks -unconstrained
+--------------------------------------------------------------------------
+Startpoint: riscv_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout     Cap    Slew   Delay    Time   Description
+-----------------------------------------------------------------------------
+                          0.00    0.00   clock clk (rise edge)
+                          2.00    2.00   clock source latency
+     2    0.23    0.00    0.00    2.00 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.04    0.02    2.02 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.20    0.21    0.25    2.27 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.21    0.01    2.27 ^ clkbuf_2_2_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.14    0.16    0.27    2.54 ^ clkbuf_2_2_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_2_2_0_clk_pri (net)
+                  0.16    0.00    2.54 ^ clkbuf_4_9__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     9    0.18    0.19    0.28    2.82 ^ clkbuf_4_9__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_9__leaf_clk_pri (net)
+                  0.19    0.00    2.83 ^ clkbuf_leaf_40_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     8    0.04    0.06    0.19    3.01 ^ clkbuf_leaf_40_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_40_clk_pri (net)
+                  0.06    0.00    3.01 ^ riscv_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+    51    0.43    1.18    1.12    4.13 ^ riscv_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+                                         riscv_pri.CPU_imm_a3[10] (net)
+                  1.18    0.03    4.16 ^ _11532_/B (sky130_fd_sc_hd__ha_2)
+     6    0.03    0.11    0.55    4.71 v _11532_/SUM (sky130_fd_sc_hd__ha_2)
+                                         _05641_ (net)
+                  0.11    0.00    4.71 v _07986_/C (sky130_fd_sc_hd__nor3_2)
+     3    0.02    0.36    0.31    5.02 ^ _07986_/Y (sky130_fd_sc_hd__nor3_2)
+                                         _02614_ (net)
+                  0.36    0.00    5.02 ^ _07988_/A (sky130_fd_sc_hd__nand2_2)
+     2    0.02    0.15    0.17    5.19 v _07988_/Y (sky130_fd_sc_hd__nand2_2)
+                                         _02616_ (net)
+                  0.15    0.00    5.19 v _07992_/A2 (sky130_fd_sc_hd__a21oi_4)
+     2    0.03    0.22    0.27    5.46 ^ _07992_/Y (sky130_fd_sc_hd__a21oi_4)
+                                         _02620_ (net)
+                  0.22    0.00    5.47 ^ _08110_/A1 (sky130_fd_sc_hd__o21ai_2)
+     4    0.02    0.15    0.16    5.62 v _08110_/Y (sky130_fd_sc_hd__o21ai_2)
+                                         _02734_ (net)
+                  0.15    0.00    5.62 v _08312_/A1 (sky130_fd_sc_hd__a21oi_4)
+     3    0.02    0.20    0.24    5.86 ^ _08312_/Y (sky130_fd_sc_hd__a21oi_4)
+                                         _02927_ (net)
+                  0.20    0.00    5.86 ^ _08525_/A1 (sky130_fd_sc_hd__o211ai_1)
+     2    0.01    0.15    0.17    6.03 v _08525_/Y (sky130_fd_sc_hd__o211ai_1)
+                                         _03130_ (net)
+                  0.15    0.00    6.03 v _08529_/B (sky130_fd_sc_hd__and3_1)
+     1    0.01    0.08    0.25    6.28 v _08529_/X (sky130_fd_sc_hd__and3_1)
+                                         _03134_ (net)
+                  0.08    0.00    6.28 v _08544_/B (sky130_fd_sc_hd__nor3_4)
+    17    0.13    1.24    0.97    7.26 ^ _08544_/Y (sky130_fd_sc_hd__nor3_4)
+                                         _03149_ (net)
+                  1.24    0.04    7.29 ^ _08748_/B2 (sky130_fd_sc_hd__o221ai_1)
+     1    0.01    0.23    0.26    7.55 v _08748_/Y (sky130_fd_sc_hd__o221ai_1)
+                                         _00599_ (net)
+                  0.23    0.00    7.55 v hold1504/A (sky130_fd_sc_hd__dlygate4sd3_1)
+     1    0.00    0.06    0.65    8.20 v hold1504/X (sky130_fd_sc_hd__dlygate4sd3_1)
+                                         net1755 (net)
+                  0.06    0.00    8.20 v riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+                                  8.20   data arrival time
+
+                         11.50   11.50   clock clk (rise edge)
+                          2.00   13.50   clock source latency
+     2    0.23    0.00    0.00   13.50 ^ avsdpll/CLK (avsdpll)
+                                         clk_pri (net)
+                  0.04    0.02   13.52 ^ clkbuf_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.20    0.21    0.25   13.77 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_0_clk_pri (net)
+                  0.21    0.01   13.77 ^ clkbuf_2_1_0_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     4    0.15    0.16    0.27   14.05 ^ clkbuf_2_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_2_1_0_clk_pri (net)
+                  0.16    0.00   14.05 ^ clkbuf_4_6__f_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+    12    0.20    0.21    0.30   14.35 ^ clkbuf_4_6__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_4_6__leaf_clk_pri (net)
+                  0.21    0.00   14.35 ^ clkbuf_leaf_146_clk_pri/A (sky130_fd_sc_hd__clkbuf_16)
+     9    0.04    0.06    0.20   14.55 ^ clkbuf_leaf_146_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+                                         clknet_leaf_146_clk_pri (net)
+                  0.06    0.00   14.55 ^ riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+                         -0.57   13.98   clock uncertainty
+                          0.00   13.98   clock reconvergence pessimism
+                         -0.11   13.86   library setup time
+                                 13.86   data required time
+-----------------------------------------------------------------------------
+                                 13.86   data required time
+                                 -8.20   data arrival time
+-----------------------------------------------------------------------------
+                                  5.67   slack (MET)
+
+
+
+==========================================================================
+global route report_check_types -max_slew -max_cap -max_fanout -violators
+--------------------------------------------------------------------------
+
+==========================================================================
+global route max_slew_check_slack
+--------------------------------------------------------------------------
+0.051913365721702576
+
+==========================================================================
+global route max_slew_check_limit
+--------------------------------------------------------------------------
+1.5
+
+==========================================================================
+global route max_slew_check_slack_limit
+--------------------------------------------------------------------------
+0.0346
+
+==========================================================================
+global route max_fanout_check_slack
+--------------------------------------------------------------------------
+1.0000000150474662e+30
+
+==========================================================================
+global route max_fanout_check_limit
+--------------------------------------------------------------------------
+1.0000000150474662e+30
+
+==========================================================================
+global route max_capacitance_check_slack
+--------------------------------------------------------------------------
+0.01552768424153328
+
+==========================================================================
+global route max_capacitance_check_limit
+--------------------------------------------------------------------------
+0.021067000925540924
+
+==========================================================================
+global route max_capacitance_check_slack_limit
+--------------------------------------------------------------------------
+0.7371
+
+==========================================================================
+global route max_slew_violation_count
+--------------------------------------------------------------------------
+max slew violation count 0
+
+==========================================================================
+global route max_fanout_violation_count
+--------------------------------------------------------------------------
+max fanout violation count 0
+
+==========================================================================
+global route max_cap_violation_count
+--------------------------------------------------------------------------
+max cap violation count 0
+
+==========================================================================
+global route setup_violation_count
+--------------------------------------------------------------------------
+setup violation count 0
+
+==========================================================================
+global route hold_violation_count
+--------------------------------------------------------------------------
+hold violation count 0
+
+==========================================================================
+global route report_checks -path_delay max reg to reg
+--------------------------------------------------------------------------
+Startpoint: riscv_pri.CPU_imm_a3[30]$_DFF_P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: max
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock clk (rise edge)
+   2.00    2.00   clock source latency
+   0.00    2.00 ^ avsdpll/CLK (avsdpll)
+   0.27    2.27 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.27    2.54 ^ clkbuf_2_2_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.28    2.82 ^ clkbuf_4_9__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.19    3.01 ^ clkbuf_leaf_40_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00    3.01 ^ riscv_pri.CPU_imm_a3[30]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_4)
+   1.12    4.13 ^ riscv_pri.CPU_imm_a3[30]$_DFF_P_/Q (sky130_fd_sc_hd__dfxtp_4)
+   0.58    4.71 v _11532_/SUM (sky130_fd_sc_hd__ha_2)
+   0.31    5.02 ^ _07986_/Y (sky130_fd_sc_hd__nor3_2)
+   0.17    5.19 v _07988_/Y (sky130_fd_sc_hd__nand2_2)
+   0.27    5.46 ^ _07992_/Y (sky130_fd_sc_hd__a21oi_4)
+   0.16    5.62 v _08110_/Y (sky130_fd_sc_hd__o21ai_2)
+   0.24    5.86 ^ _08312_/Y (sky130_fd_sc_hd__a21oi_4)
+   0.17    6.03 v _08525_/Y (sky130_fd_sc_hd__o211ai_1)
+   0.25    6.28 v _08529_/X (sky130_fd_sc_hd__and3_1)
+   0.97    7.26 ^ _08544_/Y (sky130_fd_sc_hd__nor3_4)
+   0.29    7.55 v _08748_/Y (sky130_fd_sc_hd__o221ai_1)
+   0.65    8.20 v hold1504/X (sky130_fd_sc_hd__dlygate4sd3_1)
+   0.00    8.20 v riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_/D (sky130_fd_sc_hd__dfxtp_1)
+           8.20   data arrival time
+
+  11.50   11.50   clock clk (rise edge)
+   2.00   13.50   clock source latency
+   0.00   13.50 ^ avsdpll/CLK (avsdpll)
+   0.27   13.77 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.28   14.05 ^ clkbuf_2_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.30   14.35 ^ clkbuf_4_6__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.20   14.55 ^ clkbuf_leaf_146_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00   14.55 ^ riscv_pri.CPU_Xreg_value_a4[11][30]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+  -0.57   13.98   clock uncertainty
+   0.00   13.98   clock reconvergence pessimism
+  -0.11   13.86   library setup time
+          13.86   data required time
+---------------------------------------------------------
+          13.86   data required time
+          -8.20   data arrival time
+---------------------------------------------------------
+           5.67   slack (MET)
+
+
+
+==========================================================================
+global route report_checks -path_delay min reg to reg
+--------------------------------------------------------------------------
+Startpoint: riscv_pri.CPU_Xreg_value_a4[9][8]$_SDFFE_PP0P_
+            (rising edge-triggered flip-flop clocked by clk)
+Endpoint: riscv_pri.CPU_src1_value_a3[8]$_DFF_P_
+          (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+  Delay    Time   Description
+---------------------------------------------------------
+   0.00    0.00   clock clk (rise edge)
+   2.00    2.00   clock source latency
+   0.00    2.00 ^ avsdpll/CLK (avsdpll)
+   0.27    2.27 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.28    2.55 ^ clkbuf_2_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.31    2.85 ^ clkbuf_4_4__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.20    3.06 ^ clkbuf_leaf_143_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00    3.06 ^ riscv_pri.CPU_Xreg_value_a4[9][8]$_SDFFE_PP0P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.32    3.38 ^ riscv_pri.CPU_Xreg_value_a4[9][8]$_SDFFE_PP0P_/Q (sky130_fd_sc_hd__dfxtp_1)
+   0.09    3.47 v _10554_/Y (sky130_fd_sc_hd__a221oi_1)
+   0.13    3.60 ^ _10557_/Y (sky130_fd_sc_hd__nand3_1)
+   0.14    3.74 v _10558_/Y (sky130_fd_sc_hd__o22ai_4)
+   0.20    3.95 ^ _10560_/Y (sky130_fd_sc_hd__o21ai_0)
+   0.00    3.95 ^ riscv_pri.CPU_src1_value_a3[8]$_DFF_P_/D (sky130_fd_sc_hd__dfxtp_1)
+           3.95   data arrival time
+
+   0.00    0.00   clock clk (rise edge)
+   2.00    2.00   clock source latency
+   0.00    2.00 ^ avsdpll/CLK (avsdpll)
+   0.27    2.27 ^ clkbuf_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.28    2.55 ^ clkbuf_2_1_0_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.30    2.85 ^ clkbuf_4_6__f_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.21    3.05 ^ clkbuf_leaf_99_clk_pri/X (sky130_fd_sc_hd__clkbuf_16)
+   0.00    3.06 ^ riscv_pri.CPU_src1_value_a3[8]$_DFF_P_/CLK (sky130_fd_sc_hd__dfxtp_1)
+   0.92    3.98   clock uncertainty
+   0.00    3.98   clock reconvergence pessimism
+  -0.04    3.94   library hold time
+           3.94   data required time
+---------------------------------------------------------
+           3.94   data required time
+          -3.95   data arrival time
+---------------------------------------------------------
+           0.01   slack (MET)
+
+
+
+==========================================================================
+global route critical path target clock latency max path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+global route critical path target clock latency min path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+global route critical path source clock latency min path
+--------------------------------------------------------------------------
+0
+
+==========================================================================
+global route critical path delay
+--------------------------------------------------------------------------
+8.1954
+
+==========================================================================
+global route critical path slack
+--------------------------------------------------------------------------
+5.6669
+
+==========================================================================
+global route slack div critical path delay
+--------------------------------------------------------------------------
+69.147327
+
+==========================================================================
+global route report_power
+--------------------------------------------------------------------------
+Group                  Internal  Switching    Leakage      Total
+                          Power      Power      Power      Power (Watts)
+----------------------------------------------------------------
+Sequential             4.86e-03   9.43e-04   1.04e-08   5.80e-03  29.6%
+Combinational          2.14e-03   4.88e-03   2.41e-08   7.02e-03  35.8%
+Clock                  3.66e-03   3.14e-03   3.16e-09   6.80e-03  34.7%
+Macro                  0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+Pad                    0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+----------------------------------------------------------------
+Total                  1.07e-02   8.96e-03   3.77e-08   1.96e-02 100.0%
+                          54.3%      45.7%       0.0%
+```
+
