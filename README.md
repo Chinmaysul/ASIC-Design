@@ -5337,56 +5337,6 @@ Now, go to flow directory
 │   ├── scripts             
 ```
 
-**4. Automated RTL2GDS for for GCD example:**
-
-In this section, we run the physical design and explore the gui file of gcd design of nangate45 platform. The commands are:-
-
-```
-# Assuming you should be inside the OpenROad directory inside flow folder then run below commands.
-make # by default makefile will have the gcd as the default design
-# or
-make DESIGN_CONFIG=./designs/nangate45/gcd/config.mk
-make gui_floorplan
-make gui_place
-make gui_cts
-make gui_route
-make gui_final
-# or we can open the gui file and their we select the .odb file going through the results folder of nangate45 platform
-source ./env.sh # go to the OpenROAD directory then run this command then below command
-openroad -gui
-make metadata
-gedit designs/nangate45/gcd/metadata-base-ok.json
-```
-
-**Command Screenshot:**
-
-![synth](https://github.com/user-attachments/assets/26e73bf9-750e-4187-b767-84fb0fcfadad)
-
-**Floorplan:**
-
-![floorplan](https://github.com/user-attachments/assets/ae566118-b201-4be3-ad27-09b7f5bbf6e4)
-
-![floorplan_gui1](https://github.com/user-attachments/assets/92695e6d-8224-40fd-b359-761764afa027)
-
-
-![fplan](https://github.com/user-attachments/assets/22451f5c-5980-4885-bf4f-f49f7aed3ebd)
-
-**Place:**
-
-![place](https://github.com/user-attachments/assets/53ec457b-3073-4341-984d-5fefa509e485)
-
-**CTS:**
-
-![cts](https://github.com/user-attachments/assets/3d1abfeb-404a-4d45-bce3-45165e3af115)
-
-**Route:**
-
-![route](https://github.com/user-attachments/assets/44a494cc-4ef0-4d7e-9770-5e6d96df815a)
-
-**Final GUI:**
-
-![final_gui](https://github.com/user-attachments/assets/7ab4aac4-cb36-4c5d-a3ee-bebb8eb065e2)
-
 
 ## **Using above flow and commands we ran automated RTL2GDS flow for physical design of VSDbabysoc:**
 
