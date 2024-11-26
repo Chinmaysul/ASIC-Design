@@ -1,4 +1,4 @@
-![Screenshot from 2024-11-26 03-51-02](https://github.com/user-attachments/assets/67b6f4bd-4c1c-4f3f-8360-4ad0b7178d19)# ASIC-Design
+# ASIC-Design
 This repository is for ASIC course project
 <details>
 <summary> Pre MidTerm </summary>
@@ -5579,6 +5579,6 @@ Screenshot of GUI of routed design:
 
 ![Screenshot from 2024-11-26 05-37-28](https://github.com/user-attachments/assets/dbe11846-5de2-41fb-8af1-7ced3a29cfa9)
 ![Screenshot from 2024-11-26 05-36-04](https://github.com/user-attachments/assets/40ab242a-9268-4615-a18d-244e9220c1d9)
-
+![Screenshot from 2024-11-26 03-51-02](https://github.com/user-attachments/assets/67b6f4bd-4c1c-4f3f-8360-4ad0b7178d19)
 
 
