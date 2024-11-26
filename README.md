@@ -4786,7 +4786,7 @@ Screenshots of commands run and timing report generated
 
 </details>   
 
-# Lab 6: Physical Design using OpenRoad
+# ASSIGNMENT 6: Physical Design using OpenRoad
 
 **1. FinFET Basics:**
 Path to Zetta-Scale Computing
@@ -5564,10 +5564,6 @@ Key routing constraints include:
 
 
 Screenshot of GUI of routed design:
-**all macro cells:**
-
-![route_with_cts](https://github.com/user-attachments/assets/f7d5e82a-604f-49da-9551-42224f5aa658)
-
 
 **Heat map for routing congestion:**
 
@@ -5578,6 +5574,11 @@ Screenshot of GUI of routed design:
 
 ![Screenshot from 2024-11-26 04-32-16](https://github.com/user-attachments/assets/254a11d1-e3ce-4970-a2a1-2ec972b96c36)
 
+
+**Routing Report**![Screenshot from 2024-11-26 05-40-48](https://github.com/user-attachments/assets/a875b2ff-c10d-4d12-b54a-add6ea1da697)
+
+![Screenshot from 2024-11-26 05-37-28](https://github.com/user-attachments/assets/dbe11846-5de2-41fb-8af1-7ced3a29cfa9)
+![Screenshot from 2024-11-26 05-36-04](https://github.com/user-attachments/assets/40ab242a-9268-4615-a18d-244e9220c1d9)
 
 
 
